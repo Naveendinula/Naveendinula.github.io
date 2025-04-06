@@ -2,46 +2,15 @@ import React from "react";
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Container, Row, Col } from "react-bootstrap";
-import { 
-  FaPython, 
-  FaJava, 
-  FaReact, 
-  FaDatabase, 
-  FaHtml5, 
-  FaJs 
-} from "react-icons/fa";
-import { SiR } from "react-icons/si";
 import {
   dataabout,
   meta,
   worktimeline,
-  skills,
   services,
 } from "../../content_option";
+import SkillsCarousel from "../../components/SkillsCarousel";
 
 export const About = () => {
-  // Function to get icon for each skill
-  const getSkillIcon = (skillName) => {
-    switch(skillName.toLowerCase()) {
-      case 'python':
-        return <FaPython />;
-      case 'r':
-        return <SiR />;
-      case 'javascript':
-        return <FaJs />;
-      case 'sql':
-        return <FaDatabase />;
-      case 'java':
-        return <FaJava />;
-      case 'html/css':
-        return <FaHtml5 />;
-      case 'react':
-        return <FaReact />;
-      default:
-        return null;
-    }
-  };
-
   return (
     <HelmetProvider>
       <Container className="About-header">
@@ -66,7 +35,15 @@ export const About = () => {
             </div>
           </Col>
         </Row>
-        <Row className=" sec_sp">
+        <Row className="sec_sp">
+          <Col lg="5">
+            <h3 className="color_sec py-4">Skills</h3>
+          </Col>
+          <Col lg="7">
+            <SkillsCarousel />
+          </Col>
+        </Row>
+        <Row className="sec_sp">
           <Col lg="5">
             <h3 className="color_sec py-4">Work Timline</h3>
           </Col>
@@ -84,22 +61,6 @@ export const About = () => {
                 })}
               </tbody>
             </table>
-          </Col>
-        </Row>
-        <Row className="sec_sp">
-          <Col lg="5">
-            <h3 className="color_sec py-4">Skills</h3>
-          </Col>
-          <Col lg="7">
-            <div className="skills-container">
-              {skills.map((data, i) => {
-                return (
-                  <div key={i} className="skill-tag">
-                    {getSkillIcon(data.name)} <span className="skill-text">{data.name}</span>
-                  </div>
-                );
-              })}
-            </div>
           </Col>
         </Row>
         <Row className="sec_sp">
