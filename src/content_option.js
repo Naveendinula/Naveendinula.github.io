@@ -1,38 +1,48 @@
-const logotext = "JOHN";
+const logotext = "NAVEEN";
 const meta = {
-    title: "John Doe",
-    description: "I’m John Doe data scientist _ Full stack devloper,currently working in Berlin",
+    title: "Naveen Panditharatne",
+    description: "I'm Naveen Panditharatne, a Data Analyst and Computer Science graduate with experience in data engineering and machine learning",
 };
 
 const introdata = {
-    title: "I’m John Doe",
+    title: "I'm Naveen Panditharatne",
     animated: {
-        first: "I love coding",
-        second: "I code cool websites",
-        third: "I develop mobile apps",
+        first: "I analyze data",
+        second: "I build ML models",
+        third: "I develop web applications",
     },
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at nisl euismod urna bibendum",
-    your_img_url: "https://images.unsplash.com/photo-1514790193030-c89d266d5a9d",
+    description: "Data Analyst and Computer Science professional with experience in data engineering, machine learning, and web development.",
+    your_img_url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1000",
 };
 
 const dataabout = {
-    title: "abit about my self",
-    aboutme: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent quis dolor id ligula semper elementum feugiat pretium nulla. Nunc non commodo dolor. Nunc mollis dignissim facilisis. Morbi ut magna ultricies.",
+    title: "About Me",
+    aboutme: "I'm a Computer Science graduate from the University of Wisconsin-Whitewater with a background in mechanical engineering. I specialize in data analysis, machine learning, and web development. My experience spans from analyzing marketing metrics and energy consumption to developing machine learning models and web applications. I'm passionate about leveraging technology to solve complex problems and create innovative solutions.",
 };
 const worktimeline = [{
-        jobtitle: "Designer of week",
-        where: "YAdfi",
-        date: "2020",
+        jobtitle: "Data Analyst Intern",
+        where: "American Solar Energy Society",
+        date: "January 2025 - Present",
     },
     {
-        jobtitle: "Designer of week",
-        where: "Jamalya",
-        date: "2019",
+        jobtitle: "Volunteer Data Engineer",
+        where: "Community Dreams Foundation",
+        date: "November 2024 - Present",
     },
     {
-        jobtitle: "Designer of week",
-        where: "ALquds",
-        date: "2019",
+        jobtitle: "Graduate Assistant",
+        where: "University of Wisconsin-Whitewater",
+        date: "September 2022 - May 2024",
+    },
+    {
+        jobtitle: "Mechanical Engineer",
+        where: "Lalan Group",
+        date: "May 2021 - November 2021",
+    },
+    {
+        jobtitle: "Engineering Intern",
+        where: "Vidullanka PLC",
+        date: "February 2021 - April 2021",
     },
 ];
 
@@ -41,104 +51,86 @@ const skills = [{
         value: 90,
     },
     {
-        name: "Djano",
+        name: "R",
         value: 85,
     },
     {
-        name: "Javascript",
+        name: "JavaScript",
+        value: 80,
+    },
+    {
+        name: "SQL",
+        value: 85,
+    },
+    {
+        name: "Java",
+        value: 75,
+    },
+    {
+        name: "HTML/CSS",
         value: 80,
     },
     {
         name: "React",
-        value: 60,
-    },
-    {
-        name: "Jquery",
-        value: 85,
+        value: 70,
     },
 ];
 
 const services = [{
-        title: "UI & UX Design",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at nisl euismod urna bibendum sollicitudin.",
+        title: "Data Analysis & Visualization",
+        description: "Expertise in analyzing complex datasets and creating informative visualizations using tools like Power BI, Excel, Python, and R to derive actionable insights.",
     },
     {
-        title: "Mobile Apps",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at nisl euismod urna bibendum sollicitudin.",
+        title: "Machine Learning Development",
+        description: "Implementation of machine learning models for various applications, including Physics-Informed Neural Networks for fluid mechanics simulation.",
     },
     {
-        title: "Wordpress Design",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at nisl euismod urna bibendum sollicitudin.",
+        title: "Web Application Development",
+        description: "Design and development of responsive web applications using modern frameworks like React, ensuring seamless user experience across multiple devices.",
+    },
+    {
+        title: "Energy Data Management",
+        description: "Experience in analyzing energy consumption data and load patterns to identify efficiency improvements and reduce wastage.",
     },
 ];
 
-const dataportfolio = [{
-        img: "https://picsum.photos/400/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
+const dataportfolio = [
+    // {
+    //     img: "https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=1000",
+    //     description: "Physics-Informed Neural Network for Fluid Mechanics - Simulating Lid-Driven Cavity flow using machine learning",
+    //     link: "#",
+    // },
+    // {
+    //     img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1000",
+    //     description: "Neonatal Care Web App Frontend Design - Responsive React-based interface for medical applications",
+    //     link: "#",
+    // },
+    // {
+    //     img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000",
+    //     description: "Marketing Analytics Dashboard - Power BI visualizations for campaign performance optimization",
+    //     link: "#",
+    // },
     {
-        img: "https://picsum.photos/400/800/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
+        img: require("./assets/images/PowerBI project icon.png"),
+        description: "Energy Consumption Analysis - Data-driven insights for reducing energy wastage and improving efficiency",
+        link: "/powerbi",
     },
-    {
-        img: "https://picsum.photos/400/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/600/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/300/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/700/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-
-    {
-        img: "https://picsum.photos/400/600/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/300/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/550/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
-    {
-        img: "https://picsum.photos/400/700/?grayscale",
-        description: "The wisdom of life consists in the elimination of non-essentials.",
-        link: "#",
-    },
+    // {
+    //     img: "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=1000",
+    //     description: "Azure Data Pipeline Configuration - Setup for the GreenConnect App's data workflows",
+    //     link: "#",
+    // },
+    // {
+    //     img: "https://images.unsplash.com/photo-1581094487102-8688862c7350?q=80&w=1000",
+    //     description: "Renewable Energy Data Management - Collaboration with Technical Divisions on solar and sustainability initiatives",
+    //     link: "#",
+    // },
 ];
 
 const contactConfig = {
-    YOUR_EMAIL: "name@domain.com",
-    YOUR_FONE: "(555)123-4567",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vehicula eu nunc et sollicitudin. Cras pulvinar, nisi at imperdiet pharetra. ",
+    YOUR_EMAIL: "ngnaveen.p@gmail.com",
+    YOUR_FONE: "(608)381-9208",
+    description: "Feel free to contact me for professional opportunities, collaborations, or questions about my work. I'm currently based in Madison, WI and open to both remote and local positions.",
     // creat an emailjs.com account 
     // check out this tutorial https://www.emailjs.com/docs/examples/reactjs/
     YOUR_SERVICE_ID: "service_id",
@@ -147,10 +139,10 @@ const contactConfig = {
 };
 
 const socialprofils = {
-    github: "https://github.com",
-    facebook: "https://facebook.com",
-    linkedin: "https://linkedin.com",
+    github: "https://github.com/ngnaveen",
+    linkedin: "https://linkedin.com/in/naveen-panditharathne",
     twitter: "https://twitter.com",
+    facebook: "https://facebook.com",
 };
 export {
     meta,

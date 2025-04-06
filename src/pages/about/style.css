@@ -98,3 +98,119 @@
         transform: translateZ(0);
     }
 }
+
+/* Skills section styling */
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.skill-tag {
+    background: linear-gradient(135deg, var(--text-color-3) 0%, #444 100%);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInSkill 0.5s ease forwards;
+    opacity: 0;
+}
+
+.skill-tag svg {
+    font-size: 1.2em;
+}
+
+.skill-text {
+    margin-left: 3px;
+}
+
+.skill-tag:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Create different sizes for more visual interest */
+.skill-tag:nth-child(2n) {
+    font-size: 18px;
+    padding: 12px 24px;
+}
+
+.skill-tag:nth-child(3n) {
+    font-size: 14px;
+    padding: 8px 16px;
+}
+
+.skill-tag:nth-child(5n) {
+    background: linear-gradient(135deg, #333 0%, var(--text-color-3) 100%);
+}
+
+/* Add a subtle animation */
+.skill-tag:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(30deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.skill-tag:hover:before {
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .skills-container {
+        justify-content: flex-start;
+        gap: 10px;
+    }
+    
+    .skill-tag {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+    
+    .skill-tag:nth-child(2n) {
+        font-size: 16px;
+        padding: 10px 18px;
+    }
+}
+
+@keyframes fadeInSkill {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Staggered animation delay for each skill */
+.skill-tag:nth-child(1) { animation-delay: 0.1s; }
+.skill-tag:nth-child(2) { animation-delay: 0.2s; }
+.skill-tag:nth-child(3) { animation-delay: 0.3s; }
+.skill-tag:nth-child(4) { animation-delay: 0.4s; }
+.skill-tag:nth-child(5) { animation-delay: 0.5s; }
+.skill-tag:nth-child(6) { animation-delay: 0.6s; }
+.skill-tag:nth-child(7) { animation-delay: 0.7s; }
+.skill-tag:nth-child(8) { animation-delay: 0.8s; }
+.skill-tag:nth-child(9) { animation-delay: 0.9s; }
+.skill-tag:nth-child(10) { animation-delay: 1.0s; }
