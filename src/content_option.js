@@ -16,9 +16,33 @@ const introdata = {
 };
 
 const dataabout = {
-    title: "About Me",
-    aboutme: "I'm a Computer Science graduate from the University of Wisconsin-Whitewater with a background in mechanical engineering. I specialize in data analysis, machine learning, and web development. My experience spans from analyzing marketing metrics and energy consumption to developing machine learning models and web applications. I'm passionate about leveraging technology to solve complex problems and create innovative solutions.",
+    title: "Summary",
+    aboutme: "I'm a multidisciplinary engineer blending Computer Science and Mechanical Engineering expertise to drive sustainable energy solutions. Passionate about transforming data into actionable insights, I've led large-scale energy projects, developed forecasting models in Python, and crafted engaging dashboards with Power BI. I'm dedicated to advancing renewable technologies and energy efficiency to build a cleaner, smarter future.",
 };
+
+const lifestyle = {
+    title: "Hobbies and Interests",
+    description: "When I'm not immersed in code or analyzing data, I enjoy staying active through regular workouts and playing badminton. I find that physical activity helps me maintain a balanced mindset and approach problems with a fresh perspective. In my downtime, I'm an avid reader of webtoons and listener of podcasts, enjoying creative storytelling across different media formats.",
+    interests: [
+        {
+            name: "Fitness",
+            description: "Regular workouts to stay healthy and energized"
+        },
+        {
+            name: "Badminton",
+            description: "Competitive and recreational badminton games"
+        },
+        {
+            name: "Webtoons",
+            description: "Reading digital comics and graphic novels"
+        },
+        {
+            name: "Podcasts",
+            description: "Comedian hosted shows, D&D adventures, and science & tech discussions"
+        }
+    ]
+};
+
 const worktimeline = [{
         jobtitle: "Data Analyst Intern",
         where: "American Solar Energy Society",
@@ -73,24 +97,6 @@ const skills = [{
     {
         name: "React",
         value: 70,
-    },
-];
-
-const services = [{
-        title: "Data Analysis & Visualization",
-        description: "Expertise in analyzing complex datasets and creating informative visualizations using tools like Power BI, Excel, Python, and R to derive actionable insights.",
-    },
-    {
-        title: "Machine Learning Development",
-        description: "Implementation of machine learning models for various applications, including Physics-Informed Neural Networks for fluid mechanics simulation.",
-    },
-    {
-        title: "Web Application Development",
-        description: "Design and development of responsive web applications using modern frameworks like React, ensuring seamless user experience across multiple devices.",
-    },
-    {
-        title: "Energy Data Management",
-        description: "Experience in analyzing energy consumption data and load patterns to identify efficiency improvements and reduce wastage.",
     },
 ];
 
@@ -150,9 +156,12 @@ export {
     dataportfolio,
     worktimeline,
     skills,
-    services,
     introdata,
     contactConfig,
     socialprofils,
     logotext,
+    lifestyle,
 };
+
+
+

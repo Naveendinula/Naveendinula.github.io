@@ -1,43 +1,55 @@
+
 import React from "react";
 import "./style.css";
 import { 
   FaPython, 
   FaJava, 
   FaReact, 
-  FaDatabase, 
+  FaGitAlt,
   FaHtml5, 
   FaJs,
-  FaAws
+  FaNodeJs,
+  FaDatabase
 } from "react-icons/fa";
 import { 
   SiR,
-  SiCplusplus,
-  SiKubernetes,
-  SiPostgresql,
-  SiMongodb
+  SiArduino,
+  SiMongodb,
+  SiGooglecolab,
+  SiPycharm,
+  SiEclipseide,
+  SiPowerbi,
+  SiExpress,
+  SiMatlabSimulink
 } from "react-icons/si";
 
 const SkillsCarousel = () => {
   const skills = [
-    { icon: SiCplusplus, name: "C++" },
-    { icon: FaJava, name: "Java" },
-    { icon: FaJs, name: "JavaScript" },
     { icon: FaPython, name: "Python" },
-    { icon: FaReact, name: "React" },
-    { icon: SiR, name: "R" },
+    { icon: FaJava, name: "Java" },
     { icon: FaDatabase, name: "SQL" },
-    { icon: SiKubernetes, name: "Kubernetes" },
-    { icon: SiPostgresql, name: "PostgreSQL" },
-    { icon: FaAws, name: "AWS" },
-    { icon: SiMongodb, name: "MongoDB" },
+    { icon: SiR, name: "R" },
+    { icon: FaJs, name: "JavaScript" },
     { icon: FaHtml5, name: "HTML/CSS" },
+    { icon: SiArduino, name: "Arduino" },
+    { icon: FaReact, name: "React" },
+    { icon: FaNodeJs, name: "Node.js" },
+    { icon: SiExpress, name: "Express" },
+    { icon: SiMongodb, name: "MongoDB" },
+    { icon: FaGitAlt, name: "Git" },
+    { icon: SiGooglecolab, name: "Google Colab" },
+    { icon: SiPycharm, name: "PyCharm" },
+    { icon: SiEclipseide, name: "Eclipse" },
+    { icon: SiPowerbi, name: "Power BI" }
   ];
+
+  // Create the duplicated list for seamless loop
+  const allSkills = [...skills, ...skills];
 
   return (
     <div className="skills-carousel-container">
       <div className="skills-carousel-track">
-        {/* Duplicate the skills array for seamless infinite loop */}
-        {[...skills, ...skills].map((skill, index) => (
+        {allSkills.map((skill, index) => (
           <div key={index} className="skill-item">
             <skill.icon size={40} />
             <span>{skill.name}</span>
