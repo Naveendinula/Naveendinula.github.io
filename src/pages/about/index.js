@@ -2,15 +2,33 @@ import React from "react";
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Container, Row, Col } from "react-bootstrap";
+import { FaDumbbell, FaBookOpen, FaPodcast } from "react-icons/fa";
+import { GiShuttlecock } from "react-icons/gi";
 import {
   dataabout,
   meta,
   worktimeline,
-  services,
+  lifestyle,
 } from "../../content_option";
 import SkillsCarousel from "../../components/SkillsCarousel";
 
 export const About = () => {
+  // Function to get the appropriate icon for each interest
+  const getInterestIcon = (interestName) => {
+    switch(interestName.toLowerCase()) {
+      case 'fitness':
+        return <FaDumbbell className="interest-icon" />;
+      case 'badminton':
+        return <GiShuttlecock className="interest-icon" />;
+      case 'webtoons':
+        return <FaBookOpen className="interest-icon" />;
+      case 'podcasts':
+        return <FaPodcast className="interest-icon" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <HelmetProvider>
       <Container className="About-header">
@@ -25,6 +43,7 @@ export const About = () => {
             <hr className="t_border my-4 ml-0 text-left" />
           </Col>
         </Row>
+        
         <Row className="sec_sp">
           <Col lg="5">
             <h3 className="color_sec py-4">{dataabout.title}</h3>
@@ -45,7 +64,7 @@ export const About = () => {
         </Row>
         <Row className="sec_sp">
           <Col lg="5">
-            <h3 className="color_sec py-4">Work Timline</h3>
+            <h3 className="color_sec py-4">Work Timeline</h3>
           </Col>
           <Col lg="7">
             <table className="table caption-top">
@@ -64,21 +83,22 @@ export const About = () => {
           </Col>
         </Row>
         <Row className="sec_sp">
-          <Col lang="5">
-            <h3 className="color_sec py-4">services</h3>
+          <Col lg="5">
+            <h3 className="color_sec py-4">{lifestyle.title}</h3>
           </Col>
           <Col lg="7">
-            {services.map((data, i) => {
-              return (
-                <div className="service_ py-4" key={i}>
-                  <h5 className="service__title">{data.title}</h5>
-                  <p className="service_desc">{data.description}</p>
+            <div className="interests-grid">
+              {lifestyle.interests.map((interest, i) => (
+                <div key={i} className="interest-item">
+                  {getInterestIcon(interest.name)}
+                  <span>{interest.name}</span>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </Col>
         </Row>
       </Container>
     </HelmetProvider>
   );
 };
+

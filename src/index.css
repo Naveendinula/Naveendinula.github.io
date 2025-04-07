@@ -7,6 +7,8 @@
     --text-color-3: rgb(204, 0, 0);
     --text-color-3-rgb: 204, 0, 0;
     --overlay-color: rgb(12 12 12 / 63%);
+    --color1: 18, 113, 255;
+    --color2: 221, 74, 255;
 }
 
 html,
@@ -24,7 +26,8 @@ body {
     font-family: 'Raleway', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding-top: 60px;
+    /* Remove padding-top that was causing the gap */
+    padding-top: 0;
     border-left: 10px solid var(--primary-color);
     border-right: 10px solid var(--primary-color);
     cursor: default;
@@ -97,3 +100,5 @@ code {
 .color_sec {
     color: var(--secondary-color);
 }
+
+

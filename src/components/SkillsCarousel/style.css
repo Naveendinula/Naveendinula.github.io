@@ -3,6 +3,7 @@
   overflow: hidden;
   position: relative;
   padding: 20px 0;
+  height: 150px;
 }
 
 .skills-carousel-container::before,
@@ -10,43 +11,65 @@
   content: "";
   position: absolute;
   top: 0;
-  width: 100px;
+  width: 150px;
   height: 100%;
   z-index: 2;
+  pointer-events: none;
 }
 
 .skills-carousel-container::before {
   left: 0;
-  background: linear-gradient(to right, var(--bg-color), transparent);
+  background: linear-gradient(to right, var(--bg-color) 20%, transparent);
+  -webkit-mask: linear-gradient(90deg, var(--bg-color) 0%, transparent 100%);
+  mask: linear-gradient(90deg, var(--bg-color) 0%, transparent 100%);
 }
 
 .skills-carousel-container::after {
   right: 0;
-  background: linear-gradient(to left, var(--bg-color), transparent);
+  background: linear-gradient(to left, var(--bg-color) 20%, transparent);
+  -webkit-mask: linear-gradient(270deg, var(--bg-color) 0%, transparent 100%);
+  mask: linear-gradient(270deg, var(--bg-color) 0%, transparent 100%);
 }
 
 .skills-carousel-track {
   display: flex;
   gap: 40px;
-  animation: scroll 30s linear infinite;
+  user-select: none;
   white-space: nowrap;
+  animation: scroll 40s linear infinite;
+  will-change: transform;
+  position: absolute;
+  padding: 0 60px;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .skill-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 15px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   min-width: 100px;
   backdrop-filter: blur(5px);
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .skill-item:hover {
   transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .skill-item span {
@@ -54,16 +77,8 @@
   margin-top: 5px;
 }
 
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-100% / 2));
-  }
-}
-
-/* Pause animation on hover */
 .skills-carousel-container:hover .skills-carousel-track {
   animation-play-state: paused;
 }
+
+
