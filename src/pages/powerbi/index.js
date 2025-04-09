@@ -1,82 +1,106 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Container, Row, Col } from "react-bootstrap";
 import { meta } from "../../content_option";
+import { FaGithub, FaChartLine, FaFilter, FaChartBar, FaChartPie, FaMapMarkedAlt } from "react-icons/fa";
 
 export const PowerBI = () => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Simulate loading time for the Power BI embed
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const POWERBI_EMBED_URL = "https://app.fabric.microsoft.com/view?r=eyJrIjoiMTAzY2YzMjYtZjkxYy00N2U3LTkyM2EtOTVjZGI2ZDE5NmZkIiwidCI6IjdkYTQ1YTdmLTdhYTEtNDVmZS05ZWRiLWM5OTQyMjJiYTlmOCIsImMiOjN9";
+  const handleIframeLoad = () => {
+    setIsLoading(false);
+  };
 
   return (
-    <HelmetProvider>
-      <Container className="powerbi-wrapper">
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Energy Performance and Fuel Utilization | {meta.title}</title>
-          <meta name="description" content="Power BI Energy Performance and Fuel Utilization Dashboard" />
-        </Helmet>
-        <Row className="mb-5 mt-3 pt-md-3">
-          <Col lg="8">
-            <h1 className="display-4 mb-4">Energy Performance and Fuel Utilization</h1>
-            <hr className="t_border my-4 ml-0 text-left" />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div className="powerbi-description mb-4">
-              <p>
-                This interactive Power BI dashboard presents a comprehensive analysis of energy consumption patterns
-                across various facilities. The analysis identifies areas of energy wastage and provides actionable
-                insights to improve energy efficiency and reduce costs.
-              </p>
+    <div className="powerbi-wrapper">
+      <div className="powerbi-header">
+        <h1 className="powerbi-title">Energy Performance and Fuel Utilization Dashboard</h1>
+        <div className="powerbi-description">
+          <p>
+            This project analyzes energy performance and fuel utilization across diverse electricity market structures—competitive, hybrid, and monopoly. The interactive Power BI dashboard, spanning data from 2011 to 2024, examines key metrics such as Thermal Efficiency, Total Generation (MMBtu), and Total Fuel Consumption (MMBtu), offering actionable insights for energy strategy and operational improvements.
+          </p>
+        </div>
+      </div>
+
+      <div className="powerbi-container">
+        {isLoading && (
+          <div className="loader-container">
+            <div className="loader"></div>
+            <p>Loading dashboard...</p>
+          </div>
+        )}
+        <iframe
+          title="Fuel Utilization Analysis"
+          src="https://app.fabric.microsoft.com/view?r=eyJrIjoiMTAzY2YzMjYtZjkxYy00N2U3LTkyM2EtOTVjZGI2ZDE5NmZkIiwidCI6IjdkYTQ1YTdmLTdhYTEtNDVmZS05ZWRiLWM5OTQyMjJiYTlmOCIsImMiOjN9"
+          className="powerbi-iframe"
+          onLoad={handleIframeLoad}
+          style={{ opacity: isLoading ? 0 : 1 }}
+        />
+      </div>
+        
+      <div className="key-features">
+        <h2>Key Features</h2>
+        <div className="features-grid">
+          <div className="feature-item">
+            <div className="feature-icon">
+              <FaChartLine />
             </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <div className="powerbi-container">
-              {loading ? (
-                <div className="loader-container">
-                  <div className="loader"></div>
-                  <p>Loading dashboard...</p>
-                </div>
-              ) : (
-                <iframe 
-                  title="energy_dataPBI"
-                  className="powerbi-iframe"
-                  src={POWERBI_EMBED_URL}
-                  frameBorder="0"
-                  allowFullScreen={true}
-                />
-              )}
+            <div className="feature-content">
+              <h3>Interactive Year Slicer</h3>
+              <p>Select any year from 2011 to 2024 to instantly update KPIs, charts, and maps.</p>
             </div>
-          </Col>
-        </Row>
-        <Row className="mt-5">
-          <Col>
-            <div className="key-insights">
-              <h3 className="mb-4">Key Insights</h3>
-              <ul>
-                <li>Identified peak consumption patterns across different time periods</li>
-                <li>Highlighted facilities with abnormal energy usage compared to similar units</li>
-                <li>Quantified potential cost savings through implementation of recommended efficiency measures</li>
-                <li>Tracked performance of previously implemented energy-saving initiatives</li>
-              </ul>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">
+              <FaFilter />
             </div>
-          </Col>
-        </Row>
-      </Container>
-    </HelmetProvider>
+            <div className="feature-content">
+              <h3>Market Structure Filters</h3>
+              <p>Toggle between Competitive, Hybrid, and Monopoly market views to see how regulatory environments impact performance.</p>
+            </div>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">
+              <FaChartBar />
+            </div>
+            <div className="feature-content">
+              <h3>Drill-Down Fuel Categories</h3>
+              <p>Expand fuel categories into detailed fuel types for deep analysis of generation and fuel consumption.</p>
+            </div>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">
+              <FaChartPie />
+            </div>
+            <div className="feature-content">
+              <h3>Dynamic KPI Cards</h3>
+              <p>View both raw values and Year-Over-Year percentage changes.</p>
+            </div>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">
+              <FaMapMarkedAlt />
+            </div>
+            <div className="feature-content">
+              <h3>Geographical Analysis</h3>
+              <p>Use the embedded US map to filter by state and analyze local market dynamics.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="github-section">
+        <a 
+          href="https://github.com/Naveendinula/fuel-utilization-by-electricity-market" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="github-link"
+        >
+          <FaGithub /> View Project Repository
+        </a>
+      </div>
+    </div>
   );
 };
 

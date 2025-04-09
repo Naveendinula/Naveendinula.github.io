@@ -20,7 +20,6 @@ import {
   SiEclipseide,
   SiPowerbi,
   SiExpress,
-  SiMatlabSimulink
 } from "react-icons/si";
 
 const SkillsCarousel = () => {
