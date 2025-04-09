@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaMapMarkerAlt, FaEnvelope, FaGithub, FaLinkedin, FaChevronRight } from "react-icons/fa";
+import { FaMapMarkerAlt, FaEnvelope, FaGithub, FaLinkedin, FaChevronRight, FaFilePdf } from "react-icons/fa";
 import { contactConfig, socialprofils } from "../../content_option";
 import "./style.css";
 
@@ -60,9 +60,26 @@ const ContactSidebar = () => {
             </div>
           </div>
         </div>
+
+        <div className="contact-item">
+          <FaFilePdf className="contact-icon" />
+          <div>
+            <div className="contact-label">RESUME</div>
+            <div className="contact-value">
+              <a 
+                href="/documents/CV_NaveenPanditharatne.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                download
+              >
+                Download Resume
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ContactSidebar; 
+export default ContactSidebar;
