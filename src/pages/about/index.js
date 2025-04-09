@@ -100,13 +100,23 @@ export const About = () => {
             <h3 className="color_sec py-4">{lifestyle.title}</h3>
           </Col>
           <Col lg="7">
-            <div className="interests-grid">
-              {lifestyle.interests.map((interest, i) => (
-                <div key={i} className="interest-item">
-                  {getInterestIcon(interest.name)}
-                  <span>{interest.name}</span>
-                </div>
-              ))}
+            <div className="interests-container">
+              <div className="interest-item">
+                <FaDumbbell className="interest-icon" />
+                <span>Fitness</span>
+              </div>
+              <div className="interest-item">
+                <GiShuttlecock className="interest-icon" />
+                <span>Badminton</span>
+              </div>
+              <div className="interest-item">
+                <FaBookOpen className="interest-icon" />
+                <span>Webtoons</span>
+              </div>
+              <div className="interest-item">
+                <FaPodcast className="interest-icon" />
+                <span>Podcasts</span>
+              </div>
             </div>
           </Col>
         </Row>
@@ -114,5 +124,6 @@ export const About = () => {
     </HelmetProvider>
   );
 };
+
 
 
