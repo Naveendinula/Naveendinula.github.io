@@ -7,6 +7,7 @@ import {
 import withRouter from "../hooks/withRouter";
 import AppRoutes from "./routes";
 import Headermain from "../header";
+import ContactSidebar from "../components/ContactSidebar";
 import "./App.css";
 
 function _ScrollToTop(props) {
@@ -23,8 +24,11 @@ export default function App() {
     <Router basename={process.env.PUBLIC_URL}>
       <ScrollToTop>
         <Headermain />
+        <ContactSidebar />
         <AppRoutes />
       </ScrollToTop>
     </Router>
   );
 }
+
+

@@ -7,12 +7,12 @@ const meta = {
 const introdata = {
     title: "I'm Naveen Panditharatne",
     animated: {
-        first: "I analyze data",
-        second: "I build ML models",
-        third: "I develop web applications",
+        first: "I craft data-driven solutions",
+        second: "I visualize meaningful insights",
+        third: "I develop predictive models",
     },
-    description: "Data Analyst and Computer Science professional with experience in data engineering, machine learning, and web development.",
-    your_img_url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1000",
+    description: "Data Analyst and Computer Science professional with a Mechanical Engineering background. Experienced in data engineering, machine learning, and web development, I’m passionate about leveraging analytics to drive innovative energy solutions.",
+    // your_img_url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=1000",
 };
 
 const dataabout = {
@@ -47,27 +47,32 @@ const worktimeline = [{
         jobtitle: "Data Analyst Intern",
         where: "American Solar Energy Society",
         date: "January 2025 - Present",
+        location: "Remote"
     },
     {
         jobtitle: "Volunteer Data Engineer",
         where: "Community Dreams Foundation",
         date: "November 2024 - Present",
+        location: "Remote"
     },
     {
         jobtitle: "Graduate Assistant",
-        where: "University of Wisconsin-Whitewater",
+        where: "UW Whitewater",
         date: "September 2022 - May 2024",
+        location: "Whitewater, WI, USA"
     },
     {
         jobtitle: "Mechanical Engineer",
         where: "Lalan Group",
         date: "May 2021 - November 2021",
+        location: "Sri Lanka"
     },
     {
         jobtitle: "Engineering Intern",
         where: "Vidullanka PLC",
         date: "February 2021 - April 2021",
-    },
+        location: "Sri Lanka"
+    }
 ];
 
 const skills = [{
@@ -117,7 +122,7 @@ const dataportfolio = [
     //     link: "#",
     // },
     {
-        img: require("./assets/images/PowerBI project icon.png"),
+        img: require("./assets/images/eia-dashboard.png"),
         description: "Energy Consumption Analysis - Data-driven insights for reducing energy wastage and improving efficiency",
         link: "/powerbi",
     },
@@ -137,15 +142,15 @@ const contactConfig = {
     YOUR_EMAIL: "ngnaveen.p@gmail.com",
     YOUR_FONE: "(608)381-9208",
     description: "Feel free to contact me for professional opportunities, collaborations, or questions about my work. I'm currently based in Madison, WI and open to both remote and local positions.",
-    // creat an emailjs.com account 
+    // creat an emailjs.com account
     // check out this tutorial https://www.emailjs.com/docs/examples/reactjs/
-    YOUR_SERVICE_ID: "service_id",
-    YOUR_TEMPLATE_ID: "template_id",
-    YOUR_USER_ID: "user_id",
+    YOUR_SERVICE_ID: "service_157ttxq",
+    YOUR_TEMPLATE_ID: "template_smhbjcj",
+    YOUR_USER_ID: "6k7bYcRT2ICySW5Ak",
 };
 
 const socialprofils = {
-    github: "https://github.com/ngnaveen",
+    github: "https://github.com/Naveendinula",
     linkedin: "https://linkedin.com/in/naveen-panditharathne",
     twitter: "https://twitter.com",
     facebook: "https://facebook.com",
@@ -162,6 +167,10 @@ export {
     logotext,
     lifestyle,
 };
+
+
+
+
 
 
 

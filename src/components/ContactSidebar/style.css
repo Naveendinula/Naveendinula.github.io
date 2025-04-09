@@ -1,0 +1,121 @@
+.contact-sidebar-wrapper {
+  position: fixed;
+  left: -300px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999; /* Increased z-index */
+  transition: left 0.3s ease;
+  width: 300px; /* Explicit width */
+}
+
+.contact-sidebar-wrapper.open {
+  left: 0;
+}
+
+.contact-toggle {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #2a2a2a;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffd700;
+  transition: all 0.3s ease;
+  z-index: 10000; /* Higher z-index than wrapper */
+  padding: 0;
+  outline: none;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.contact-sidebar-content {
+  background: rgba(42, 42, 42, 0.95);
+  padding: 20px;
+  border-radius: 0 12px 12px 0;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+  height: auto;
+  min-height: 200px;
+}
+
+.toggle-icon {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+  display: block; /* Ensure icon is displayed */
+  color: #ffd700; /* Explicit color */
+}
+
+.toggle-icon.open {
+  transform: rotate(180deg);
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  color: #fff;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.contact-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transform: translateX(5px);
+}
+
+.contact-label {
+  font-size: 0.8em;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.contact-value {
+  font-size: 0.9em;
+  color: #fff;
+}
+
+.contact-icon {
+  font-size: 1.2em;
+  color: #ffd700;
+  min-width: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .contact-sidebar-wrapper {
+    left: -100%; /* Full width off-screen on mobile */
+    width: 100%;
+    top: auto;
+    bottom: 0;
+    transform: none;
+  }
+
+  .contact-sidebar-wrapper.open {
+    left: 0;
+  }
+
+  .contact-sidebar-content {
+    border-radius: 12px 12px 0 0;
+    padding: 15px;
+  }
+
+  .contact-toggle {
+    top: -40px;
+    right: 20px;
+    border-radius: 8px 8px 0 0;
+    transform: rotate(90deg);
+  }
+
+  .toggle-icon.open {
+    transform: rotate(180deg);
+  }
+} 

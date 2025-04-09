@@ -37,13 +37,14 @@ export const About = () => {
           <title> About | {meta.title}</title>
           <meta name="description" content={meta.description} />
         </Helmet>
+
         <Row className="mb-5 mt-3 pt-md-3">
           <Col lg="8">
             <h1 className="display-4 mb-4">About me</h1>
             <hr className="t_border my-4 ml-0 text-left" />
           </Col>
         </Row>
-        
+
         <Row className="sec_sp">
           <Col lg="5">
             <h3 className="color_sec py-4">{dataabout.title}</h3>
@@ -64,22 +65,34 @@ export const About = () => {
         </Row>
         <Row className="sec_sp">
           <Col lg="5">
-            <h3 className="color_sec py-4">Work Timeline</h3>
+            <h3 className="color_sec py-4">Timeline</h3>
           </Col>
           <Col lg="7">
-            <table className="table caption-top">
-              <tbody>
-                {worktimeline.map((data, i) => {
-                  return (
-                    <tr key={i}>
-                      <th scope="row">{data.jobtitle}</th>
-                      <td>{data.where}</td>
-                      <td>{data.date}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className="timeline">
+              {worktimeline.map((data, i) => {
+                // Assign different colors to the dots based on index
+                const dotColors = ['blue', 'yellow', 'green', 'red'];
+                const colorClass = dotColors[i % dotColors.length];
+
+                return (
+                  <div className="timeline-item" key={i}>
+                    <div className={`timeline-dot ${colorClass}`}></div>
+                    <div className="timeline-content">
+                      <div className="timeline-date">{data.date}</div>
+                      <h4 className="timeline-title">{data.jobtitle}</h4>
+                      <div className="timeline-subtitle">{data.where}</div>
+                      {data.description && (
+                        <div className="timeline-description">
+                          <ul>
+                            <li>{data.description}</li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </Col>
         </Row>
         <Row className="sec_sp">
@@ -101,4 +114,5 @@ export const About = () => {
     </HelmetProvider>
   );
 };
+
 
