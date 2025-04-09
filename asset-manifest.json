@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.c2910599.css",
-    "main.js": "/static/js/main.8d2946a7.js",
+    "main.css": "/static/css/main.4b171826.css",
+    "main.js": "/static/js/main.8cdb7c76.js",
     "static/media/eia-dashboard.png": "/static/media/eia-dashboard.0f850327599ea306e7a8.png",
     "index.html": "/index.html",
-    "main.c2910599.css.map": "/static/css/main.c2910599.css.map",
-    "main.8d2946a7.js.map": "/static/js/main.8d2946a7.js.map"
+    "main.4b171826.css.map": "/static/css/main.4b171826.css.map",
+    "main.8cdb7c76.js.map": "/static/js/main.8cdb7c76.js.map"
   },
   "entrypoints": [
-    "static/css/main.c2910599.css",
-    "static/js/main.8d2946a7.js"
+    "static/css/main.4b171826.css",
+    "static/js/main.8cdb7c76.js"
   ]
 }
