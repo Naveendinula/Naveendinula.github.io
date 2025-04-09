@@ -34,6 +34,10 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
+.contact-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .contact-sidebar-content {
   background: rgba(42, 42, 42, 0.95);
   padding: 20px;
@@ -54,20 +58,32 @@
   transform: rotate(180deg);
 }
 
+.contact-toggle:hover .toggle-icon {
+  transform: scale(1.2);
+}
+
 .contact-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
+  padding: 15px;
   color: #fff;
   transition: all 0.3s ease;
   white-space: nowrap;
+  border-radius: 8px;
+  margin: 8px 0;
 }
 
 .contact-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   transform: translateX(5px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contact-item:hover .contact-icon {
+  transform: scale(1.2);
+  color: #64ffda;
 }
 
 .contact-label {
@@ -83,10 +99,22 @@
   color: #fff;
 }
 
+.contact-value a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-value a:hover {
+  color: #64ffda;
+  text-decoration: underline;
+}
+
 .contact-icon {
   font-size: 1.2em;
   color: #ffd700;
   min-width: 20px;
+  transition: transform 0.3s ease;
 }
 
 /* Responsive adjustments */
@@ -118,4 +146,4 @@
   .toggle-icon.open {
     transform: rotate(180deg);
   }
-} 
+}

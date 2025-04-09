@@ -141,9 +141,8 @@ const dataportfolio = [
 const contactConfig = {
     YOUR_EMAIL: "ngnaveen.p@gmail.com",
     YOUR_FONE: "(608)381-9208",
+    YOUR_RESUME: "/documents/CV_NaveenPanditharatne.pdf",
     description: "Feel free to contact me for professional opportunities, collaborations, or questions about my work. I'm currently based in Madison, WI and open to both remote and local positions.",
-    // creat an emailjs.com account
-    // check out this tutorial https://www.emailjs.com/docs/examples/reactjs/
     YOUR_SERVICE_ID: "service_157ttxq",
     YOUR_TEMPLATE_ID: "template_smhbjcj",
     YOUR_USER_ID: "6k7bYcRT2ICySW5Ak",
