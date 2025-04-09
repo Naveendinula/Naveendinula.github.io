@@ -106,6 +106,11 @@ const skills = [{
 ];
 
 const dataportfolio = [
+    {
+        img: require("./assets/images/eia-dashboard.png"),
+        description: "Energy Consumption Analysis - Data-driven insights for reducing energy wastage and improving efficiency",
+        link: "/eiaproject",
+    },
     // {
     //     img: "https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=1000",
     //     description: "Physics-Informed Neural Network for Fluid Mechanics - Simulating Lid-Driven Cavity flow using machine learning",
@@ -121,11 +126,6 @@ const dataportfolio = [
     //     description: "Marketing Analytics Dashboard - Power BI visualizations for campaign performance optimization",
     //     link: "#",
     // },
-    {
-        img: require("./assets/images/eia-dashboard.png"),
-        description: "Energy Consumption Analysis - Data-driven insights for reducing energy wastage and improving efficiency",
-        link: "/powerbi",
-    },
     // {
     //     img: "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=1000",
     //     description: "Azure Data Pipeline Configuration - Setup for the GreenConnect App's data workflows",
