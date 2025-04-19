@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { WiMoonAltWaningCrescent4 } from "react-icons/wi";
+import React, { useState, useEffect } from 'react';
+import './style.css';
 
+const ThemeToggle = () => {
+  const [isDark, setIsDark] = useState(false);
 
-const Themetoggle = () => {
-  const [theme, settheme] = useState(localStorage.getItem("theme"));
-  const themetoggle = () => {
-    settheme(theme === "dark" ? "light" : "dark");
-  };
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme ); 
-  }, [theme]);
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
+
   return (
-    <div className="nav_ac" onClick={themetoggle}>
-      <WiMoonAltWaningCrescent4 />
-    </div>
+    <button 
+      className="theme-toggle"
+      onClick={() => setIsDark(!isDark)}
+      aria-label="Toggle theme"
+    >
+      {isDark ? '☀️' : '🌙'}
+    </button>
   );
 };
 
-export default Themetoggle;
+export default ThemeToggle;

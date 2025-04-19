@@ -5,29 +5,30 @@
 }
 
 .page-enter {
-    transform: translateY(100%);
+    opacity: 0;
+    transform: translateY(20px);
 }
 
 .page-enter-active {
-    transform: translateY(0%);
-    transition: all 400ms ease-out;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .page-exit {
-    transform: translateY(0%);
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
+    opacity: 1;
 }
 
 .page-exit-active {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    transform: translateY(-130%);
-    transition: all 400ms ease-out;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
 }
 
 @media (min-width: 1400px) {
@@ -37,6 +38,157 @@
     .container-sm,
     .container-xl,
     .container-xxl {
-        max-width: 1140px;
+        max-width: var(--max-width);
     }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hover-lift {
+    transition: transform var(--transition-speed) ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+}
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    font-family: var(--font-sans);
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 240px;
+    padding: 20px 40px;
+    min-height: calc(100vh - 100px);
+    position: relative;
+    overflow-x: hidden;
+    transition: all 0.3s ease;
+}
+
+.section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    position: relative;
+    background: rgba(242, 242, 242, 0.95);
+    border-radius: 16px;
+    box-shadow: 
+        inset 1px 1px 1px rgba(214, 214, 214, 1),
+        inset -1px -1px 1px rgba(214, 214, 214, 1);
+    border: 1px solid rgba(214, 214, 214, 1);
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+    opacity: 0;
+    animation: sectionFadeIn 0.5s ease-out forwards;
+}
+
+/* Remove the red gradient border */
+.section-container::before {
+    content: none;
+}
+
+.section-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: transparent;
+    transform: translateZ(-1px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Ensure content has proper contrast */
+.section-container > * {
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes sectionFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) perspective(1000px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) perspective(1000px);
+    }
+}
+
+/* Ensure content has good contrast */
+.section-container h1,
+.section-container h2,
+.section-container h3,
+.section-container h4,
+.section-container h5,
+.section-container h6 {
+    color: rgba(17, 17, 17, 1);
+}
+
+.section-container p,
+.section-container span,
+.section-container div {
+    color: rgba(51, 51, 51, 1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+        margin-bottom: 80px; /* Space for bottom navigation on mobile */
+    }
+    
+    .vertical-nav {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        transform: none;
+        background: var(--background-primary);
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px;
+    }
+
+    .nav-button {
+        flex: 1;
+        margin: 0 5px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .section-container {
+        padding: 20px;
+        margin: 10px;
+        border-radius: 12px;
+    }
+}
+
+/* Dark theme support */
+[data-theme='dark'] .nav-button {
+    background: var(--background-secondary-dark, #2a2a2a);
+    color: var(--text-primary-dark, #ffffff);
+}
+
+[data-theme='dark'] .nav-button:hover {
+    background: var(--background-hover-dark, #363636);
 }

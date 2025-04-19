@@ -1,14 +1,16 @@
 :root {
-    --bg-color: #0c0c0c;
-    --primary-color: #0d0d0d;
-    --secondary-color: #fff;
-    --text-color: #fff;
-    --text-color-2: #fff;
-    --text-color-3: rgb(204, 0, 0);
-    --text-color-3-rgb: 204, 0, 0;
-    --overlay-color: rgb(12 12 12 / 63%);
-    --color1: 18, 113, 255;
-    --color2: 221, 74, 255;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --bg-color: rgba(235, 235, 235, 1);
+    --primary-color: #ffffff;
+    --secondary-color: #111;
+    --text-color: #111;
+    --text-color-2: #333;
+    --text-color-3: #ff4d4d;
+    --text-color-3-rgb: 255, 77, 77;
+    --overlay-color: rgb(255, 255, 255, 0.95);
+    --color1: 255, 77, 77;
+    --color2: 255, 122, 89;
 }
 
 html,
@@ -16,18 +18,20 @@ body {
     height: 100%;
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+}
+
 body {
     margin: 0;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: visible;
+    padding: 0;
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Raleway', sans-serif;
+    font-family: var(--font-sans);
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Remove padding-top that was causing the gap */
-    padding-top: 0;
     border-left: 10px solid var(--primary-color);
     border-right: 10px solid var(--primary-color);
     cursor: default;
@@ -35,6 +39,9 @@ body {
 
 /* Use default cursor for all elements */
 * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
     cursor: default !important;
 }
 
@@ -52,20 +59,162 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: Marcellus;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 1rem;
 }
 
-a,
+h1 {
+    font-size: 2.5rem;
+    letter-spacing: -0.025em;
+}
+
+h2 {
+    font-size: 2rem;
+    letter-spacing: -0.025em;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+a {
+    position: relative;
+    color: var(--accent-primary);
+    text-decoration: none;
+    transition: all var(--transition-speed) ease;
+}
+
 a:hover {
-    color: var(--text-color);
+    color: var(--accent-hover);
+}
+
+a.underline {
+    background-image: linear-gradient(to right, var(--accent-primary), var(--accent-primary));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    transition: background-size var(--transition-speed) ease;
+}
+
+a.underline:hover {
+    background-size: 100% 2px;
 }
 
 p {
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
     word-break: break-word;
     hyphens: auto;
 }
 
-.ovhidden {
+button, .button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 0.375rem;
+    transition: all var(--transition-speed) var(--animation-timing);
+    gap: 0.5rem;
+    overflow: hidden;
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.2),
+        0 2px 4px -2px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+button:hover, .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 6px 12px -2px rgba(0, 0, 0, 0.25),
+        0 3px 7px -3px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.btn-primary, .button-primary {
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover, .button-primary:hover {
+    background: var(--accent-hover);
+}
+
+.btn-secondary, .button-secondary {
+    background: var(--background-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover, .button-secondary:hover {
+    background: var(--card-background);
+    border-color: var(--accent-primary);
+    box-shadow: var(--card-shadow);
+}
+
+.btn::before, .button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.15), transparent 70%);
+    opacity: 0;
+    transition: opacity var(--transition-speed) ease;
+}
+
+.btn:hover::before, .button:hover::before {
+    opacity: 1;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.card {
+    position: relative;
+    background: var(--card-background);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: all var(--transition-speed) var(--animation-timing);
+    overflow: hidden;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(var(--accent-primary-rgb), 0.1), transparent 70%);
+    opacity: 0;
+    transition: opacity var(--transition-speed) ease;
+    pointer-events: none;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 10px 20px -5px rgba(0, 0, 0, 0.15),
+        0 4px 8px -4px rgba(0, 0, 0, 0.1),
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.9);
+    border-color: rgba(var(--accent-primary-rgb), 0.2);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+ovhidden {
     overflow: hidden;
 }
 
@@ -75,23 +224,19 @@ p {
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background-color: var(--background-secondary);
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
 }
 
-/* Custom cursor styles - disabled
-.cursor__dot div {
-    z-index: 999999 !important;
+.text-gradient {
+    background: linear-gradient(to right, var(--accent-primary), #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
-
-.cursor__dot div:last-child {
-    background-color: var(--text-color-3) !important;
-}
-
-.cursor__dot div:first-child {
-    filter: invert(1);
-    background-color: var(--overlay-color) !important;
-}
-*/
 
 .color_pr {
     color: var(--primary-color) !important;
@@ -99,6 +244,106 @@ code {
 
 .color_sec {
     color: var(--secondary-color);
+}
+
+::selection {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.scroll-margin {
+    scroll-margin-top: 5rem;
+}
+
+/* Improve focus states */
+:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(var(--accent-primary-rgb), 0.1);
+}
+
+/* Add fluid animations */
+@media (prefers-reduced-motion: no-preference) {
+    .animate-in {
+        animation: animate-in 0.5s ease-out;
+    }
+    
+    .animate-up {
+        animation: animate-up 0.5s ease-out;
+    }
+}
+
+@keyframes animate-in {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes animate-up {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Add nav blur effect */
+.nav-blur {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Touch target sizes for mobile */
+@media (max-width: 768px) {
+    .btn, button, .button {
+        min-height: 44px;
+        padding: 0.875rem 1.5rem;
+    }
+    
+    a {
+        padding: 0.25rem 0;
+    }
+}
+
+/* Handle mouse position for interactive hover effects */
+.interactive-hover {
+    --x: 50%;
+    --y: 50%;
+}
+
+/* Smooth animations for page transitions */
+.page-enter {
+    opacity: 0;
+    transform: translateY(1rem);
+}
+
+.page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--transition-speed) ease, transform var(--transition-speed) var(--animation-timing);
+}
+
+.page-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-exit-active {
+    opacity: 0;
+    transform: translateY(-1rem);
+    transition: opacity var(--transition-speed) ease, transform var(--transition-speed) var(--animation-timing);
 }
 
 

@@ -2,7 +2,7 @@
   width: 100%;
   overflow: hidden;
   position: relative;
-  padding: 20px 0;
+  padding: 2rem 0;
 }
 
 .interests-carousel-container::before,
@@ -28,11 +28,12 @@
 
 .interests-carousel-track {
   display: flex;
-  gap: 40px;
+  gap: 2rem;
   user-select: none;
   white-space: nowrap;
-  animation: interestScroll 40s linear infinite;
+  animation: scroll 30s linear infinite;
   will-change: transform;
+  padding: 1rem 0;
 }
 
 @keyframes interestScroll {
@@ -44,35 +45,79 @@
   }
 }
 
+@keyframes scroll {
+  to {
+    transform: translateX(calc(-50% - 1rem));
+  }
+}
+
 .interest-carousel-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 20px 30px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  min-width: 130px;
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
+  gap: 1rem;
+  padding: 2rem;
+  background: rgba(var(--card-background-rgb), 0.7);
+  border-radius: 0.5rem;
+  min-width: 200px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  position: relative;
   flex-shrink: 0;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.interest-carousel-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(var(--accent-primary-rgb), 0.1),
+    transparent 70%
+  );
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+  pointer-events: none;
 }
 
 .interest-carousel-item:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05) translateY(-4px);
+  box-shadow: 
+    0 10px 20px -5px rgba(0, 0, 0, 0.15),
+    0 4px 8px -4px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.9);
+  border-color: rgba(var(--accent-primary-rgb), 0.2);
+}
+
+.interest-carousel-item:hover::before {
+  opacity: 1;
 }
 
 .interest-carousel-item .interest-icon {
-  font-size: 32px;
-  color: var(--text-color-3);
+  font-size: 2rem;
+  color: var(--accent-primary);
+  transition: transform var(--transition-speed) ease;
+}
+
+.interest-carousel-item:hover .interest-icon {
+  transform: scale(1.2);
+  color: var(--accent-hover);
 }
 
 .interest-carousel-item span {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
 }
 
 /* Pause animation on hover */
@@ -91,4 +136,208 @@
 
 .interest-carousel-item:nth-child(3n+3) {
   background: linear-gradient(135deg, rgba(50, 50, 50, 0.1) 0%, rgba(var(--text-color-3-rgb), 0.12) 100%);
-} 
+}
+
+@media (max-width: 768px) {
+  .interests-carousel-track {
+    gap: 1rem;
+  }
+  
+  .interest-carousel-item {
+    min-width: 160px;
+    padding: 1.5rem;
+  }
+}
+
+.interests-section {
+  padding: var(--section-spacing) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.interests-container {
+  position: relative;
+  padding: 2rem 0;
+}
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin: 0 auto;
+  max-width: var(--max-width);
+  padding: 0 1rem;
+}
+
+.interest-item {
+  position: relative;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all var(--transition-speed) var(--animation-timing);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-in-up 0.6s var(--animation-timing) forwards;
+  animation-delay: calc(var(--item-index, 0) * 0.1s);
+}
+
+.interest-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(var(--accent-primary-rgb), 0.1),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.interest-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(var(--accent-primary-rgb), 0.2);
+}
+
+.interest-item:hover::before {
+  opacity: 1;
+}
+
+.interest-icon {
+  font-size: 2.5rem;
+  color: var(--accent-primary);
+  margin-bottom: 1rem;
+  transition: all var(--transition-speed) var(--animation-timing);
+  display: inline-block;
+}
+
+.interest-item:hover .interest-icon {
+  transform: scale(1.1) rotate(5deg);
+  color: var(--accent-hover);
+}
+
+.interest-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.interest-description {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Background decoration */
+.interest-bg-decoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.interest-bg-decoration::before,
+.interest-bg-decoration::after {
+  content: '';
+  position: absolute;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(
+    circle at center,
+    rgba(var(--gradient-1), 0.1),
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: float 20s infinite;
+}
+
+.interest-bg-decoration::before {
+  top: -20%;
+  right: -20%;
+  animation-delay: -10s;
+}
+
+.interest-bg-decoration::after {
+  bottom: -20%;
+  left: -20%;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 2%);
+  }
+  50% {
+    transform: translate(2%, -2%);
+  }
+  75% {
+    transform: translate(-2%, -2%);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .interests-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .interest-item {
+    padding: 1.5rem;
+  }
+
+  .interest-icon {
+    font-size: 2rem;
+  }
+
+  .interest-title {
+    font-size: 1rem;
+  }
+
+  .interest-description {
+    font-size: 0.75rem;
+  }
+}
+
+/* Loading state */
+.interests-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin: 0 auto;
+  max-width: var(--max-width);
+  padding: 0 1rem;
+}
+
+.skeleton-item {
+  aspect-ratio: 1;
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    90deg,
+    var(--background-secondary) 25%,
+    var(--card-background) 50%,
+    var(--background-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
