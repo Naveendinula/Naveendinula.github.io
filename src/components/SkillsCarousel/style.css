@@ -2,8 +2,16 @@
   width: 100%;
   overflow: hidden;
   position: relative;
-  padding: 20px 0;
+  padding: 2rem 0;
   height: 150px;
+  filter: url(#goo);
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--background-primary) 15%,
+    var(--background-primary) 85%,
+    transparent
+  );
 }
 
 .skills-carousel-container::before,
@@ -33,52 +41,115 @@
 
 .skills-carousel-track {
   display: flex;
-  gap: 40px;
+  gap: 2rem;
   user-select: none;
-  white-space: nowrap;
-  animation: scroll 40s linear infinite;
+  animation: scrollSkills 40s linear infinite;
   will-change: transform;
-  position: absolute;
-  padding: 0 60px;
+  position: relative;
 }
 
-@keyframes scroll {
+.skills-carousel-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scrollSkills {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% - 1rem));
   }
 }
 
 .skill-item {
+  flex: 0 0 auto;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 15px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  min-width: 100px;
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
-  flex-shrink: 0;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--card-background);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  transition: all var(--transition-speed) var(--animation-timing);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.skill-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--x, 50%) var(--y, 50%),
+    rgba(var(--accent-primary-rgb), 0.1),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease;
+  pointer-events: none;
 }
 
 .skill-item:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 
+    0 10px 20px -5px rgba(0, 0, 0, 0.15),
+    0 4px 8px -4px rgba(0, 0, 0, 0.1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.9);
+  border-color: rgba(var(--accent-primary-rgb), 0.2);
+  z-index: 1;
 }
 
-.skill-item span {
-  font-size: 14px;
-  margin-top: 5px;
+.skill-item:hover::before {
+  opacity: 1;
 }
 
-.skills-carousel-container:hover .skills-carousel-track {
-  animation-play-state: paused;
+.skill-icon {
+  font-size: 1.5rem;
+  color: var(--accent-primary);
+  transition: transform var(--transition-speed) var(--animation-timing);
+}
+
+.skill-item:hover .skill-icon {
+  transform: scale(1.2);
+  color: var(--accent-hover);
+}
+
+.skill-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .skills-carousel-container {
+    height: auto;
+    padding: 1rem 0;
+  }
+  
+  .skills-carousel-track {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    animation: none;
+  }
+  
+  .skills-carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .skill-item {
+    scroll-snap-align: start;
+  }
 }
 
 
