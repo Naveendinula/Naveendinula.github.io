@@ -43,35 +43,58 @@ const lifestyle = {
     ]
 };
 
-const worktimeline = [{
+const worktimeline = [
+    {
         jobtitle: "Data Analyst Intern",
         where: "American Solar Energy Society",
         date: "January 2025 - Present",
-        location: "Remote"
+        location: "Remote",
+        description: "Analyze membership, webinar, and event data using Excel and Power BI to identify engagement trends and inform data-driven strategies for renewable energy programs. Collaborate with technical teams to cleanse and manage datasets, generate insightful visualizations and reports, supporting initiatives in solar energy and grid modernization."
     },
     {
         jobtitle: "Volunteer Data Engineer",
         where: "Community Dreams Foundation",
         date: "November 2024 - Present",
-        location: "Remote"
+        location: "Remote",
+        description: "Developed and optimized Azure-based data pipelines using ETL workflows for the Green Connect App, ensuring scalable and efficient data processing. Contributed to data modeling and documentation, enhancing system interoperability and team collaboration for an environmentally focused application."
     },
     {
         jobtitle: "Graduate Assistant",
         where: "UW Whitewater",
         date: "September 2022 - May 2024",
-        location: "Whitewater, WI, USA"
+        location: "Whitewater, WI, USA",
+        description: "Analyzed Google Ads and Facebook Ads performance metrics, creating Power BI dashboards to track key marketing KPIs and drive data-driven campaign optimizations. Maintained and updated campus web content, analyzing user engagement data to optimize accessibility and user experience."
     },
     {
         jobtitle: "Mechanical Engineer",
         where: "Lalan Group",
         date: "May 2021 - November 2021",
-        location: "Sri Lanka"
+        location: "Sri Lanka",
+        description: "Monitored and analyzed energy consumption data for a 16Mkcal/hr centralized thermic fluid heater, identifying key strategies for improving energy efficiency. Designed and optimized utility networks (water, compressed air) using AutoCAD, contributing to reduced operational inefficiencies. Managed machinery commissioning projects using MS Project, tracking progress and optimizing resource allocation based on project data."
     },
     {
         jobtitle: "Engineering Intern",
         where: "Vidullanka PLC",
         date: "February 2021 - April 2021",
-        location: "Sri Lanka"
+        location: "Sri Lanka",
+        description: "Developed a Python-based SARIMA forecasting model to predict energy consumption trends for biomass and hydropower projects, improving forecast accuracy. Conducted historical load pattern analysis to enable proactive energy management strategies and reduce operational waste."
+    }
+];
+
+const educationtimeline = [
+    {
+        degree: "Master's, Computer Science",
+        where: "University of Wisconsin - Whitewater",
+        date: "January 2022 - May 2024",
+        location: "Whitewater, WI, USA",
+        description: ""
+    },
+    {
+        degree: "Bachelor's, Mechanical Engineering",
+        where: "University of Hong Kong",
+        date: "September 2016 - December 2020",
+        location: "Hong Kong",
+        description: ""
     }
 ];
 
@@ -159,6 +182,7 @@ export {
     dataabout,
     dataportfolio,
     worktimeline,
+    educationtimeline,
     skills,
     introdata,
     contactConfig,

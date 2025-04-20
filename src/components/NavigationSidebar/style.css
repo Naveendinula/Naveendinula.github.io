@@ -77,7 +77,7 @@
 }
 
 .nav-button.active::after {
-  background: #ff4d4d;
+  background: transparent; /* Changed from #ff4d4d to transparent to remove the orange line */
 }
 
 .nav-button.active {

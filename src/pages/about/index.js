@@ -8,9 +8,11 @@ import {
   dataabout,
   meta,
   worktimeline,
+  educationtimeline,
   lifestyle,
 } from "../../content_option";
-import SkillsCarousel from "../../components/SkillsCarousel";
+import SkillsGrid from "../../components/SkillsCarousel";
+import ExperienceEducationTabs from "../../components/ExperienceEducationTabs";
 
 export const About = () => {
   // Function to get the appropriate icon for each interest
@@ -46,60 +48,39 @@ export const About = () => {
         </Row>
 
         <Row className="sec_sp">
-          <Col lg="5">
+          <Col lg="4">
             <h3 className="color_sec py-4">{dataabout.title}</h3>
           </Col>
-          <Col lg="7" className="d-flex align-items-center">
+          <Col lg="8" className="d-flex align-items-center">
             <div>
               <p>{dataabout.aboutme}</p>
             </div>
           </Col>
         </Row>
         <Row className="sec_sp">
-          <Col lg="5">
+          <Col lg="4">
             <h3 className="color_sec py-4">Skills</h3>
           </Col>
-          <Col lg="7">
-            <SkillsCarousel />
+          <Col lg="8">
+            <SkillsGrid />
           </Col>
         </Row>
         <Row className="sec_sp">
-          <Col lg="5">
+          <Col lg="4">
             <h3 className="color_sec py-4">Timeline</h3>
           </Col>
-          <Col lg="7">
-            <div className="timeline">
-              {worktimeline.map((data, i) => {
-                // Assign different colors to the dots based on index
-                const dotColors = ['blue', 'yellow', 'green', 'red'];
-                const colorClass = dotColors[i % dotColors.length];
-
-                return (
-                  <div className="timeline-item" key={i}>
-                    <div className={`timeline-dot ${colorClass}`}></div>
-                    <div className="timeline-content">
-                      <div className="timeline-date">{data.date}</div>
-                      <h4 className="timeline-title">{data.jobtitle}</h4>
-                      <div className="timeline-subtitle">{data.where}</div>
-                      {data.description && (
-                        <div className="timeline-description">
-                          <ul>
-                            <li>{data.description}</li>
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          <Col lg="8">
+            <ExperienceEducationTabs 
+              workTimeline={worktimeline} 
+              educationTimeline={educationtimeline} 
+            />
           </Col>
         </Row>
         <Row className="sec_sp">
-          <Col lg="5">
+          <Col lg="4">
             <h3 className="color_sec py-4">{lifestyle.title}</h3>
           </Col>
-          <Col lg="7">
+          <Col lg="8">
             <div className="interests-container">
               <div className="interest-item">
                 <FaDumbbell className="interest-icon" />
