@@ -172,10 +172,10 @@ const contactConfig = {
 };
 
 const socialprofils = {
-    github: "https://github.com/Naveendinula",
     linkedin: "https://linkedin.com/in/naveen-panditharathne",
-    twitter: "https://twitter.com",
-    facebook: "https://facebook.com",
+    email: contactConfig.YOUR_EMAIL,
+    resume: contactConfig.YOUR_RESUME,
+    github: "https://github.com/Naveendinula",
 };
 export {
     meta,

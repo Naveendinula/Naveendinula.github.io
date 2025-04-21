@@ -39,7 +39,7 @@
   font-size: 12px;
   text-align: center;
   margin-bottom: 10px;
-  transition: all .3s;
+  transition: none;
 }
 
 .stick_follow_icon p:after {
@@ -51,32 +51,42 @@
   margin: 1rem auto 0;
 }
 
-.stick_follow_icon ul li {
-  display: block;
-  font-size: 12px;
-  text-align: center;
-  margin-bottom: 10px;
-  transition: all .3s;
-}
-
 .stick_follow_icon li a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  background: var(--background-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  background: transparent; /* Remove background */
+  border: none; /* Remove border */
   color: var(--text-primary);
-  transition: all var(--transition-speed) ease;
+  box-shadow: none; /* Remove box shadow */
+  transform: none;
+  position: relative;
+  overflow: visible;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
+/* Remove chamfered edges pseudo-elements */
+.stick_follow_icon li a::before,
+.stick_follow_icon li a::after {
+  display: none;
+}
+
+/* Active state - just darken the icon */
+.stick_follow_icon li a:active {
+  transform: none;
+  box-shadow: none;
+  color: #ff6b00; /* Orange color for active state */
+}
+
+/* Hover effect - change color to orange */
 .stick_follow_icon li a:hover {
-  background: var(--card-background);
-  transform: translateY(-2px);
-  box-shadow: var(--card-shadow);
-  color: var(--accent-primary);
+  background: transparent;
+  transform: scale(1.2); /* Add a slight scale effect on hover */
+  color: #ff6b00 !important; /* Use !important to override any conflicting styles */
+  filter: drop-shadow(0 0 2px rgba(255, 107, 0, 0.3)); /* Add a subtle glow */
+  transition: color 0.3s ease;
 }
 
 @media only screen and (max-width: 991px) {
@@ -105,4 +115,54 @@
   .stick_follow_icon ul {
     flex-direction: row;
   }
+}
+
+/* Horizontal social icons styling */
+.horizontal-social-icons .stick_follow_icon {
+  position: static;
+  flex-direction: row;
+  transform: none;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
+}
+
+.horizontal-social-icons .stick_follow_icon ul {
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.horizontal-social-icons .stick_follow_icon p {
+  display: none;
+}
+
+.horizontal-social-icons .stick_follow_icon li {
+  margin-bottom: 0;
+}
+
+/* Email popup styling */
+.email-popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff6b00;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeInOutTop 3s ease forwards;
+  text-align: center;
+  min-width: 200px;
+}
+
+@keyframes fadeInOutTop {
+  0% { opacity: 0; transform: translate(-50%, -20px); }
+  15% { opacity: 1; transform: translate(-50%, 0); }
+  85% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -20px); }
 }
