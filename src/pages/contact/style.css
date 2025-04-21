@@ -124,11 +124,12 @@ button.btn.ac_btn:hover {
   font-size: 1rem;
   font-weight: 500;
   color: white;
-  background: var(--accent-primary);
+  background: #ff6b00; /* Explicit orange color instead of var(--accent-primary) */
   border: none;
   border-radius: 0.375rem;
-  transition: all var(--transition-speed) ease;
+  transition: all 0.3s ease;
   overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
 }
 
 .btn.ac_btn::before {
@@ -145,8 +146,10 @@ button.btn.ac_btn:hover {
 }
 
 .btn.ac_btn:hover {
-  background: var(--accent-hover);
+  background: #e56000; /* Darker orange for hover state */
   transform: translateY(-2px);
+  color: white; /* Keep text white on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .btn.ac_btn:hover::before {

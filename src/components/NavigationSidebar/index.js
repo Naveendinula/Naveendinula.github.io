@@ -7,6 +7,11 @@ const NavigationSidebar = () => {
   const path = location.pathname;
 
   const isActive = (linkPath) => {
+    // For portfolio, also consider eiaproject as active
+    if (linkPath === '/portfolio') {
+      return path === linkPath || path === '/eiaproject';
+    }
+    // For other links, exact match
     return path === linkPath;
   };
 
