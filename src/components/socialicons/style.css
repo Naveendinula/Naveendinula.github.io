@@ -85,7 +85,6 @@
   background: transparent;
   transform: scale(1.2); /* Add a slight scale effect on hover */
   color: #ff6b00 !important; /* Use !important to override any conflicting styles */
-  filter: drop-shadow(0 0 2px rgba(255, 107, 0, 0.3)); /* Add a subtle glow */
   transition: color 0.3s ease;
 }
 

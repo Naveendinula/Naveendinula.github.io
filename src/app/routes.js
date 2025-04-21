@@ -1,12 +1,10 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import withRouter from "../hooks/withRouter";
-import { Home } from "../pages/home";
 import { About } from "../pages/about";
 import { Portfolio } from "../pages/portfolio";
 import { ContactUs } from "../pages/contact";
-import { PowerBI } from "../pages/eiaproject"; // Updated import path
-import { Socialicons } from "../components/socialicons";
+import { PowerBI } from "../pages/eiaproject";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const AnimatedRoutes = withRouter(({ location }) => (
@@ -21,12 +19,12 @@ const AnimatedRoutes = withRouter(({ location }) => (
       unmountOnExit
     >
       <Routes location={location}>
-        <Route exact path="/" element={<Home />} />
+        <Route exact path="/" element={<About />} />
         <Route path="/about" element={<About />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/contact" element={<ContactUs />} />
-        <Route path="/eiaproject" element={<PowerBI />} /> {/* Updated route path */}
-        <Route path="*" element={<Home />} />
+        <Route path="/eiaproject" element={<PowerBI />} />
+        <Route path="*" element={<About />} />
       </Routes>
     </CSSTransition>
   </TransitionGroup>

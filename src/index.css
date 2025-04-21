@@ -247,7 +247,7 @@ code {
 }
 
 ::selection {
-    background: var(--accent-primary);
+    background: #ff6b00; /* Orange color consistent with your site */
     color: white;
 }
 

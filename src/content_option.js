@@ -131,31 +131,37 @@ const skills = [{
 const dataportfolio = [
     {
         img: require("./assets/images/eia-dashboard.png"),
+        title: "Energy Dashboard",
         description: "Energy Consumption Analysis - Data-driven insights for reducing energy wastage and improving efficiency",
         link: "/eiaproject",
     },
     // {
     //     img: "https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=1000",
+    //     title: "Physics-Informed Neural Network",
     //     description: "Physics-Informed Neural Network for Fluid Mechanics - Simulating Lid-Driven Cavity flow using machine learning",
     //     link: "#",
     // },
     // {
     //     img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1000",
+    //     title: "Neonatal Care Web App",
     //     description: "Neonatal Care Web App Frontend Design - Responsive React-based interface for medical applications",
     //     link: "#",
     // },
     // {
     //     img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000",
+    //     title: "Marketing Analytics Dashboard",
     //     description: "Marketing Analytics Dashboard - Power BI visualizations for campaign performance optimization",
     //     link: "#",
     // },
     // {
     //     img: "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=1000",
+    //     title: "Azure Data Pipeline",
     //     description: "Azure Data Pipeline Configuration - Setup for the GreenConnect App's data workflows",
     //     link: "#",
     // },
     // {
     //     img: "https://images.unsplash.com/photo-1581094487102-8688862c7350?q=80&w=1000",
+    //     title: "Renewable Energy Data Management",
     //     description: "Renewable Energy Data Management - Collaboration with Technical Divisions on solar and sustainability initiatives",
     //     link: "#",
     // },

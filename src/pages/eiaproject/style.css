@@ -16,10 +16,12 @@
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  background: linear-gradient(to right, var(--accent-primary), #06b6d4);
+  color: #000000; /* Black color */
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: initial; /* Reset the transparent fill */
   background-clip: text;
+  display: inline-block;
+  position: relative;
 }
 
 .powerbi-container {
@@ -146,19 +148,22 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: var(--accent-primary);
+  background: #ff6b00; /* Explicit orange color instead of var(--accent-primary) */
   color: white;
   border-radius: 0.375rem;
   font-size: 1rem;
   font-weight: 500;
-  transition: all var(--transition-speed) ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow for better visibility */
+  text-decoration: none; /* Ensure no text decoration */
 }
 
 .github-link:hover {
-  background: var(--accent-hover);
+  background: #e56000; /* Darker orange for hover state */
   transform: translateY(-1px);
   text-decoration: none;
   color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes spin {
