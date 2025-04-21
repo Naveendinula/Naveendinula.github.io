@@ -6,7 +6,6 @@ import { About } from "../pages/about";
 import { Portfolio } from "../pages/portfolio";
 import { ContactUs } from "../pages/contact";
 import Home from "../pages/home";
-import ContactSidebar from "../components/ContactSidebar";
 import Footer from "../components/Footer";
 import "./App.css";
 
@@ -15,7 +14,6 @@ export default function App() {
     <Router basename={process.env.PUBLIC_URL}>
       <div className="app-container">
         <NavigationSidebar />
-        <ContactSidebar />
         <main className="main-content">
           <div className="section-container">
             <Routes>

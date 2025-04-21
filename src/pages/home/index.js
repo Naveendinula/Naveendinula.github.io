@@ -1,33 +1,60 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Container, Row, Col } from "react-bootstrap";
 import { meta } from "../../content_option";
+import { Socialicons } from "../../components/socialicons";
 
 const Home = () => {
+  const [displayText, setDisplayText] = useState("");
+  const fullText = "Hi! I'm Naveen Panditharatne";
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+
+  useEffect(() => {
+    let currentIndex = 0;
+    const typingInterval = setInterval(() => {
+      if (currentIndex < fullText.length) {
+        setDisplayText(fullText.substring(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+        setIsTypingComplete(true);
+      }
+    }, 100); // Adjust typing speed here (milliseconds per character)
+
+    return () => clearInterval(typingInterval);
+  }, []);
+
   return (
     <HelmetProvider>
-      <Container className="home-container">
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>Home | {meta.title}</title>
-          <meta name="description" content={meta.description} />
-        </Helmet>
-        <Row className="mb-5 mt-3 pt-md-3">
-          <Col lg="12">
-            <h1 className="display-4 mb-4">Home</h1>
-            <hr className="t_border my-4 ml-0 text-left" />
-          </Col>
-        </Row>
-        <Row className="sec_sp">
-          <Col lg="12">
-            {/* This container is intentionally left blank as requested */}
-            <div className="home-content-placeholder">
-              {/* Blank content area */}
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Home | {meta.title}</title>
+        <meta name="description" content={meta.description} />
+      </Helmet>
+      <div className="greeting-container">
+        <div className="greeting-text">
+          {displayText}
+          <span className="typing-cursor"></span>
+        </div>
+        <div className="status-indicators">
+          <div className="availability-indicator">
+            <div className="availability-dot"></div>
+            <span>Available for work</span>
+          </div>
+          <div className="location-indicator">
+            <div className="location-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
             </div>
-          </Col>
-        </Row>
-      </Container>
+            <span>Madison, WI</span>
+          </div>
+        </div>
+        <div className="horizontal-social-icons">
+          <Socialicons />
+        </div>
+      </div>
     </HelmetProvider>
   );
 };

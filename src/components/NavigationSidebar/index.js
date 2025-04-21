@@ -12,11 +12,6 @@ const NavigationSidebar = () => {
 
   return (
     <nav className="vertical-nav">
-      <Link to="/">
-        <button className={`nav-button ${isActive('/') ? 'active' : ''}`}>
-          Home
-        </button>
-      </Link>
       <Link to="/about">
         <button className={`nav-button ${isActive('/about') ? 'active' : ''}`}>
           About

@@ -17,9 +17,9 @@
 .tab {
   display: flex;
   align-items: center;
-  gap: 1rem; /* Increased gap between icon and text */
-  padding: 0.75rem 2rem 0.75rem 1.25rem; /* Added even more padding on right side */
-  min-width: 250px; /* Increased minimum width to make buttons wider */
+  gap: 1rem; /* Gap between icon and text */
+  padding: 0.75rem 2rem 0.75rem 1.25rem;
+  min-width: 250px;
   background: #ffffff;
   border: none;
   font-family: "JetBrains Mono", monospace;
@@ -34,16 +34,17 @@
   transform: translateY(-1px);
 }
 
-/* Add indicator for the tab */
-.tab::before {
+/* Add indicator for the tab - positioned to the right of the text */
+.tab::after {
   content: '';
   position: absolute;
-  right: 20px; /* Moved the indicator even further right */
-  bottom: 10px;
+  right: 20px; /* Position to the right of the text */
+  top: 50%;
+  transform: translateY(-50%);
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: transparent;
+  background: #e0e0e0; /* Light gray for inactive state */
   transition: background-color 0.2s ease;
 }
 
@@ -60,13 +61,8 @@
 }
 
 /* Orange indicator for active tab */
-.tab.active::before {
-  background: #ff7a59;
-}
-
-/* Remove the after element that created the underline */
-.tab::after {
-  display: none;
+.tab.active::after {
+  background: #ff6b00; /* Orange color as shown in image */
 }
 
 .tab-icon {

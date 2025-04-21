@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Container, Row, Col } from "react-bootstrap";
-import { FaDumbbell, FaBookOpen, FaPodcast } from "react-icons/fa";
+import { FaDumbbell, FaBookOpen, FaPodcast, FaMapMarkerAlt } from "react-icons/fa";
 import { GiShuttlecock } from "react-icons/gi";
 import {
   dataabout,
@@ -13,8 +13,28 @@ import {
 } from "../../content_option";
 import SkillsGrid from "../../components/SkillsCarousel";
 import ExperienceEducationTabs from "../../components/ExperienceEducationTabs";
+import { Socialicons } from "../../components/socialicons";
 
 export const About = () => {
+  const [displayText, setDisplayText] = useState("");
+  const fullText = "Hi! I'm Naveen Panditharatne";
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+
+  useEffect(() => {
+    let currentIndex = 0;
+    const typingInterval = setInterval(() => {
+      if (currentIndex < fullText.length) {
+        setDisplayText(fullText.substring(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+        setIsTypingComplete(true);
+      }
+    }, 100); // Adjust typing speed here (milliseconds per character)
+
+    return () => clearInterval(typingInterval);
+  }, []);
+
   // Function to get the appropriate icon for each interest
   const getInterestIcon = (interestName) => {
     switch(interestName.toLowerCase()) {
@@ -39,6 +59,22 @@ export const About = () => {
           <title> About | {meta.title}</title>
           <meta name="description" content={meta.description} />
         </Helmet>
+
+        <div className="greeting-container about-greeting">
+          <div className="greeting-text">
+            {displayText}
+            <span className="typing-cursor"></span>
+          </div>
+          <div className="status-indicators">
+            <div className="location-indicator">
+              <FaMapMarkerAlt className="location-icon" />
+              <span>Madison, WI, USA</span>
+            </div>
+            <div className="horizontal-social-icons">
+              <Socialicons />
+            </div>
+          </div>
+        </div>
 
         <Row className="mb-5 mt-3 pt-md-3">
           <Col lg="8">
