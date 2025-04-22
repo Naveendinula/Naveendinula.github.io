@@ -133,7 +133,7 @@ const dataportfolio = [
         img: require("./assets/images/eia-dashboard.png"),
         title: "Energy Dashboard",
         description: "Energy Consumption Analysis - Data-driven insights for reducing energy wastage and improving efficiency",
-        link: "/eiaproject",
+        link: "/project/eiaproject",
     },
     // {
     //     img: "https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=1000",
