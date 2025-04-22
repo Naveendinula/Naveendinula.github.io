@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.76147f68.css",
+    "main.js": "/static/js/main.a6cc85a7.js",
+    "static/media/eia-dashboard.png": "/static/media/eia-dashboard.0f850327599ea306e7a8.png",
+    "index.html": "/index.html",
+    "main.76147f68.css.map": "/static/css/main.76147f68.css.map",
+    "main.a6cc85a7.js.map": "/static/js/main.a6cc85a7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.76147f68.css",
+    "static/js/main.a6cc85a7.js"
+  ]
+}
