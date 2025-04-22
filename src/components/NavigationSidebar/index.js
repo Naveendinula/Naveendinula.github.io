@@ -7,6 +7,10 @@ const NavigationSidebar = () => {
   const path = location.pathname;
 
   const isActive = (linkPath) => {
+    // For About, consider both /about and root path (/) as active
+    if (linkPath === '/about') {
+      return path === linkPath || path === '/';
+    }
     // For portfolio, also consider eiaproject as active
     if (linkPath === '/portfolio') {
       return path === linkPath || path === '/eiaproject';

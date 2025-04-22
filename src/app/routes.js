@@ -23,6 +23,9 @@ const AnimatedRoutes = withRouter(({ location }) => (
         <Route path="/about" element={<About />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/contact" element={<ContactUs />} />
+        {/* Updated project route with nested structure */}
+        <Route path="/project/eiaproject" element={<PowerBI />} />
+        {/* Keep old route temporarily for backward compatibility */}
         <Route path="/eiaproject" element={<PowerBI />} />
         <Route path="*" element={<About />} />
       </Routes>
