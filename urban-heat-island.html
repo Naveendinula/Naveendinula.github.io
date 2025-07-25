@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Heat‑Island Mitigation via Green‑Roof Retrofits in Amsterdam · Portfolio</title>
+
+  <!-- === External Dependencies === -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- === Modular Stylesheets === -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="assets/css/building-analytics.css" />
+</head>
+<body>
+  <!-- === Vertical navigation === -->
+  <nav class="vertical-nav">
+    <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
+    <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
+    <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
+  </nav>
+
+  <div class="content-box">
+    <div class="powerbi-wrapper">
+      <!-- Back link -->
+      <div class="back-navigation"><a href="portfolio.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Portfolio</a></div>
+
+      <!-- Header -->
+      <header class="powerbi-header">
+        <h1 class="powerbi-title">Urban Heat‑Island Mitigation via Green‑Roof Retrofits in Amsterdam</h1>
+        <p class="powerbi-description"><em>A Dragonfly + 3D BAG + UWG study</em></p>
+        <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #ff6b00;">
+          <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Abstract</h3>
+          <p style="color: #444; line-height: 1.7;">
+            Amsterdam's historic canal district suffers from summertime urban‑heat‑island (UHI) amplification.  
+            This study quantifies the cooling potential of extensive green‑roof retrofits by:
+          </p>
+          <ol style="color: #444; line-height: 1.7; margin: 15px 0 15px 20px;">
+            <li>Importing <strong>LoD 1.3</strong> building geometry from the open‑source <strong>3D BAG</strong> data set;</li>
+            <li>Filtering flat roofs with potential for green roofs via <strong>CityJSON</strong> attributes in Grasshopper;</li>
+            <li>Generating a <strong>UWG‑modified urban EPW</strong> and comparing it to the baseline rural EPW;</li>
+            <li>Assessing outdoor comfort using <strong>UTCI</strong>, thermal‑condition tiers, and a binary comfort metric.</li>
+          </ol>
+          <p style="color: #444; line-height: 1.7;">
+           Despite adding vegetated surfaces, the model showed no measurable cooling because (1) the share of roof area actually covered in greenery was too small to drive meaningful latent‑heat flux, and (2) whatever cooling did occur was swamped by the district’s continuous anthropogenic heat load (traffic + HVAC), leaving peak air temperatures and “extreme‑heat‑stress” hours unchanged.</p>
+        </div>
+      </header>
+
+      <!-- Introduction Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Introduction</h2>
+        <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 0;">
+          <li><strong>Background.</strong> Buildings, asphalt, and limited vegetation raise urban air temperatures, elevating heat stress on occupants.</li>
+          <li><strong>Objective.</strong> Evaluate how much green‑roof retrofits can mitigate UHI for a 0.65 km² Amsterdam tile.</li>
+          <li><strong>Contribution.</strong> Combines high‑resolution 3‑D data with Dragonfly's micro‑climate engine and open weather data to deliver block‑scale cooling estimates.</li>
+        </ul>
+      </section>
+
+      <!-- Data & Tools Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Data & Tools</h2>
+        
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem;">
+            <thead>
+              <tr style="background: #f8f9fa;">
+                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Component</th>
+                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">3‑D Geometry</td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">3D BAG (LoD 1.3) → CityJSON → Grasshopper (<code>cityjson</code> plug‑in)</td>
+              </tr>
+              <tr>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Simulation Suite</td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Ladybug Tools v1.8 – Dragonfly Core + UWG</td>
+              </tr>
+              <tr>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Weather</td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Baseline EPW <code>Amsterdam_062400_TMYx</code> vs. UWG urban EPW</td>
+              </tr>
+              <tr>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Surface Materials</td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Terrain geometry (canal + street): albedo = 0.09, pavement thickness = 0.72 m, conductivity = 0.87 W/m‑K, volumetric heat capacity = 2.8 × 10⁶ J/m³‑K</td>
+              </tr>
+              <tr>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Anthropogenic Heat</td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Weekday/weekend traffic schedules + 18 W m⁻² anthropogenic heat</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== PROJECT PREVIEW =====
+      <div class="analytics-container">
+        <div class="project-media">
+          <img src="assets/images/UWG greenroof.png" 
+               alt="Amsterdam Green Roof Simulation Results" />
+        </div>
+      </div> -->
+
+      <!-- Methodology Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 class="platform-title">Methodology</h2>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-cubes" style="color: #ff6b00; margin-right: 0.5rem;"></i>3.1 Geometry Preparation</h3>
+        <ol style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+          <li><strong>Download & crop</strong> 3D BAG tile.</li>
+          <li><strong>Import CityJSON</strong> to Grasshopper → explode by <code>surface_type</code>.</li>
+          <li><strong>Filter roofs</strong>: <code>(surface_type = "RoofSurface") ∧ (pitch ≤ 5°) ∧ (area ≥ 40 m²)</code>.</li>
+          <li><strong>Assign WWR</strong> = 0.25 to façades; tag filtered slabs as <em>green‑roof ready</em>.</li>
+        </ol>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/3d bag view.png" alt="3D BAG Tile Overview" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 1.</strong> Axonometric view of the study tile showing canals and mid‑rise perimeter blocks.</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/rhino model.png" alt="Consolidated Rhino Model" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 2.</strong> Cleaned Rhino scene; streets and canals were measured using Google Maps and vegetation was traced as approximate surfaces.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/flat roof.png" alt="Filtered Flat Roofs" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 3.</strong> Filtered buildings with flat roofs appropriate for green roof implementation.</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/canal.png" alt="Canal Geometry" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 4.</strong> Traced canal geometry added to urban context model.</p>
+          </div>
+        </div>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-cloud-sun" style="color: #ff6b00; margin-right: 0.5rem;"></i>3.2 Urban Weather Generation</h3>
+        <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+          <li>UWG model information: average height of building = 13.7 m, façade to site density = 0.36, tree cover = 0.14, grass cover = 0.09, anthropogenic heat as above.</li>
+          <li>UWG produces an <strong>urban EPW</strong> reflecting thermal mass & waste‑heat effects.</li>
+        </ul>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-flask" style="color: #ff6b00; margin-right: 0.5rem;"></i>3.3 Scenario Simulations</h3>
+        <div style="overflow-x: auto; margin-bottom: 1.5rem;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: #f8f9fa;">
+                <th style="padding: 0.8rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Scenario</th>
+                <th style="padding: 0.8rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Roof Type</th>
+                <th style="padding: 0.8rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Weather File</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Baseline‑Rural</strong></td>
+                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666;">Conventional</td>
+                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666;">Baseline EPW</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Baseline‑Urban</strong></td>
+                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666;">Conventional</td>
+                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666;">UWG EPW</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.8rem; color: #666; font-weight: 600;"><strong>Green‑Roof‑Urban</strong></td>
+                <td style="padding: 0.8rem; color: #666;">Vegetated</td>
+                <td style="padding: 0.8rem; color: #666;">UWG EPW</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Results Section -->
+      <section class="project-section" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Results</h2>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-thermometer-three-quarters" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.1 Weather Validation</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/dry bulb temp.png" alt="Monthly Mean Dry‑Bulb" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 5.</strong> Monthly mean dry‑bulb: rural (blue) vs. UWG urban (red).</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/temp diff.png" alt="ΔT Urban‑Rural" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 6.</strong> Hourly ΔT = T<sub>urban</sub> – T<sub>rural</sub>.</p>
+          </div>
+        </div>
+
+        <p style="color: #666; font-style: italic; margin-bottom: 1.5rem;">The urban (UWG) curve sits above the rural baseline all year, confirming a persistent urban‑heat‑island signal. The gap is modest in winter but widens to roughly <strong> 1–2 °C</strong> during June‑to‑August afternoons, meaning the city stays noticeably hotter precisely when heat‑stress risk is highest.</p>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-chart-bar" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.2 UTCI Category Comparison</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/base category.png" alt="Rural UTCI Categories" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 7a.</strong> Rural UTCI category map.</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/uwg category.png" alt="Urban UTCI Categories" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 7b.</strong> Urban UTCI category map.</p>
+          </div>
+        </div>
+        
+        <!-- <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+          <li>Urban context adds <strong>75 additional "strong to extreme heat" hours</strong> (UTCI > 38 °C).</li>
+        </ul> -->
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-chart-pie" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.3 Thermal‑Status Tiers & Comfort Maps</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/base condition.png" alt="Rural Thermal Status" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 8a.</strong> Hot / Neutral / Cold (rural).</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/uwg condition.png" alt="Urban Thermal Status" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 8b.</strong> Hot / Neutral / Cold (urban).</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/base comfort.png" alt="Rural Comfort" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 9a.</strong> Comfortable vs. Uncomfortable (rural).</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/uwg comfort.png" alt="Urban Comfort" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 9b.</strong> Comfortable vs. Uncomfortable (urban).</p>
+          </div>
+        </div>
+        
+        <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+          <li>The UWG run increases Amsterdam's hourly temperatures by ~1 °C, adding approximately <strong>80 more heat‑stress hours</strong> (primarily "slight heat," with some June afternoons reaching extreme‑heat category) while eliminating similar numbers of cold‑stress hours during winter nights.</li>
+          <li>Heat episodes <strong>start ~1 week earlier, finish ~1 week later</strong>, and persist for an extra hour daily, trading fewer chilly periods for noticeably more intense summer heat‑stress.</li>
+        </ul>
+        
+        <!-- <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-leaf" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.4 Green‑Roof Impact</h3>
+        <p style="color: #666; font-style: italic; margin-bottom: 1rem;">(Simulated with UWG EPW)</p>
+        
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Metric</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Baseline‑Urban</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Green‑Roof‑Urban</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Δ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Summer max T<sub>db</sub></strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">35.1 °C</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>34.2 °C</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #ff6b00; font-weight: 600;">−0.9 °C</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Summer min T<sub>db</sub></strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">24.3 °C</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>23.7 °C</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #ff6b00; font-weight: 600;">−0.6 °C</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Peak UTCI</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">41.8 °C</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>40.5 °C</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #ff6b00; font-weight: 600;">−1.3 °C</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Extreme‑Heat Hours</strong></td>
+                  <td style="padding: 1rem; color: #666;">104 h</td>
+                  <td style="padding: 1rem; color: #666;"><strong>67 h</strong></td>
+                  <td style="padding: 1rem; color: #ff6b00; font-weight: 600;">−36 %</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div> -->
+
+        <h3 style="color: #000; margin: 1.5rem 0 1rem 0; font-size: 1.3rem;"><i class="fas fa-chart-pie" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.4 Comfort Statistics Analysis</h3>
+        <p style="color: #666; font-style: italic; margin-bottom: 1rem;">Ladybug Comfort Statistics component analysis showing percent hot, neutral, and cold conditions.</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/percentage of time for each condition(base).png" alt="Baseline Comfort Statistics" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 10a.</strong> Baseline comfort statistics: Hot (66.9%), Neutral (31.9%), Cold (1.2%).</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/uwg/percentage of time for each condition(uwg).png" alt="UWG Comfort Statistics" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 10b.</strong> UWG comfort statistics showing increased heat stress in urban conditions.</p>
+          </div>
+        </div>
+
+        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 1.5rem; border-left: 6px solid #ff6b00;">
+          <p style="color: #666; line-height: 1.7; margin: 0;">
+            These results show that the urban‑heat‑island signal itself—not the tested green‑roof retrofit—drives the shift toward more heat‑stress hours and fewer neutral hours. To restore thermal comfort, the project should pivot toward strategies with stronger, proven cooling leverage—e.g., expanding street‑level tree canopy, increasing high‑albedo and permeable paving, and improving night‑time ventilation corridors—rather than relying on extensive green roofs alone.
+          </p>
+        </div>
+      </section>
+
+      <!-- Discussion & Limitations Sections -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Discussion & Limitations</h2>
+        
+        <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 2rem;">
+          <h3 style="color: #000; margin-bottom: 0.8rem; font-size: 1.2rem;"><i class="fas fa-comment-alt" style="color: #ff6b00; margin-right: 0.5rem;"></i>Discussion</h3>
+          <p style="color: #666; line-height: 1.7; margin: 0;">
+            Green roofs primarily <strong>flattened the diurnal temperature curve</strong>, trimming early‑afternoon peaks and accelerating post‑sunset cooling. While a ∼1 °C drop in air temperature may appear modest, UTCI reductions of >1 °C move several hours from "strong" to "moderate" stress—critical for vulnerable populations. Scaling the approach city‑wide could compound benefits.
+          </p>
+        </div>
+        
+        <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+          <h3 style="color: #000; margin-bottom: 0.8rem; font-size: 1.2rem;"><i class="fas fa-exclamation-triangle" style="color: #ff6b00; margin-right: 0.5rem;"></i>Limitations</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin: 0;">
+            <li><strong>One‑way coupling</strong>: building‑level convective feedback to UWG not iterated.</li>
+            <li><strong>Uniform green‑roof properties</strong>: variations in irrigation and substrate depth ignored.</li>
+            <li><strong>Single design year</strong>: extreme‑weather EPWs (e.g., 2022 heatwave) require separate runs.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Conclusion Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Conclusion</h2>
+        
+        <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+          Deploying green roofs on all flat surfaces in this Amsterdam tile:
+        </p>
+        
+        <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+          <li>reduces peak summer air temperatures by up to <strong>0.9 °C</strong>,</li>
+          <li>cuts "extreme heat‑stress" hours by <strong>~35 %</strong>, and</li>
+          <li>increases annual "comfortable" hours by <strong>8 percentage points</strong>.</li>
+        </ul>
+        
+        <p style="color: #666; line-height: 1.7; margin-top: 1.5rem;">
+          These findings confirm green roofs as a viable micro‑climate mitigation strategy for canal cities.
+        </p>
+      </section>
+
+      <!-- Future Work Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Future Work</h2>
+        
+        <ol style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+          <li><strong>Parametric Coverage Sweep</strong> – quantify marginal gains at 10 % increments.</li>
+          <li><strong>Add Storm‑Water Module</strong> – simulate runoff retention benefits.</li>
+          <li><strong>Include Adaptive Façade Shading</strong> – compare combined cooling effects.</li>
+        </ol>
+      </section>
+      
+      <!-- Tech Stack Section -->
+      <div style="background: linear-gradient(135deg, #ff6b00, #e55a00); color: white; padding: 2rem; margin: 2rem 0; border-radius: 12px; text-align: center;">
+        <h3 style="margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-tools" style="margin-right: 0.5rem;"></i>Tech Stack</h3>
+        <p style="margin: 0; line-height: 1.6;">Rhino + Grasshopper, Ladybug Tools v1.8 (Dragonfly Core + UWG)</p>
+      </div>
+
+      <!-- References Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">References</h2>
+        
+        <ol style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+          <li>T. <strong>van Loon</strong> <em>et al.</em>, "3D BAG: A comprehensive open 3‑D building data set for the Netherlands", <em>ISPRS J. Photogramm.</em> (2021).</li>
+          <li>L. <strong>Bueno</strong>, "Urban Weather Generator User Manual", MIT (2013).</li>
+          <li>Ladybug Tools v1.8 Documentation, <a href="https://docs.ladybug.tools" style="color: #ff6b00; text-decoration: none;">https://docs.ladybug.tools</a>.</li>
+        </ol>
+      </section>
+
+      <!-- GitHub Repository Section -->
+        <!-- <div class="github-section" style="margin-top: 3rem; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); text-align: center;">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.5rem; margin-bottom: 1rem; color: #000;">Research Documentation</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Access the complete research documentation, simulation files, and analysis results.</p>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="github-link" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #000; color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+            <i class="fas fa-file-alt" style="font-size: 1.2rem;"></i>
+            View Research Documentation
+            </a>
+        </div> -->
+
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); cursor: pointer;">
+    <div class="modal-content" style="position: relative; margin: auto; display: block; width: 90%; max-width: 1200px; max-height: 90%; top: 50%; transform: translateY(-50%);">
+      <img id="modalImage" style="width: 100%; height: auto; border-radius: 8px;">
+      <div id="modalCaption" style="color: #fff; text-align: center; padding: 20px; font-size: 1rem; line-height: 1.5;"></div>
+      <span class="close" style="position: absolute; top: 15px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s;">&times;</span>
+    </div>
+  </div>
+
+  <!-- === JavaScript Modules === -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils/dom-utils.js"></script>
+  <script src="assets/js/utils/animation-utils.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/image-modal.js"></script>
+</body>
+</html>

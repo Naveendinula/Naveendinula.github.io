@@ -1,1 +1,312 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="author" content="John Doe"><link rel="preconnect" href="https://fonts.gstatic.com"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet"><script defer="defer" src="/static/js/main.a6cc85a7.js"></script><link href="/static/css/main.76147f68.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div><script type="text/javascript">!function(n){if("/"===n.search[1]){var a=n.search.slice(1).split("&").map((function(n){return n.replace(/~and~/g,"&")})).join("?");window.history.replaceState(null,null,n.pathname.slice(0,-1)+a+n.hash)}}(window.location)</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <!-- === External Dependencies === -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <!-- === Modular Stylesheets === -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/components/shuttlecock-icon.css">
+    <link rel="stylesheet" href="assets/css/components/tab-overrides.css">
+</head>
+<body>
+    <!-- Vertical Navigation Sidebar -->
+    <nav class="vertical-nav">
+        <a href="index.html">
+            <button class="nav-button active" data-page="about">
+                About
+            </button>
+        </a>
+        <a href="portfolio.html">
+            <button class="nav-button" data-page="portfolio">
+                Portfolio
+            </button>
+        </a>
+        <a href="contact.html">
+            <button class="nav-button" data-page="contact">
+                Contact
+            </button>
+        </a>
+    </nav>
+
+    <!-- Content Box -->
+    <div class="content-box">
+        <!-- About Page Content -->
+        <section class="about-page">
+            <div class="container">
+                <!-- Greeting Section with Typing Animation -->
+                <div class="greeting-container">
+                    <div class="greeting-text" id="typingText">
+                        <span class="typing-cursor"></span>
+                    </div>
+                    <div class="location-indicator">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Madison, WI, USA</span>
+                    </div>
+                    <div class="horizontal-social-icons">
+                        <a href="https://www.linkedin.com/in/naveen-panditharathne/" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" onclick="copyEmailToClipboard(event)" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fas fa-envelope"></i></a>
+                        <a href="assets/CV_NaveenPanditharatne.pdf" target="_blank" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fas fa-external-link-alt"></i></a>
+                        <a href="https://github.com/Naveendinula/" target="_blank" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+
+                <!-- About Me Section -->
+                <div class="about-section">
+                    <div class="section-header">
+                        <h1 class="display-title">About me</h1>
+                        <hr class="section-divider">
+                    </div>
+                    
+                    <div class="about-content">
+                        <div class="content-row">
+                            <div class="label-column">
+                                <h3 class="section-label">Summary</h3>
+                            </div>
+                            <div class="content-column">
+                                <p class="about-description">
+                                    Data Analyst and Computer Science professional with a Mechanical Engineering background. 
+                                    Passionate about transforming complex data into actionable insights and building innovative 
+                                    software solutions. Experienced in full-stack development, data pipeline optimization, 
+                                    and machine learning applications.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="about-section">
+                    <div class="content-row">
+                        <div class="label-column">
+                            <h3 class="section-label">Skills</h3>
+                        </div>
+                        <div class="content-column">
+                            <div class="skills-grid">
+                                <div class="skill-category">
+                                    <i class="fab fa-python"></i>
+                                    <h4>Python</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fab fa-react"></i>
+                                    <h4>React</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fas fa-database"></i>
+                                    <h4>MongoDB</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fab fa-java"></i>
+                                    <h4>Java</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fas fa-database"></i>
+                                    <h4>SQL</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fas fa-chart-line"></i>
+                                    <h4>R</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fab fa-js-square"></i>
+                                    <h4>JavaScript</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <h4>Power BI</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fab fa-node-js"></i>
+                                    <h4>Node.js</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fas fa-bug"></i>
+                                    <h4>Ladybug Tools</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fas fa-cube"></i>
+                                    <h4>Rhino</h4>
+                                </div>
+                                <div class="skill-category">
+                                    <i class="fas fa-project-diagram"></i>
+                                    <h4>Grasshopper</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Section -->
+                <div class="about-section">
+                    <div class="content-row">
+                        <div class="label-column">
+                            <h3 class="section-label">Timeline</h3>
+                        </div>
+                        <div class="content-column">
+                            <div class="timeline-tabs">
+                                <div class="tabs-header">
+                                    <button class="tab-button active" data-tab="experience">
+                                        <i class="fas fa-briefcase tab-icon"></i>
+                                        Work Experience
+                                    </button>
+                                    <button class="tab-button" data-tab="education">
+                                        <i class="fas fa-graduation-cap tab-icon"></i>
+                                        Education
+                                    </button>
+                                </div>
+                                
+                                <div class="tab-content">
+                                    <div id="experience-tab" class="tab-panel active">
+                                        <div class="timeline-container">
+                                            <div class="timeline-item">
+                                                <div class="timeline-content">
+                                                    <h4>Data Analyst Intern</h4>
+                                                    <p class="timeline-company">American Solar Energy Society</p>
+                                                    <p class="timeline-date">January 2025 - Present</p>
+                                                    <p class="timeline-description">
+                                                        Analyze membership, webinar, and event data using Excel and Power BI to 
+                                                        identify engagement trends and inform data-driven strategies for renewable 
+                                                        energy programs. Collaborate with technical teams to cleanse and manage 
+                                                        datasets, generate insightful visualizations and reports, supporting 
+                                                        initiatives in solar energy and grid modernization.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="timeline-item">
+                                                <div class="timeline-content">
+                                                    <h4>Volunteer Data Engineer</h4>
+                                                    <p class="timeline-company">Community Dreams Foundation</p>
+                                                    <p class="timeline-date">November 2024 - Present</p>
+                                                    <p class="timeline-description">
+                                                        Developed and optimized Azure-based data pipelines using ETL workflows for 
+                                                        the Green Connect App, ensuring scalable and efficient data processing. 
+                                                        Contributed to data modeling and documentation, enhancing system 
+                                                        interoperability and team collaboration for an environmentally focused 
+                                                        application.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="timeline-item">
+                                                <div class="timeline-content">
+                                                    <h4>Graduate Assistant</h4>
+                                                    <p class="timeline-company">UW Whitewater</p>
+                                                    <p class="timeline-date">September 2022 - May 2024</p>
+                                                    <p class="timeline-description">
+                                                        Analyzed Google Ads and Facebook Ads performance metrics, creating Power 
+                                                        BI dashboards to track key marketing KPIs and drive data-driven campaign 
+                                                        optimizations. Maintained and updated campus web content, analyzing user 
+                                                        engagement data to optimize accessibility and user experience.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="timeline-item">
+                                                <div class="timeline-content">
+                                                    <h4>Mechanical Engineer</h4>
+                                                    <p class="timeline-company">Lalan Group</p>
+                                                    <p class="timeline-date">May 2021 - November 2021</p>
+                                                    <p class="timeline-description">
+                                                        Monitored and analyzed energy consumption data for a 16MKcal/hr 
+                                                        centralized thermic fluid heater, identifying key strategies for improving 
+                                                        energy efficiency. Designed and optimized utility networks (water, 
+                                                        compressed air) using AutoCAD, contributing to reduced operational 
+                                                        inefficiencies. Managed machinery commissioning projects using MS Project, 
+                                                        tracking progress and optimizing resource allocation based on project 
+                                                        data.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="timeline-item">
+                                                <div class="timeline-content">
+                                                    <h4>Engineering Intern</h4>
+                                                    <p class="timeline-company">Vidullanka PLC</p>
+                                                    <p class="timeline-date">February 2021 - April 2021</p>
+                                                    <p class="timeline-description">
+                                                        Developed a Python-based SARIMA forecasting model to predict energy 
+                                                        consumption trends for biomass and hydropower projects, improving forecast 
+                                                        accuracy. Conducted historical load pattern analysis to enable proactive 
+                                                        energy management strategies and reduce operational waste.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="education-tab" class="tab-panel">
+                                        <div class="timeline-container">
+                                            <div class="timeline-item">
+                                                <div class="timeline-content">
+                                                    <h4>Master's, Computer Science</h4>
+                                                    <p class="timeline-company">University of Wisconsin - Whitewater</p>
+                                                    <p class="timeline-date">January 2022 - May 2024</p>
+                                                    <p class="timeline-location">Whitewater, WI, USA</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="timeline-item">
+                                                <div class="timeline-content">
+                                                    <h4>Bachelor's, Mechanical Engineering</h4>
+                                                    <p class="timeline-company">University of Hong Kong</p>
+                                                    <p class="timeline-date">September 2016 - December 2020</p>
+                                                    <p class="timeline-location">Hong Kong</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interests Section -->
+                <div class="about-section">
+                    <div class="content-row">
+                        <div class="label-column">
+                            <h3 class="section-label">Interests</h3>
+                        </div>
+                        <div class="content-column">
+                            <div class="interests-container">
+                                <div class="interests-list" style="font-size: 1.2rem;">
+                                    <span>Fitness</span>
+                                    <span style="margin: 0 15px; color: #ccc;">|</span>
+                                    <span>Badminton</span>
+                                    <span style="margin: 0 15px; color: #ccc;">|</span>
+                                    <span>Webtoons</span>
+                                    <span style="margin: 0 15px; color: #ccc;">|</span>
+                                    <span>Podcasts</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Email Popup -->
+    <div id="emailPopup" style="display: none; position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #ff6b00; color: white; padding: 15px 25px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 1000; text-align: center; transition: top 0.3s ease;">
+        <p style="margin: 0; font-size: 16px; font-weight: 600;">Email copied to clipboard!</p>
+        <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">ngnaveen.p@gmail.com</p>
+    </div>
+    <div id="popupOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;" onclick="closeEmailPopup()"></div>
+
+    <!-- === JavaScript Modules === -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/utils/dom-utils.js"></script>
+    <script src="assets/js/utils/animation-utils.js"></script>
+    <script src="assets/js/modules/email-utils.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

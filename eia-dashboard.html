@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EIA Energy Dashboard · Portfolio</title>
+
+  <!-- === External Dependencies === -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- === Modular Stylesheets === -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="assets/css/components/powerbi-dashboard.css" />
+</head>
+<body>
+  <!-- === Vertical navigation === -->
+  <nav class="vertical-nav">
+    <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
+    <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
+    <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
+  </nav>
+
+  <div class="content-box">
+    <div class="powerbi-wrapper">
+      <!-- Back link -->
+      <div class="back-navigation"><a href="portfolio.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Portfolio</a></div>
+
+      <!-- Header -->
+      <header class="powerbi-header">
+        <h1 class="powerbi-title">Energy Performance and Fuel Utilization Dashboard</h1>
+        <p class="powerbi-description">This project analyzes energy performance and fuel utilization across diverse electricity market structures—competitive, hybrid, and monopoly. The interactive Power BI dashboard, spanning data from 2011 – 2024, examines key metrics such as Thermal Efficiency, Total Generation (MMBtu), and Total Fuel Consumption (MMBtu).</p>
+      </header>
+
+      <!-- ===== POWER‑BI DASHBOARD ===== -->
+      <div class="powerbi-container">
+        <div class="loader-container" id="dashboardLoader">
+          <div class="loader"></div>
+          <p>Loading dashboard…</p>
+        </div>
+
+        <!-- ▶ NOTE: replace src with a Publish‑to‑web or secure‑embed URL from Power BI -->
+        <iframe id="powerbi-dashboard" class="powerbi-iframe" title="Fuel Utilization Analysis"
+                src="https://app.powerbi.com/view?r=eyJrIjoiMTAzY2YzMjYtZjkxYy00N2U3LTkyM2EtOTVjZGI2ZDE5NmZkIiwidCI6IjdkYTQ1YTdmLTdhYTEtNDVmZS05ZWRiLWM5OTQyMjJiYTlmOCIsImMiOjN9" allowfullscreen></iframe>
+
+        <!-- === Fallback preview === -->
+        <div id="dashboard-fallback" class="dashboard-fallback">
+          <img src="assets/eia-dashboard.png" alt="Dashboard preview" />
+          <div class="fallback-overlay">
+            <h3>Dashboard Preview</h3>
+            <p>Interactive embed blocked by browser security.</p>
+            <a href="https://app.powerbi.com/view?r=eyJrIjoiMTAzY2YzMjYtZjkxYy00N2U3LTkyM2EtOTVjZGI2ZDE5NmZkIiwidCI6IjdkYTQ1YTdmLTdhYTEtNDVmZS05ZWRiLWM5OTQyMjJiYTlmOCIsImMiOjN9" target="_blank" class="fallback-button"><i class="fas fa-external-link-alt"></i> Open dashboard</a>
+            <button id="retryButton" class="fallback-button" style="background:#28a745"><i class="fas fa-redo"></i> Try again</button>
+            <a href="https://github.com/Naveendinula/fuel-utilization-by-electricity-market" target="_blank" class="fallback-button"><i class="fab fa-github"></i> Source code</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Features + GitHub sections would stay the same → omitted for brevity -->
+      
+      <!-- GitHub Repository Section -->
+      <div class="github-section" style="margin-top: 3rem; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); text-align: center;">
+        <a href="https://github.com/Naveendinula/fuel-utilization-by-electricity-market" target="_blank" rel="noopener noreferrer" class="github-link" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #000; color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
+          <i class="fab fa-github" style="font-size: 1.2rem;"></i>
+          View Project Repository
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =============================================================
+       Script: wires events *after* DOM exists and uses proper tags
+  ============================================================= -->
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+      const iframe=document.getElementById('powerbi-dashboard');
+      const loader=document.getElementById('dashboardLoader');
+      const fallback=document.getElementById('dashboard-fallback');
+      const retryBtn=document.getElementById('retryButton');
+
+      let timeoutId;
+      function showFallback(){loader.style.display='none';iframe.style.opacity='0';fallback.style.display='block';clearTimeout(timeoutId);}
+      function hideLoader(){loader.style.display='none';iframe.style.opacity='1';clearTimeout(timeoutId);}
+
+      // give the iframe a maximum of 10 s to load
+      timeoutId=setTimeout(showFallback,10_000);
+
+      iframe.addEventListener('load',hideLoader);
+      iframe.addEventListener('error',showFallback);
+
+      retryBtn.addEventListener('click',()=>{
+        fallback.style.display='none';loader.style.display='flex';iframe.style.opacity='0';
+        // force reload
+        iframe.contentWindow.location.reload();
+        timeoutId=setTimeout(showFallback,10_000);
+      });
+    });
+  </script>
+</body>
+</html>

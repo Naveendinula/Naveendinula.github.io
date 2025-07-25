@@ -1,0 +1,32 @@
+/* Shuttlecock Icon Component */
+.shuttlecock-icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    position: relative;
+}
+
+.shuttlecock-icon:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0.6em;
+    height: 0.6em;
+    background: currentColor;
+    border-radius: 50%;
+}
+
+.shuttlecock-icon:after {
+    content: "";
+    position: absolute;
+    top: 0.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 0.3em solid transparent;
+    border-right: 0.3em solid transparent;
+    border-top: 0.6em solid currentColor;
+}

@@ -1,0 +1,104 @@
+/* Power BI Dashboard Component Styles */
+.powerbi-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    margin: 2rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: #f8f9fa;
+}
+
+.powerbi-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.loader-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 2;
+    background: #f8f9fa;
+}
+
+.loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #ff6b00;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.dashboard-fallback {
+    position: relative;
+    text-align: center;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: none;
+}
+
+.dashboard-fallback img {
+    max-width: 100%;
+    border-radius: 8px;
+    opacity: 0.85;
+}
+
+.fallback-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.fallback-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background: #444;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.fallback-button:hover {
+    opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .powerbi-container {
+        height: 500px;
+    }
+}
+
+@media (max-width: 480px) {
+    .powerbi-container {
+        height: 400px;
+    }
+}

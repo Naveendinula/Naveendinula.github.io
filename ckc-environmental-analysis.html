@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Environmental Performance Analysis of CKC Building, Central Hong Kong · Portfolio</title>
+
+  <!-- === External Dependencies === -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- === Modular Stylesheets === -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="assets/css/building-analytics.css" />
+</head>
+<body>
+  <!-- === Vertical navigation === -->
+  <nav class="vertical-nav">
+    <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
+    <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
+    <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
+  </nav>
+
+  <div class="content-box">
+    <div class="powerbi-wrapper">
+      <!-- Back link -->
+      <div class="back-navigation"><a href="portfolio.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Portfolio</a></div>
+
+      <!-- Header -->
+      <header class="powerbi-header">
+        <h1 class="powerbi-title">Environmental Performance Analysis of CKC Building, Central Hong Kong</h1>
+        <p class="powerbi-description"><em>Comprehensive Environmental Assessment & Design Optimization</em></p>
+        <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #ff6b00;">
+          <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Data Workflow</h3>
+          <p style="color: #444; line-height: 1.7;">
+            <strong>Tools:</strong> Rhino + Grasshopper + Ladybug Tools 1.8<br>
+            <strong>EPW/STAT Source:</strong> <a href="https://climate.onebuilding.org/WMO_Region_2_Asia/HKG_Hong_Kong/HKG_KOW_Hong.Kong.Obs.450050_TMYx.zip" style="color: #ff6b00; text-decoration: none;">Hong Kong Observatory TMYx</a><br>
+            <strong>Analysis Extent:</strong> 1 km² centred on CKC, including coastline, parks and surrounding blocks.
+          </p>
+        </div>
+      </header>
+
+      <!-- Abstract Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Abstract</h2>
+        <p style="color: #666; line-height: 1.7;">
+          This comprehensive environmental performance analysis examines the CKC Building in Central Hong Kong's dense urban context. 
+          Using parametric environmental simulation tools and 8,760-hour climate data, the study evaluates weather patterns, solar exposure, 
+          thermal comfort conditions, and visual connections to inform sustainable design strategies for the subtropical climate.
+        </p>
+      </section>
+
+      <!-- Introduction Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Introduction</h2>
+        <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+          <li><strong>Context:</strong> CKC Building represents a critical urban redevelopment opportunity in Hong Kong's Central district.</li>
+          <li><strong>Objective:</strong> Quantify environmental performance metrics to guide sustainable design decisions in a high-density tropical context.</li>
+          <li><strong>Approach:</strong> Multi-scale analysis combining microclimate assessment, solar studies, and urban comfort evaluation.</li>
+        </ul>
+      </section>
+
+      <!-- Site Context & Location Analysis Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Site Context & Location Analysis</h2>
+        <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+          Located in Central Hong Kong, the CKC site sits within one of the world's densest urban environments. 
+          The 1 km² analysis area encompasses the Victoria Harbour coastline, Central Park green spaces, and surrounding high-rise developments, 
+          creating a complex microclimate with significant shading, wind channeling, and urban heat island effects.
+        </p>
+      </section>
+
+      <!-- Methodology Section -->
+      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 class="platform-title">Methodology</h2>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-cog" style="color: #ff6b00; margin-right: 0.5rem;"></i>Tools & Software</h3>
+        
+        <div style="overflow-x: auto; margin-bottom: 1.5rem;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: #f8f9fa;">
+                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Step</th>
+                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Tool / Component</th>
+                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">What we did</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Download HK EPW/STAT</td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>Ladybug ➝ Download EPW</strong></td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Pulls 8,760‑h "typical year" from climate.onebuilding.org</td>
+              </tr>
+              <tr>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Import & parse</td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>LB Import EPW / Import STAT</strong></td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Exposes hourly dry‑bulb T, RH, wind, solar + climate stats</td>
+              </tr>
+              <tr>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Unit conversions</td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>LB Math</strong></td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Wind: <strong>m s⁻¹ → km h⁻¹</strong> </td>
+              </tr>
+              <tr>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Identify peak‑heat week</td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>STAT → Typical Hot Week</strong></td>
+                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Returned <strong>1 – 7 July</strong> (7/1 – 7/7)</td>
+              </tr>
+              <tr>
+                <td style="padding: 1rem; color: #666; font-weight: 600;">Comfort metrics</td>
+                <td style="padding: 1rem; color: #666;"><strong>LB UTCI ➝ ComfStat</strong></td>
+                <td style="padding: 1rem; color: #666;">Hour‑by‑hour UTCI + 3‑band (Hot / Neutral / Cold) + binary Comfort</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-cube" style="color: #ff6b00; margin-right: 0.5rem;"></i>3D Modeling & Building Geometry</h3>
+        <p style="color: #666; line-height: 1.7;">
+          Building geometry was developed in Rhino 3D with parametric environmental analysis components in Grasshopper. 
+          The model includes the CKC building massing, surrounding context buildings, and landscape features within the 1 km² study area.
+        </p>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-database" style="color: #ff6b00; margin-right: 0.5rem;"></i>Data Collection & Sources</h3>
+        <p style="color: #666; line-height: 1.7;">
+          Climate data sourced from Hong Kong Observatory through the OneBuilding.org repository, providing TMYx typical meteorological year data 
+          with validated hourly weather parameters for comprehensive environmental simulation.
+        </p>
+      </section>
+
+      <!-- Environmental Analysis Results -->
+      <section class="project-section" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Environmental Analysis Results</h2>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-cloud-sun" style="color: #ff6b00; margin-right: 0.5rem;"></i>Weather Analysis</h3>
+        
+        <!-- Climate Insights Table -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">Key Climate Insights</h4>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Metric</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Value</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Visual Reference</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Annual mean T</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">24.5 °C</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Figure 1: Monthly bars</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Monthly peaks</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">29 – 30 °C (Jul – Aug)</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Figure 1</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Annual range</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>5.4 °C → 34 °C</strong> (from EPW extremes)</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Figure 2: Hourly heatmap</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Hottest week</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>1 – 7 July</strong> (typical extreme‐hot)</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Critical analysis period</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Heat‑stress hours</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Mostly heat‑stress year‑round; July peaks.</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Figure 3: UTCI categories</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Comfort split</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">31.1% hot, 59.8% neutral, 9.2% cold (with wind influence)</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Figure 4: 3-band classification</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Binary comfort</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>May → Sep largely "uncomfortable"</strong> outdoors</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Figure 5: Comfort/Uncomfortable</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Wind regime</strong></td>
+                  <td style="padding: 1rem; color: #666;">Frequent calm (< 10 km h⁻¹); sporadic > 45 km h⁻¹ typhoon spikes</td>
+                  <td style="padding: 1rem; color: #666;">Figure 6: Wind speed distribution</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        <!-- Weather Analysis Graphics -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/Environmental analysis/dry bulb temp monthly.png" alt="Monthly Temperature Distribution" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 1.</strong> Average monthly dry‑bulb temperature showing peak summer conditions.</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/Environmental analysis/dry bulb temp hourly.png" alt="Hourly Temperature Heatmap" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 2.</strong> Hour‑by‑hour temperature heatmap (8,760 h) revealing diurnal patterns.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/Environmental analysis/category graph.png" alt="UTCI Comfort Categories" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 3.</strong> Universal Thermal Climate Index — 11‑point comfort categories.</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/Environmental analysis/condition graph.png" alt="Hot/Neutral/Cold Classification" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 4.</strong> Simplified hot / neutral / cold classification for design guidance.</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+          <div style="text-align: center;">
+            <img src="assets/images/Environmental analysis/comfort graph.png" alt="Binary Comfort Analysis" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 5.</strong> Binary comfortable / uncomfortable hours showing seasonal patterns.</p>
+          </div>
+          <div style="text-align: center;">
+            <img src="assets/images/Environmental analysis/wind speed graph.png" alt="Wind Speed Distribution" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 6.</strong> Wind‑speed distribution (km h⁻¹) including typhoon events.</p>
+          </div>
+        </div>
+
+       
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-sun" style="color: #ff6b00; margin-right: 0.5rem;"></i>Sunpath Analysis</h3>
+        
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">Analysis Parameters</h4>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Parameter</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Details</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Location set‑up</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">22.2829° N, 114.1570° E</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Elevation ≈ 42 m, Time‑zone UTC + 8</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Tools</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">• Ladybug <strong>SunPath</strong> & <strong>Sun‑Vector</strong> components<br>• Rhino "Sun" system for physically‑accurate shadows</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">–</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Analysis windows</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">① <strong>Full‑year</strong> (8,760 h) — global daylight potential<br>② Key solar events & design checkpoints:<br>  • <strong>20 Mar</strong> Vernal Equinox<br>  • <strong>21 Jun</strong> Summer Solstice <br>  • <strong>21 Dec</strong> Winter Solstice </td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">–</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Visual aids</strong></td>
+                  <td style="padding: 1rem; color: #666;">• 3‑D Sun‑Path dome + hourly sun vectors<br>• Roof‑mounted compass rose for quick orientation</td>
+                  <td style="padding: 1rem; color: #666;">–</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sunpath Visualization -->
+        <div style="text-align: center; margin: 2rem 0;">
+          <img src="assets/images/Environmental analysis/sunpath analysis.png" alt="Sunpath Analysis" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+          <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 7.</strong> Sun‑path dome & shadow casting, view to NNW.</p>
+        </div>
+
+        <!-- Analysis Insights -->
+        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin: 2rem 0;">
+          <h4 style="color: #000; margin-bottom: 1rem;">What the image shows</h4>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin: 0;">
+            <li>Arcs trace the sun's apparent path for the three key dates; the tallest arc (brown highlight) is June 21, confirming noon sun almost overhead at Hong Kong's latitude.</li>
+            <li>Vectors (black rays) connect each hourly sun position to the CKC roof, making it easy to test shading devices or PV angles.</li>
+            <li>Real‑time Rhino shadows reveal how surrounding towers shield lower façades in early morning and late afternoon.</li>
+          </ul>
+        </div>
+
+        
+
+        <!-- Key Takeaway -->
+        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin: 2rem 0; border-left: 6px solid #ff6b00;">
+          <h4 style="color: #000; margin-bottom: 1rem;">Take‑away</h4>
+          <p style="color: #666; line-height: 1.7; margin: 0; font-weight: 500;">
+            CKC receives unobstructed, near‑zenith solar exposure at midday in summer, while morning and late‑afternoon sun is heavily filtered by the Central skyline—guiding us to prioritize east‑/west‑façade shading and rooftop solar strategies.
+          </p>
+        </div>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-lightbulb" style="color: #ff6b00; margin-right: 0.5rem;"></i>Direct Sun Analysis</h3>
+        
+        <!-- Purpose Section -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">1. Purpose</h4>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin: 0;">
+            <li>Quantify how much direct solar exposure each floor façade receives through the year.</li>
+            <li>Compare annual vs. key seasonal periods (March equinox, June solstice, December solstice).</li>
+            <li>Flag high-exposure façade zones (design for shading / glazing performance).</li>
+            <li>Understand usable sun in adjacent public open spaces (Cheung Kong Park, Chater Garden).</li>
+          </ul>
+        </div>
+
+        <!-- Analysis Geometry Prep -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">2. Analysis Geometry Prep</h4>
+          <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;"><strong>Source model:</strong> 70-storey CKC tower within 1 km² context tile (CADMapper import: towers, parks, coastline).</p>
+          
+          <h5 style="color: #000; margin: 1rem 0;">Process:</h5>
+          <ol style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>Extract per-floor slab & façade surfaces from GH tower stack.</li>
+            <li>Filter out slabs & non-test geometry; retain vertical façade surfaces as test set.</li>
+            <li>Generate per-floor test meshes (uniform grid ___m; offset ___m from glass—<em>fill in</em>).</li>
+          </ol>
+
+          <h5 style="color: #000; margin: 1rem 0;">Aggregate areas:</h5>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin: 0;">
+            <li><strong>Façade area:</strong> 53,711 m²</li>
+            <li><strong>Floor plate area</strong> (sum of all floors): 155,342 m²</li>
+            <li style="font-style: italic;">(Record method: Brep Area → Mass Addition.)</li>
+          </ul>
+        </div>
+
+        <!-- Simulation Setup -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">3. Simulation Setup</h4>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Parameter</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Annual Run</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Seasonal Runs</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Parks Runs</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Period</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">1 Jan – 31 Dec</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>Mar</strong>, <strong>Jun</strong>, <strong>Dec</strong> (exact ranges: ___)</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Same periods as tower</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Time step</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Hourly</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Hourly</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Hourly</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Sky model</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Weather-based (EPW) sun positions</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Same</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Same</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Test geometry</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">CKC façades</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">CKC façades</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Park ground meshes (Cheung Kong Park, Chater Garden)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;">Min sun-vector altitude</td>
+                  <td style="padding: 1rem; color: #666;">default (Ladybug)</td>
+                  <td style="padding: 1rem; color: #666;">default</td>
+                  <td style="padding: 1rem; color: #666;">default</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        
+
+        <!-- Direct Sun Hours Year Analysis -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">Annual Direct Sun Hours Analysis</h4>
+          
+          <!-- Direct Sun Hours Images Carousel -->
+          <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <div id="sunHoursCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+              <div id="carouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (year) photo 1.png" alt="Direct Sun Hours Year View 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 8a.</strong> CKC tower annual direct sun exposure - Southeast perspective.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (year) photo 2.png" alt="Direct Sun Hours Year View 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 8b.</strong> Annual solar exposure distribution across façade surfaces.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (year) photo 3.png" alt="Direct Sun Hours Year View 3" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 8c.</strong> Northwest view showing urban shading effects on lower levels.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (year) photo 4.png" alt="Direct Sun Hours Year View 4" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 8d.</strong> Detail view of sun-path dome and façade exposure gradients.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Carousel Controls -->
+            <button id="prevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+            <button id="nextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+            
+            <!-- Carousel Indicators -->
+            <div id="indicators" style="text-align: center; margin-top: 1rem;">
+              <span class="indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+              <span class="indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="indicator" data-slide="3" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+            </div>
+          </div>
+
+          <!-- Analysis Insights -->
+          <div style="margin: 2rem 0;">
+            <h5 style="color: #000; margin-bottom: 1rem;">What you're seeing</h5>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li>Each façade panel is coloured by the total hours of direct sunshine it receives over 12 months (EPW‑based solar positions, 1 h time‑step).</li>
+              <li><strong>Blue → shaded</strong> (< 800 h yr⁻¹) | <strong>Red → sun‑struck</strong> (> 2,200 h yr⁻¹).</li>
+              <li>The yellow mesh dome is the Ladybug Sun‑Path, showing the sun’s position for every hour of the year. Vector rays are included to visualize the direction of incoming light.</li>
+            </ul>
+
+            <h5 style="color: #000; margin-bottom: 1rem;">Design take‑away (non‑technical)</h5>
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00;">
+              <p style="color: #666; line-height: 1.7; margin: 0;">
+                The upper third of the tower bakes in Hong Kong's sun for more than half the day, while ground‑level glass spends most of the year in shadow cast by neighbouring skyscrapers. Shading and high‑performance glass should therefore be concentrated at the top, whereas lower floors can prioritize daylight and views.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- March Equinox Analysis -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">March Equinox Direct Sun Hours Analysis</h4>
+          
+          <!-- March Analysis Table -->
+          <div style="overflow-x: auto; margin-bottom: 2rem;">
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Metric (March 1 – 31)</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Value*</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Avg. daily sun‑hours — entire façade</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>4 h day⁻¹</strong></td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Panels > 5 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>27 %</strong> of façade (green outline, figure 9f)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Panels < 3 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>14 %</strong> (green outline, figure 9g)</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Park</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Avg. daily sun (Mar)</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Usability cue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Cheung Kong Park</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">predominantly <strong>5–7 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Suitable for midday seating & planting; minor shade structures advised.</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Chater Garden</strong></td>
+                  <td style="padding: 1rem; color: #666;">mixed <strong>3–4 h day⁻¹</strong> due to tower shadows</td>
+                  <td style="padding: 1rem; color: #666;">Good for morning / late‑afternoon events; select shade‑tolerant horticulture.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- March Images Carousel -->
+          <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <div id="marchCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+              <div id="marchSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period March) with parks.png" alt="March Direct Sun Hours View 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 9a.</strong> March direct sun hours showing facade exposure patterns and surrounding parks.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period March) photo 4.png" alt="March Direct Sun Hours View 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 9b.</strong> Legend showing March daily direct sun hours, 0–7 hour scale.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period March) photo 3.png" alt="March Direct Sun Hours View 3" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 9c.</strong> March sun hours mapped; west facade, north shaded behind skyline.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period March) photo 2.png" alt="March Direct Sun Hours View 4" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 9d.</strong> March equinox sun hours: east facade sun‑lit, neighboring tower shading.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period March) photo 1.png" alt="March Direct Sun Hours View 5" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 9e.</strong> Northeast façade March sun‑hours: bright upper levels, shaded lower zones.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period March) hours more than 5.png" alt="March Direct Sun Hours View 6" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 9f.</strong> Mesh highlights façade panels receiving over five hours March sunlight.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period March) hours less than 3.png" alt="March Direct Sun Hours View 6" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 9g.</strong> Mesh highlights façade panels receiving less than three hours March sunlight.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- March Carousel Controls -->
+            <button id="marchPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+            <button id="marchNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+            
+            <!-- March Carousel Indicators -->
+            <div id="marchIndicators" style="text-align: center; margin-top: 1rem;">
+              <span class="march-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+              <span class="march-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="march-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="march-indicator" data-slide="3" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="march-indicator" data-slide="4" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="march-indicator" data-slide="5" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="march-indicator" data-slide="6" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+            </div>
+          </div>
+
+          <!-- Analysis Insights -->
+          <div style="margin: 2rem 0;">
+            <h5 style="color: #000; margin-bottom: 1rem;">What you're seeing</h5>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li>Each façade panel is coloured by the total hours of direct sunshine it receives during the March equinox, indicating potential overheating risks. 
+                These panels will require effective shading solutions, while others may benefit from increased glazing to optimize daylighting.
+              </li>
+            </ul>
+
+            <h5 style="color: #000; margin-bottom: 1rem;">Design take‑away (non‑technical)</h5>
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00;">
+              <p style="color: #666; line-height: 1.7; margin: 0;">
+                The analysis highlights façade panels that receive excessive sun during the March equinox, indicating potential overheating risks. 
+                These panels will require effective shading solutions, while others may benefit from increased glazing to optimize daylighting.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- June Solstice Analysis -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">June Solstice Direct Sun Hours Analysis</h4>
+          
+          <!-- June Analysis Table -->
+          <div style="overflow-x: auto; margin-bottom: 2rem;">
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Metric (June 1 – 30)</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Value*</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Avg. daily sun‑hours — entire façade</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>5 h day⁻¹</strong></td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Panels > 5 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>69 %</strong> (green outline, figure 10f)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Panels < 3 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; color: #666;"><strong>1 %</strong> (green outline, figure 10e)</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Park</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Avg. daily sun (Jun)</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Usability cue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Cheung Kong Park</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">consistently <strong>3–5 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Peak summer heat; essential shade structures & water features recommended.</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Chater Garden</strong></td>
+                  <td style="padding: 1rem; color: #666;">variable <strong>5–6 h day⁻¹</strong> with tower shadows</td>
+                  <td style="padding: 1rem; color: #666;">Strategic shading; avoid midday events; focus on early morning programming.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- June Images Carousel -->
+          <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <div id="juneCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+              <div id="juneSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period June) photo 1.png" alt="June Direct Sun Hours View 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 10a.</strong> June solstice view: north west facade intensely sunlit, north east partly shaded.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period June) photo 2.png" alt="June Direct Sun Hours View 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 10b.</strong> High‑angle solstice gradient; south east top facade brightest, shading increases downward slightly.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (period June) photo 3.png" alt="June Direct Sun Hours View 3" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 10c.</strong> Entire south west facade glows red, indicating widespread seven‑plus sun hours daily.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period June) with parks.png" alt="June Direct Sun Hours View 4" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 10d.</strong> Chater garden receives less sun hours around corners due to shading, Cheung kong park has less shading</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period June) hours less than 3.png" alt="June Direct Sun Hours View 5" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 10e.</strong> Facade area with less than 3 sun hours</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets\images\Environmental analysis\direct sun hours (period June) hours more than 5.png" alt="June Direct Sun Hours View 6" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 10f.</strong> Facade area with more than 5 sun hours</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- June Carousel Controls -->
+            <button id="junePrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+            <button id="juneNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+            
+            <!-- June Carousel Indicators -->
+            <div id="juneIndicators" style="text-align: center; margin-top: 1rem;">
+              <span class="june-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+              <span class="june-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="june-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="june-indicator" data-slide="3" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="june-indicator" data-slide="4" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="june-indicator" data-slide="5" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+            </div>
+          </div>
+
+          <!-- Analysis Insights -->
+          <div style="margin: 2rem 0;">
+            <h5 style="color: #000; margin-bottom: 1rem;">What you're seeing</h5>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li>Each façade panel is coloured by the total hours of direct sunshine it receives during the June solstice, with only a few panels in the shade. 
+                This information is crucial for optimizing solar energy capture and ensuring adequate shading for thermal comfort.
+              </li>
+            </ul>
+
+            <h5 style="color: #000; margin-bottom: 1rem;">Design take‑away (non‑technical)</h5>
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00;">
+              <p style="color: #666; line-height: 1.7; margin: 0;">
+                The analysis reveals that most of the CKC tower receives ample sunlight during the June solstice, with only a few panels in the shade. 
+                This information is crucial for optimizing solar energy capture and ensuring adequate shading for thermal comfort.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- December Winter Solstice Analysis -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">December Winter Solstice Direct Sun Hours Analysis</h4>
+          
+          <!-- December Analysis Table -->
+          <div style="overflow-x: auto; margin-bottom: 2rem;">
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Metric (December 1 – 31)</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Value*</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Avg. daily sun‑hours — entire façade</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>3 h day⁻¹</strong></td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Panels > 5 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>34 %</strong> (green outline, figure 11f)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Panels < 3 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; color: #666;"><strong>50 %</strong> (green outline, figure 11e)</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Park</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Avg. daily sun (Dec)</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Usability cue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Cheung Kong Park</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">reduced <strong>5–7 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Optimal for winter comfort; sunny seating areas preferred during midday.</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Chater Garden</strong></td>
+                  <td style="padding: 1rem; color: #666;">limited <strong>3–5 h day⁻¹</strong> due to low sun angle & shadows</td>
+                  <td style="padding: 1rem; color: #666;">Minimal winter solar gain; focus on wind protection & thermal comfort.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- December Images Carousel -->
+          <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <div id="decemberCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+              <div id="decemberSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (period December) photo 1.png" alt="December Direct Sun Hours View 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 11a.</strong> December winter solstice: low sun angle creates deep facade shadows.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (period December) photo 2.png" alt="December Direct Sun Hours View 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 11b.</strong> South west facing facade receives limited winter sun due to urban canyon effects.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (period December) photo 3.png" alt="December Direct Sun Hours View 3" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 11c.</strong> South east upper tower levels maintain some solar access while lower floors remain shaded.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (period December) with parks.png" alt="December Direct Sun Hours View 4" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 11d.</strong> Winter park conditions: both parks show reduced sun hours, Cheung kong park more affected.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (period December) hours less than 3.png" alt="December Direct Sun Hours View 5" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 11e.</strong> Extensive facade areas receiving minimal winter sun (<3h daily).</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/direct sun hours (period December) hours more than 5.png" alt="December Direct Sun Hours View 6" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 11f.</strong> Limited facade areas with beneficial winter solar gain (>5h daily).</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- December Carousel Controls -->
+            <button id="decemberPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+            <button id="decemberNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+            
+            <!-- December Carousel Indicators -->
+            <div id="decemberIndicators" style="text-align: center; margin-top: 1rem;">
+              <span class="december-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+              <span class="december-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="december-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="december-indicator" data-slide="3" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="december-indicator" data-slide="4" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="december-indicator" data-slide="5" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+            </div>
+          </div>
+
+          <!-- Analysis Insights -->
+          <div style="margin: 2rem 0;">
+            <h5 style="color: #000; margin-bottom: 1rem;">What you're seeing</h5>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li>Each façade panel is coloured by the total hours of direct sunshine it receives during the December solstice period.</li>
+              <li><strong>Blue → shaded</strong> (< 3 h day⁻¹) | <strong>Green → moderate sun</strong> (3–5 h day⁻¹) | <strong>Red → sun‑struck</strong> (> 5 h day⁻¹).</li>
+              <li>The overlaid numbers indicate the exact daily sun‑hour totals for key panels.</li>
+            </ul>
+
+            <h5 style="color: #000; margin-bottom: 1rem;">Design take‑away (non‑technical)</h5>
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00;">
+              <p style="color: #666; line-height: 1.7; margin: 0;">
+                The analysis shows that during the December solstice, most of the CKC tower receives limited direct sunlight, 
+                with significant shading on the lower floors. This highlights the importance of considering seasonal sun path 
+                and shading from surrounding buildings in the design of façade systems.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-fire" style="color: #ff6b00; margin-right: 0.5rem;"></i>Solar Radiation Analysis</h3>
+        
+        <!-- Purpose and Overview -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">1. Purpose & Methodology</h4>
+          <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+            While direct sun analysis quantifies hours of solar exposure, radiation analysis calculates the actual energy flux (kWh m⁻²) 
+            incident on building surfaces. This approach uses sophisticated sky modeling to assess both beneficial winter solar gains 
+            and problematic summer cooling loads, informing glazing specifications and shading strategies.
+          </p>
+          
+          <h5 style="color: #000; margin: 1rem 0;">Matrix Analysis Approach</h5>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Matrix</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">What it contains</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Why we need it</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Sky Matrix</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Absolute <em>annual</em> kWh m⁻² from each of the 580 Tregenza sky patches.</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Baseline resource: feeds incident‑radiation studies and radiation roses.</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Benefit Matrix</strong></td>
+                  <td style="padding: 1rem; color: #666;">Same sky dome, but values carry a <strong>sign</strong>: <strong>+</strong> = useful winter gain, <strong>–</strong> = harmful summer load (computed from hourly outdoor temperature).</td>
+                  <td style="padding: 1rem; color: #666;">Instantly tells us whether sun on a surface helps reduce heating or worsens cooling.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Analysis Parameters -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">2. Analysis Parameters</h4>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Parameter</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Sky Matrix</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Benefit Matrix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Period</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">1 Jan – 31 Dec</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Same</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Sky type</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Perez all‑weather</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Same</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Radiance modules</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">580‑patch Tregenza</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">580‑patch Tregenza</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Temp threshold</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">n/a</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>bal_temp = 12 °C</strong> (HK office)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; color: #666; font-weight: 600;">Output</td>
+                  <td style="padding: 1rem; color: #666;">5 PNG heat‑maps (sky visible points)</td>
+                  <td style="padding: 1rem; color: #666;">4 PNG bivariate maps (warm = helpful, cool = harmful)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sky Matrix Results -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">Sky Matrix Analysis</h4>
+          
+          <!-- Sky Matrix Images Carousel -->
+          <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <div id="skyMatrixCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+              <div id="skyMatrixSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/sky matrix - radiation rose.png" alt="Sky Matrix Radiation Rose" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 12a.</strong> Annual radiation rose shows south‑west and south-east walls capturing peak solar energy.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/sky matrix - radiation rose photo 2 (december).png" alt="December Radiation Rose" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 12b.</strong> Radiation rose shows less radiation for north east and north west facades due to building geometry blocking radiation.
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/sky matrix - incident radiation photo 1.png" alt="Incident Radiation Map 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 12c.</strong> Incident radiation map: upper façades saturated, lower floors receive less.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/sky matrix - incident radiation photo 2.png" alt="Incident Radiation Map 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 12d.</strong> Benefit matrix view: north facade blue, south yellow beneficial gains.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/sky matrix - sky dome.png" alt="Radiation Sky Dome" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 12e.</strong> Radiation dome visualises sun energy across hemisphere, aids panel orientation.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Sky Matrix Carousel Controls -->
+            <button id="skyMatrixPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+            <button id="skyMatrixNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+            
+            <!-- Sky Matrix Carousel Indicators -->
+            <div id="skyMatrixIndicators" style="text-align: center; margin-top: 1rem;">
+              <span class="skymatrix-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+              <span class="skymatrix-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="skymatrix-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="skymatrix-indicator" data-slide="3" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="skymatrix-indicator" data-slide="4" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+            </div>
+          </div>
+
+    
+        </div>
+
+        <!-- Benefit Matrix Results -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">Benefit Matrix Analysis</h4>
+          <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+            The benefit matrix evaluates solar radiation using Hong Kong's climate context, classifying radiation as beneficial 
+            (winter heating) or detrimental (summer cooling load) based on a 12°C balance temperature for commercial buildings.
+          </p>
+          
+          <!-- Benefit Matrix Images Carousel -->
+          <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <div id="benefitMatrixCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+              <div id="benefitMatrixSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/benefit matrix - radiation rose.png" alt="Benefit Matrix Radiation Rose" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 13a.</strong> Radiation rose: south‑east directions dominate harmful solar load.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/benefit matrix - sky dome.png" alt="Benefit Matrix Sky Dome" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 13b.</strong> Sky‑dome maps: total, direct, diffuse all net harmful.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/benefit matrix - incident radiation photo 1.png" alt="Benefit Matrix Incident Radiation 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 13c.</strong> Incident radiation per floor: upper tiers absorb greatest energy.</p>
+                  </div>
+                </div>
+                <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                  <img src="assets/images/Environmental analysis/benefit matrix - incident radiation photo 2.png" alt="Benefit Matrix Incident Radiation 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                  <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 13d.</strong> Reverse view confirms universal façade exposure; minimal beneficial gains.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Benefit Matrix Carousel Controls -->
+            <button id="benefitMatrixPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+            <button id="benefitMatrixNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+            
+            <!-- Benefit Matrix Carousel Indicators -->
+            <div id="benefitMatrixIndicators" style="text-align: center; margin-top: 1rem;">
+              <span class="benefitmatrix-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+              <span class="benefitmatrix-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="benefitmatrix-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              <span class="benefitmatrix-indicator" data-slide="3" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+            </div>
+          </div>
+
+          
+          <!-- Benefit Matrix Analysis Insights -->
+          <div style="margin: 2rem 0;">
+            <h5 style="color: #000; margin-bottom: 1rem;">Design implications</h5>
+            <div style="background: #fff8e1; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ffc107;">
+              <p style="color: #666; line-height: 1.7; margin: 0;">
+                Hong Kong's subtropical climate means most solar radiation represents a cooling penalty rather than heating benefit. 
+                West and south facades show predominantly negative energy balance, requiring aggressive shading strategies. 
+                Only winter morning sun on east facades shows consistent positive benefit for office buildings.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- View Analysis -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">View Analysis</h2>
+          
+          <!-- Purpose and Overview -->
+          <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+            <h4 style="color: #000; margin-bottom: 1rem;">1. Purpose & Methodology — View / Sky Exposure Study</h4>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+              This study measures how well occupants of the Cheung Kong Center connect to their surroundings—Victoria Harbour, nearby parks, 
+              and the open sky—and how that connection changes with height. Using Grasshopper view‑analysis tools, façade grids were tested for:
+            </p>
+            
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+              <li><strong>Harbour / landscape visibility</strong> – % of each panel with an unobstructed ocean horizon.</li>
+              <li><strong>Sky exposure</strong> – fraction of visible sky dome per point (blue → high, green → low in the diagrams).</li>
+              <li><strong>Obstruction mapping</strong> – neighbouring towers that block key sightlines and daylight.</li>
+              <li><strong>Vertical gradient</strong> – how views and sky access improve from podium to roof.</li>
+            </ul>
+            
+            <p style="color: #666; line-height: 1.7; margin: 0;">
+              Results guide window placement, glazing priorities, and interior programming to maximize wellbeing and 
+              capitalize on Hong Kong's harbour and skyline vistas.
+            </p>
+          </div>
+
+          
+
+          <!-- Ocean View Visibility Analysis -->
+          <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+            <h4 style="color: #000; margin-bottom: 1rem;">Ocean View Visibility Analysis</h4>
+            
+            <!-- Ocean View Images Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+              <div id="oceanViewCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                <div id="oceanViewSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                  <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                    <img src="assets/images/Environmental analysis/oceanviewanalysis.png" alt="Ocean View Analysis 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                    <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                      <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 14a.</strong> Ocean visibility: lower floors blocked by surrounding buildings; top north‑east and north-west corner have a clear view of the ocean</p>
+                    </div>
+                  </div>
+                  <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                    <img src="assets/images/Environmental analysis/oceanviewanalysis 2.png" alt="Ocean View Analysis 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                    <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                      <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 14b.</strong> Majority floors have restricted seaside visibility from the south-west and south-east facade.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Ocean View Carousel Controls -->
+              <button id="oceanViewPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+              <button id="oceanViewNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+              
+              <!-- Ocean View Carousel Indicators -->
+              <div id="oceanViewIndicators" style="text-align: center; margin-top: 1rem;">
+                <span class="oceanview-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                <span class="oceanview-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sky Exposure Analysis -->
+          <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+            <h4 style="color: #000; margin-bottom: 1rem;">Sky Exposure Analysis</h4>
+            
+            <!-- Sky Exposure Images Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+              <div id="skyExposureCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                <div id="skyExposureSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                  <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                    <img src="assets/images/Environmental analysis/sky exposure view percent 2.png" alt="Sky Exposure View 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                    <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                      <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 15a.</strong> SkyExposure: northeast façade, 0 – 100 % sky solid‑angle visible.</p>
+                    </div>
+                  </div>
+                  <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                    <img src="assets/images/Environmental analysis/sky exposure view percent 3.png" alt="Sky Exposure View 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                    <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                      <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 15b.</strong> Opposite façade shows similar gradient—urban canyon blocks lower levels.</p>
+                    </div>
+                  </div>
+                  <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                    <img src="assets/images/Environmental analysis/sky exposure view percent.png" alt="Sky Exposure View 3" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                    <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                      <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 15c.</strong> Isometric overview; blue tops wide sky, green base obstructed.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Sky Exposure Carousel Controls -->
+              <button id="skyExposurePrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+              <button id="skyExposureNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+              
+              <!-- Sky Exposure Carousel Indicators -->
+              <div id="skyExposureIndicators" style="text-align: center; margin-top: 1rem;">
+                <span class="skyexposure-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                <span class="skyexposure-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                <span class="skyexposure-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      <!-- Limitations & Future Work Section -->
+      <!-- <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Limitations & Future Work</h2> -->
+        <!-- Content to be added -->
+      <!-- </section> -->
+
+      <!-- Conclusion Section -->
+      <!-- <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Conclusion</h2> -->
+        <!-- Content to be added -->
+      <!-- </section> -->
+      
+      <!-- Tech Stack Section -->
+      <!-- <div style="background: linear-gradient(135deg, #ff6b00, #e55a00); color: white; padding: 2rem; margin: 2rem 0; border-radius: 12px; text-align: center;">
+        <h3 style="margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-tools" style="margin-right: 0.5rem;"></i>Tech Stack</h3>
+        <p style="margin: 0; line-height: 1.6;">Rhino + Grasshopper, Ladybug Tools, Climate Studio, EPW Weather Data</p>
+      </div> -->
+
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); cursor: pointer;">
+    <div class="modal-content" style="position: relative; margin: auto; display: block; width: 90%; max-width: 1200px; max-height: 90%; top: 50%; transform: translateY(-50%);">
+      <img id="modalImage" style="width: 100%; height: auto; border-radius: 8px;">
+      <div id="modalCaption" style="color: #fff; text-align: center; padding: 20px; font-size: 1rem; line-height: 1.5;"></div>
+      <span class="close" style="position: absolute; top: 15px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s;">&times;</span>
+    </div>
+  </div>
+
+  <!-- === JavaScript Modules === -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils/dom-utils.js"></script>
+  <script src="assets/js/utils/animation-utils.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/image-modal.js"></script>
+  <script>
+    // Ensure portfolio nav button stays active on this page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Remove active class from all nav buttons first
+      const navButtons = document.querySelectorAll('.nav-button');
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Add active class to portfolio button since this is a portfolio detail page
+      const portfolioButton = document.querySelector('.nav-button[data-page="portfolio"]');
+      if (portfolioButton) {
+        portfolioButton.classList.add('active');
+      }
+    });
+  </script>
+  <script>
+    let slideIndex = 1;
+    
+    function nextSlide() {
+      showSlide(slideIndex += 1);
+    }
+    
+    function previousSlide() {
+      showSlide(slideIndex -= 1);
+    }
+    
+    function currentSlide(n) {
+      showSlide(slideIndex = n);
+    }
+    
+    function showSlide(n) {
+      const carousel = document.querySelector('#sunHoursCarousel > div');
+      const indicators = document.querySelectorAll('#sunHoursCarousel').nextElementSibling.nextElementSibling.children;
+      
+      if (n > 4) {slideIndex = 1}
+      if (n < 1) {slideIndex = 4}
+      
+      carousel.style.transform = `translateX(-${(slideIndex - 1) * 100}%)`;
+      
+      // Update indicators
+      for (let i = 0; i < indicators.length; i++) {
+        indicators[i].style.backgroundColor = '#ccc';
+        indicators[i].style.opacity = '0.5';
+      }
+      indicators[slideIndex - 1].style.backgroundColor = '#ff6b00';
+      indicators[slideIndex - 1].style.opacity = '1';
+    }
+  </script>
+  <script>
+    let currentSlideIndex = 0;
+    let marchSlideIndex = 0;
+    let juneSlideIndex = 0;
+    let decemberSlideIndex = 0;
+    let skyMatrixSlideIndex = 0;
+    let benefitMatrixSlideIndex = 0;
+    let oceanViewSlideIndex = 0;
+    let skyExposureSlideIndex = 0;
+    const totalSlides = 4;
+    const totalMarchSlides = 7;
+    const totalJuneSlides = 6;
+    const totalDecemberSlides = 6;
+    const totalSkyMatrixSlides = 5;
+    const totalBenefitMatrixSlides = 4;
+    const totalOceanViewSlides = 2;
+    const totalSkyExposureSlides = 3;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      // Annual carousel
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const indicators = document.querySelectorAll('.indicator');
+      
+      // March carousel
+      const marchPrevBtn = document.getElementById('marchPrevBtn');
+      const marchNextBtn = document.getElementById('marchNextBtn');
+      const marchIndicators = document.querySelectorAll('.march-indicator');
+
+      // June carousel
+      const junePrevBtn = document.getElementById('junePrevBtn');
+      const juneNextBtn = document.getElementById('juneNextBtn');
+      const juneIndicators = document.querySelectorAll('.june-indicator');
+
+      // December carousel
+      const decemberPrevBtn = document.getElementById('decemberPrevBtn');
+      const decemberNextBtn = document.getElementById('decemberNextBtn');
+      const decemberIndicators = document.querySelectorAll('.december-indicator');
+
+      // Sky Matrix carousel
+      const skyMatrixPrevBtn = document.getElementById('skyMatrixPrevBtn');
+      const skyMatrixNextBtn = document.getElementById('skyMatrixNextBtn');
+      const skyMatrixIndicators = document.querySelectorAll('.skymatrix-indicator');
+
+      // Benefit Matrix carousel
+      const benefitMatrixPrevBtn = document.getElementById('benefitMatrixPrevBtn');
+      const benefitMatrixNextBtn = document.getElementById('benefitMatrixNextBtn');
+      const benefitMatrixIndicators = document.querySelectorAll('.benefitmatrix-indicator');
+
+      // Ocean View carousel
+      const oceanViewPrevBtn = document.getElementById('oceanViewPrevBtn');
+      const oceanViewNextBtn = document.getElementById('oceanViewNextBtn');
+      const oceanViewIndicators = document.querySelectorAll('.oceanview-indicator');
+
+      // Sky Exposure carousel
+      const skyExposurePrevBtn = document.getElementById('skyExposurePrevBtn');
+      const skyExposureNextBtn = document.getElementById('skyExposureNextBtn');
+      const skyExposureIndicators = document.querySelectorAll('.skyexposure-indicator');
+      
+      // Annual carousel events
+      prevBtn.addEventListener('click', function() {
+        currentSlideIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+      });
+      
+      nextBtn.addEventListener('click', function() {
+        currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+        updateCarousel();
+      });
+      
+      indicators.forEach(function(indicator, index) {
+        indicator.addEventListener('click', function() {
+          currentSlideIndex = index;
+          updateCarousel();
+        });
+      });
+
+      // March carousel events
+      marchPrevBtn.addEventListener('click', function() {
+        marchSlideIndex = (marchSlideIndex - 1 + totalMarchSlides) % totalMarchSlides;
+        updateMarchCarousel();
+      });
+      
+      marchNextBtn.addEventListener('click', function() {
+        marchSlideIndex = (marchSlideIndex + 1) % totalMarchSlides;
+        updateMarchCarousel();
+      });
+      
+      marchIndicators.forEach(function(indicator, index) {
+        indicator.addEventListener('click', function() {
+          marchSlideIndex = index;
+          updateMarchCarousel();
+        });
+      });
+
+      // June carousel events
+      junePrevBtn.addEventListener('click', function() {
+        juneSlideIndex = (juneSlideIndex - 1 + totalJuneSlides) % totalJuneSlides;
+        updateJuneCarousel();
+      });
+      
+      juneNextBtn.addEventListener('click', function() {
+        juneSlideIndex = (juneSlideIndex + 1) % totalJuneSlides;
+        updateJuneCarousel();
+      });
+      
+      juneIndicators.forEach(function(indicator, index) {
+        indicator.addEventListener('click', function() {
+          juneSlideIndex = index;
+          updateJuneCarousel();
+        });
+      });
+
+      // December carousel events
+      decemberPrevBtn.addEventListener('click', function() {
+        decemberSlideIndex = (decemberSlideIndex - 1 + totalDecemberSlides) % totalDecemberSlides;
+        updateDecemberCarousel();
+      });
+      
+      decemberNextBtn.addEventListener('click', function() {
+        decemberSlideIndex = (decemberSlideIndex + 1) % totalDecemberSlides;
+        updateDecemberCarousel();
+      });
+      
+      decemberIndicators.forEach(function(indicator, index) {
+        indicator.addEventListener('click', function() {
+          decemberSlideIndex = index;
+          updateDecemberCarousel();
+        });
+      });
+
+      // Sky Matrix carousel events
+      skyMatrixPrevBtn.addEventListener('click', function() {
+        skyMatrixSlideIndex = (skyMatrixSlideIndex - 1 + totalSkyMatrixSlides) % totalSkyMatrixSlides;
+        updateSkyMatrixCarousel();
+      });
+      
+      skyMatrixNextBtn.addEventListener('click', function() {
+        skyMatrixSlideIndex = (skyMatrixSlideIndex + 1) % totalSkyMatrixSlides;
+        updateSkyMatrixCarousel();
+      });
+      
+      skyMatrixIndicators.forEach(function(indicator, index) {
+        indicator.addEventListener('click', function() {
+          skyMatrixSlideIndex = index;
+          updateSkyMatrixCarousel();
+        });
+      });
+
+      // Benefit Matrix carousel events
+      benefitMatrixPrevBtn.addEventListener('click', function() {
+        benefitMatrixSlideIndex = (benefitMatrixSlideIndex - 1 + totalBenefitMatrixSlides) % totalBenefitMatrixSlides;
+        updateBenefitMatrixCarousel();
+      });
+      
+      benefitMatrixNextBtn.addEventListener('click', function() {
+        benefitMatrixSlideIndex = (benefitMatrixSlideIndex + 1) % totalBenefitMatrixSlides;
+        updateBenefitMatrixCarousel();
+      });
+      
+      benefitMatrixIndicators.forEach(function(indicator, index) {
+        indicator.addEventListener('click', function() {
+          benefitMatrixSlideIndex = index;
+          updateBenefitMatrixCarousel();
+        });
+      });
+
+      // Ocean View carousel events
+      oceanViewPrevBtn.addEventListener('click', function() {
+        oceanViewSlideIndex = (oceanViewSlideIndex - 1 + totalOceanViewSlides) % totalOceanViewSlides;
+        updateOceanViewCarousel();
+      });
+      
+      oceanViewNextBtn.addEventListener('click', function() {
+        oceanViewSlideIndex = (oceanViewSlideIndex + 1) % totalOceanViewSlides;
+        updateOceanViewCarousel();
+      });
+      
+      oceanViewIndicators.forEach(function(indicator, index) {
+        indicator.addEventListener('click', function() {
+          oceanViewSlideIndex = index;
+          updateOceanViewCarousel();
+        });
+      });
+
+      // Sky Exposure carousel events
+      skyExposurePrevBtn.addEventListener('click', function() {
+        skyExposureSlideIndex = (skyExposureSlideIndex - 1 + totalSkyExposureSlides) % totalSkyExposureSlides;
+        updateSkyExposureCarousel();
+      });
+      
+      skyExposureNextBtn.addEventListener('click', function() {
+        skyExposureSlideIndex = (skyExposureSlideIndex + 1) % totalSkyExposureSlides;
+        updateSkyExposureCarousel();
+      });
+      
+      skyExposureIndicators.forEach(function(indicator, index) {
+        indicator.addEventListener('click', function() {
+          skyExposureSlideIndex = index;
+          updateSkyExposureCarousel();
+        });
+      });
+    });
+    
+    function updateCarousel() {
+      const slides = document.getElementById('carouselSlides');
+      const indicators = document.querySelectorAll('.indicator');
+      
+      slides.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+      
+      // Update indicators
+      indicators.forEach(function(indicator, index) {
+        if (index === currentSlideIndex) {
+          indicator.style.backgroundColor = '#ff6b00';
+          indicator.style.opacity = '1';
+        } else {
+          indicator.style.backgroundColor = '#ccc';
+          indicator.style.opacity = '0.5';
+        }
+      });
+    }
+
+    function updateMarchCarousel() {
+      const slides = document.getElementById('marchSlides');
+      const indicators = document.querySelectorAll('.march-indicator');
+      
+      slides.style.transform = `translateX(-${marchSlideIndex * 100}%)`;
+      
+      // Update indicators
+      indicators.forEach(function(indicator, index) {
+        if (index === marchSlideIndex) {
+          indicator.style.backgroundColor = '#ff6b00';
+          indicator.style.opacity = '1';
+        } else {
+          indicator.style.backgroundColor = '#ccc';
+          indicator.style.opacity = '0.5';
+        }
+      });
+    }
+
+    function updateJuneCarousel() {
+      const slides = document.getElementById('juneSlides');
+      const indicators = document.querySelectorAll('.june-indicator');
+      
+      slides.style.transform = `translateX(-${juneSlideIndex * 100}%)`;
+      
+      // Update indicators
+      indicators.forEach(function(indicator, index) {
+        if (index === juneSlideIndex) {
+          indicator.style.backgroundColor = '#ff6b00';
+          indicator.style.opacity = '1';
+        } else {
+          indicator.style.backgroundColor = '#ccc';
+          indicator.style.opacity = '0.5';
+        }
+      });
+    }
+
+    function updateDecemberCarousel() {
+      const slides = document.getElementById('decemberSlides');
+      const indicators = document.querySelectorAll('.december-indicator');
+      
+      slides.style.transform = `translateX(-${decemberSlideIndex * 100}%)`;
+      
+      // Update indicators
+      indicators.forEach(function(indicator, index) {
+        if (index === decemberSlideIndex) {
+          indicator.style.backgroundColor = '#ff6b00';
+          indicator.style.opacity = '1';
+        } else {
+          indicator.style.backgroundColor = '#ccc';
+          indicator.style.opacity = '0.5';
+        }
+      });
+    }
+
+    function updateSkyMatrixCarousel() {
+      const slides = document.getElementById('skyMatrixSlides');
+      const indicators = document.querySelectorAll('.skymatrix-indicator');
+      
+      slides.style.transform = `translateX(-${skyMatrixSlideIndex * 100}%)`;
+      
+      // Update indicators
+      indicators.forEach(function(indicator, index) {
+        if (index === skyMatrixSlideIndex) {
+          indicator.style.backgroundColor = '#ff6b00';
+          indicator.style.opacity = '1';
+        } else {
+          indicator.style.backgroundColor = '#ccc';
+          indicator.style.opacity = '0.5';
+        }
+      });
+    }
+
+    function updateBenefitMatrixCarousel() {
+      const slides = document.getElementById('benefitMatrixSlides');
+      const indicators = document.querySelectorAll('.benefitmatrix-indicator');
+      
+      slides.style.transform = `translateX(-${benefitMatrixSlideIndex * 100}%)`;
+      
+      // Update indicators
+      indicators.forEach(function(indicator, index) {
+        if (index === benefitMatrixSlideIndex) {
+          indicator.style.backgroundColor = '#ff6b00';
+          indicator.style.opacity = '1';
+        } else {
+          indicator.style.backgroundColor = '#ccc';
+          indicator.style.opacity = '0.5';
+        }
+      });
+    }
+
+    function updateOceanViewCarousel() {
+      const slides = document.getElementById('oceanViewSlides');
+      const indicators = document.querySelectorAll('.oceanview-indicator');
+      
+      slides.style.transform = `translateX(-${oceanViewSlideIndex * 100}%)`;
+      
+      // Update indicators
+      indicators.forEach(function(indicator, index) {
+        if (index === oceanViewSlideIndex) {
+          indicator.style.backgroundColor = '#ff6b00';
+          indicator.style.opacity = '1';
+        } else {
+          indicator.style.backgroundColor = '#ccc';
+          indicator.style.opacity = '0.5';
+        }
+      });
+    }
+
+    function updateSkyExposureCarousel() {
+      const slides = document.getElementById('skyExposureSlides');
+      const indicators = document.querySelectorAll('.skyexposure-indicator');
+      
+      slides.style.transform = `translateX(-${skyExposureSlideIndex * 100}%)`;
+      
+      // Update indicators
+      indicators.forEach(function(indicator, index) {
+        if (index === skyExposureSlideIndex) {
+          indicator.style.backgroundColor = '#ff6b00';
+          indicator.style.opacity = '1';
+        } else {
+          indicator.style.backgroundColor = '#ccc';
+          indicator.style.opacity = '0.5';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

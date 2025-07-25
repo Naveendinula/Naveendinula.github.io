@@ -1,0 +1,195 @@
+/* EIA Dashboard Page Specific Styles */
+
+/* --- Power BI frame & loader --- */
+.powerbi-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    margin: 2rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: #f8f9fa;
+}
+
+.powerbi-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.loader-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 2;
+    background: #f8f9fa;
+}
+
+.loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #ff6b00;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loader-container p {
+    color: #666;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Dashboard fallback styles */
+.dashboard-fallback {
+    position: relative;
+    text-align: center;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: none;
+}
+
+.dashboard-fallback img {
+    max-width: 100%;
+    border-radius: 8px;
+    opacity: 0.85;
+}
+
+.fallback-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.fallback-overlay h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.fallback-overlay p {
+    margin: 0 0 1rem 0;
+    color: #ccc;
+}
+
+.fallback-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background: #444;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    margin: 0.25rem;
+    transition: all 0.3s ease;
+}
+
+.fallback-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.fallback-button.retry-button {
+    background: #28a745;
+}
+
+.fallback-button.github-button {
+    background: #333;
+}
+
+/* GitHub section specific to EIA Dashboard */
+.eia-github-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.eia-github-section h2 {
+    font-family: var(--font-primary, 'JetBrains Mono');
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #000;
+}
+
+.eia-github-section p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.eia-github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #000;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.eia-github-link:hover {
+    background: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.eia-github-link i {
+    font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .powerbi-container {
+        height: 500px;
+    }
+    
+    .eia-github-section {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .powerbi-container {
+        height: 400px;
+    }
+    
+    .eia-github-section {
+        padding: 1rem;
+    }
+    
+    .fallback-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
