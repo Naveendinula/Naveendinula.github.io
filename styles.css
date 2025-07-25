@@ -327,8 +327,8 @@ body {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: #000;
-    font-family: var(--font-secondary); /* Marcellus for decorative titles */
+    color: #706c6c; /* Changed from #000 to #706c6c */
+    font-family: var(--font-primary); /* Marcellus for decorative titles */
 }
 
 .section-subtitle {
@@ -848,12 +848,12 @@ body {
 .greeting-text {
     font-size: 3.25rem;
     font-weight: 800;
-    color: #000; /* Black main text */
+    color: #706c6c; /* Already updated to the desired color */
     margin-bottom: 0;
     line-height: 1.2;
     position: relative;
     display: inline-block;
-    font-family: var(--font-secondary); /* Marcellus for main greeting */
+    font-family: var(--font-primary); /* Marcellus for main greeting */
 }
 
 .location-indicator {
@@ -906,8 +906,8 @@ body {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: #000; /* Black title */
-    font-family: var(--font-secondary); /* Marcellus for decorative titles */
+    color: #706c6c; /* Changed from #000 to #706c6c */
+    font-family: var(--font-primary); /* Marcellus for decorative titles */
 }
 
 .section-divider {
@@ -1429,7 +1429,7 @@ section {
     font-family: var(--font-primary);
     font-size: 2rem;
     font-weight: 600;
-    color: #000;
+    color: #706c6c; /* Changed from #000 to #706c6c */
     margin-bottom: 1rem;
     text-align: left;
 }
@@ -1480,7 +1480,7 @@ section {
     font-family: var(--font-primary);
     font-size: 2.5rem;
     font-weight: 700;
-    color: #000;
+    color: #706c6c; /* Changed from #000 to #706c6c */
     margin-bottom: 1.5rem;
     line-height: 1.2;
 }
