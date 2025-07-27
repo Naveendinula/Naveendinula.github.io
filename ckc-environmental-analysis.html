@@ -922,13 +922,15 @@
                   <td style="padding: 1rem; text-align: center; color: #666;"><strong>< 3 h/day: limited benefit</strong></td>
                   <td style="padding: 1rem; text-align: center; color: #666;">3–5 h/day: useful</td>
                   <td style="padding: 1rem; text-align: center; color: #666;"><strong>> 5 h/day: maximize gains</strong></td>
-                  <td style="padding: 1rem; color: #666; line-height: 1.6;">
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; line-height: 1.6;">
                     Winter gains are comparatively small but welcome; analysis shows 50% <3 h/day and 34% >5 h/day. 
                     Focus on wind protection and envelope performance rather than solar gains during this period.
                   </td>
                 </tr>
               </tbody>
             </table>
+            </div
+            
           </div>
           
           <!-- Key Takeaways -->
@@ -1126,22 +1128,24 @@
                       High: glare‑sensitive daylight controls.
                     </td>
                   </tr>
-                  <tr>
-                    <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Benefit / Harm</strong> <em>(bal. temp 12 °C)</em></td>
-                    <td style="padding: 1rem; text-align: center; color: #666;">kWh·m²⁻¹</td>
-                    <td style="padding: 1rem; color: #666; line-height: 1.6;">
-                      <strong>> +700</strong> strongly detrimental • <strong>+300 to +700</strong> detrimental • <strong>−100 to +300</strong> near‑neutral • <strong>< −100</strong> beneficial
-                    </td>
-                    <td style="padding: 1rem; color: #666; line-height: 1.6;">
-                      Detrimental: shading + low SHGC. Near‑neutral: standard glazing. Beneficial: allow higher VT / moderate SHGC.
-                    </td>
-                  </tr>
                 </tbody>
               </table>
+
+                    
+                  <!-- Key Design Findings -->
+                  <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00; margin-top: 2rem;">
+                  <h5 style="color: #000; margin-bottom: 1rem;">Key Design Findings</h5>
+                  <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin: 0;">
+                    <li><strong>SE/SW façades:</strong> Mostly high load ~760–953 kWh·m²; prioritize external shading + low‑SHGC (upper/mid storeys).</li>
+                    <li><strong>NE/NW façades:</strong> Moderate ~380–570 kWh·m² with low ≤190–285 kWh·m² near the base; suitable for higher‑VT glazing with glare control.</li>
+                    <li><strong>Height effect:</strong> Radiation jumps above neighboring rooflines; south corners at upper levels sit in the top band.</li>
+                    <li><strong>Thresholds for action:</strong> ≥760 kWh·m² = priority, 380–760 = moderate, <380 = winter‑gain / daylight opportunity.</li>
+                  </ul>
+                  </div>
             </div>
           </div>
     
-        </div>
+        
 
         <!-- Benefit Matrix Results -->
         <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
@@ -1195,23 +1199,53 @@
             </div>
           </div>
 
-          
-          <!-- Benefit Matrix Analysis Insights -->
-          <div style="margin: 2rem 0;">
-            <h5 style="color: #000; margin-bottom: 1rem;">Design implications</h5>
-            <div style="background: #fff8e1; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ffc107;">
-              <p style="color: #666; line-height: 1.7; margin: 0;">
-                Hong Kong's subtropical climate means most solar radiation represents a cooling penalty rather than heating benefit. 
-                West and south facades show predominantly negative energy balance, requiring aggressive shading strategies. 
-                Only winter morning sun on east facades shows consistent positive benefit for office buildings.
-              </p>
+          <!-- Benefit Matrix Thresholds Table -->
+          <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+            <h4 style="color: #000; margin-bottom: 1rem;">Benefit Matrix Analysis Thresholds</h4>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+              The benefit matrix uses temperature-weighted solar radiation values to classify energy impacts on building performance:
+            </p>
+            
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: #f8f9fa;">
+                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Indicator</th>
+                    <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Units</th>
+                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Bands / Thresholds</th>
+                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Typical Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Total radiation — Benefit/Harm</strong></td>
+                    <td style="padding: 1rem; text-align: center; color: #666;">kWh·m²⁻¹</td>
+                    <td style="padding: 1rem; color: #666; line-height: 1.6;">
+                      <strong>≤ −733</strong> critical • <strong>−549 to −733</strong> very high • <strong>−366 to −549</strong> high • <strong>−183 to −366</strong> moderate • <strong>−100 to −183</strong> low harm • <strong>−100 to +100</strong> near‑neutral • <strong>> +100</strong> beneficial (rare here)
+                    </td>
+                    <td style="padding: 1rem; color: #666; line-height: 1.6;">
+                      Critical/high: <strong>external shading + lowest SHGC</strong>. Moderate: <strong>shading or selective low‑SHGC</strong>; glare control. Low/neutral: <strong>standard glazing</strong>, manage glare. Beneficial: <strong>higher VT / moderate SHGC</strong> to admit winter sun.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
 
-        <!-- View Analysis -->
-        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
-          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">View Analysis</h2>
+          <!-- Key Benefit Matrix Findings -->
+          <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00; margin-top: 2rem;">
+            <h5 style="color: #000; margin-bottom: 1rem;">Key Benefit Matrix Findings</h5>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin: 0;">
+              <li><strong>SE/SW façades:</strong> Predominantly high load (~760–953 kWh·m²) → external shading + low‑SHGC, especially at upper/mid storeys.</li>
+              <li><strong>NE/NW façades:</strong> Moderate (~380–570 kWh·m²) with low (≤190–285 kWh·m²) at the base → higher‑VT glazing feasible; manage glare.</li>
+              <li><strong>Height effect:</strong> Loads spike above surrounding rooflines; upper south corners fall in the top band.</li>
+              <li><strong>Action thresholds:</strong> ≥760 kWh·m² = priority, 380–760 = moderate, <380 = winter‑gain / daylight opportunity.</li>
+            </ul>
+          </div>
+      
+        </div>
+        
+        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-eye" style="color: #ff6b00; margin-right: 0.5rem;"></i>View Analysis</h3>
           
           <!-- Purpose and Overview -->
           <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
@@ -1746,6 +1780,9 @@
         }
       });
     }
+  </script>
+</body>
+</html>
   </script>
 </body>
 </html>
