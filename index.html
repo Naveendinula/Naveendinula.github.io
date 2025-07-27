@@ -53,7 +53,7 @@
                     <div class="horizontal-social-icons">
                         <a href="https://www.linkedin.com/in/naveen-panditharathne/" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
                         <a href="#" onclick="copyEmailToClipboard(event)" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fas fa-envelope"></i></a>
-                        <a href="assets/CV_NaveenPanditharatne.pdf" target="_blank" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fas fa-external-link-alt"></i></a>
+                        <a href="assets/images/CV_NaveenPanditharatne.pdf" target="_blank" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fas fa-external-link-alt"></i></a>
                         <a href="https://github.com/Naveendinula/" target="_blank" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
@@ -295,7 +295,7 @@
     </div>
 
     <!-- Email Popup -->
-    <div id="emailPopup" style="display: none; position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #ff6b00; color: white; padding: 15px 25px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 1000; text-align: center; transition: top 0.3s ease;">
+    <div id="emailPopup" style="display: none; position: fixed; top: 0; left: 50%; transform: translateX(-50%); background: #ff6b00; color: white; padding: 15px 25px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 1000; text-align: center; transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0;">
         <p style="margin: 0; font-size: 16px; font-weight: 600;">Email copied to clipboard!</p>
         <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">ngnaveen.p@gmail.com</p>
     </div>
@@ -308,5 +308,37 @@
     <script src="assets/js/modules/email-utils.js"></script>
     <script src="assets/js/app.js"></script>
     <script src="script.js"></script>
+    
+    <script>
+        function copyEmailToClipboard(event) {
+            event.preventDefault();
+            const email = 'ngnaveen.p@gmail.com';
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(email).then(() => {
+                // Show popup
+                const popup = document.getElementById('emailPopup');
+                popup.style.display = 'block';
+                
+                // Animate in
+                setTimeout(() => {
+                    popup.style.opacity = '1';
+                    popup.style.transform = 'translateX(-50%) translateY(0)';
+                }, 10);
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    popup.style.opacity = '0';
+                    popup.style.transform = 'translateX(-50%) translateY(-20px)';
+                    
+                    setTimeout(() => {
+                        popup.style.display = 'none';
+                    }, 300);
+                }, 3000);
+            }).catch(err => {
+                console.error('Failed to copy email: ', err);
+            });
+        }
+    </script>
 </body>
 </html>
