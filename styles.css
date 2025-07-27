@@ -195,6 +195,25 @@ body {
     color: #f39c12;
 }
 
+/* Add orange background highlighting */
+::selection {
+    background-color: #ff6b00;
+    color: white;
+}
+
+::-moz-selection {
+    background-color: #ff6b00;
+    color: white;
+}
+
+/* Or for specific highlight class with background */
+.text-highlight {
+    background-color: #ff6b00;
+    color: white;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
 .hero-subtitle {
     font-size: 1.25rem;
     font-weight: 500;
