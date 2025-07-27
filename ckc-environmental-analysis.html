@@ -52,6 +52,61 @@
         </p>
       </section>
 
+      <!-- Executive Summary Section -->
+      <section class="project-section" style="background: #f8f9fa; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); border-left: 4px solid #ff6b00;">
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">
+          <i class="fas fa-clipboard-list" style="color: #ff6b00; margin-right: 0.5rem;"></i>Executive Summary
+          <span style="font-size: 0.7rem; color: #666; font-weight: 400; margin-left: 0.5rem;">(for decision‑makers)</span>
+        </h2>
+        
+        <div style="display: grid; gap: 1.5rem;">
+          <div style="background: white; padding: 1.8rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); border-left: 4px solid #333;">
+            <h3 style="color: #000; margin-bottom: 0.8rem; font-size: 1.1rem; display: flex; align-items: center;">
+              <i class="fas fa-building" style="color: #666; margin-right: 0.5rem;"></i>Façade Prioritization
+            </h3>
+            <p style="color: #555; line-height: 1.6; margin: 0;">
+              North-east & north-west façades show predominantly detrimental solar load; prioritize fixed/operable shading and high‑SHGC control.
+            </p>
+          </div>
+
+          <div style="background: white; padding: 1.8rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); border-left: 4px solid #666;">
+            <h3 style="color: #000; margin-bottom: 0.8rem; font-size: 1.1rem; display: flex; align-items: center;">
+              <i class="fas fa-sun" style="color: #666; margin-right: 0.5rem;"></i>Seasonal Hot Spots
+            </h3>
+            <p style="color: #555; line-height: 1.6; margin: 0;">
+              June: ~69% of panels >5 h/day; March: 27% >5 h/day → target these for shading (figures 10f, 9f).
+            </p>
+          </div>
+
+          <div style="background: white; padding: 1.8rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); border-left: 4px solid #999;">
+            <h3 style="color: #000; margin-bottom: 0.8rem; font-size: 1.1rem; display: flex; align-items: center;">
+              <i class="fas fa-snowflake" style="color: #666; margin-right: 0.5rem;"></i>Winter Strategy
+            </h3>
+            <p style="color: #555; line-height: 1.6; margin: 0;">
+              50% of panels <3 h/day in December → limited passive gains; focus on wind protection and envelope performance.
+            </p>
+          </div>
+
+          <div style="background: white; padding: 1.8rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); border-left: 4px solid #777;">
+            <h3 style="color: #000; margin-bottom: 0.8rem; font-size: 1.1rem; display: flex; align-items: center;">
+              <i class="fas fa-tree" style="color: #666; margin-right: 0.5rem;"></i>Parks Programming
+            </h3>
+            <p style="color: #555; line-height: 1.6; margin: 0;">
+              Cheung Kong Park ~3–5 h/day in June (shade/water features); March ~5–7 h/day (midday seating OK).
+            </p>
+          </div>
+
+          <div style="background: white; padding: 1.8rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); border-left: 4px solid #555;">
+            <h3 style="color: #000; margin-bottom: 0.8rem; font-size: 1.1rem; display: flex; align-items: center;">
+              <i class="fas fa-thermometer-half" style="color: #666; margin-right: 0.5rem;"></i>Overall Climate
+            </h3>
+            <p style="color: #555; line-height: 1.6; margin: 0;">
+              Mean 24.5 °C; May–Sep largely uncomfortable outdoors; frequent calm winds with typhoon spikes.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <!-- Introduction Section -->
       <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
         <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Introduction</h2>
@@ -314,9 +369,10 @@
           
           <h5 style="color: #000; margin: 1rem 0;">Process:</h5>
           <ol style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
-            <li>Extract per-floor slab & façade surfaces from GH tower stack.</li>
-            <li>Filter out slabs & non-test geometry; retain vertical façade surfaces as test set.</li>
-            <li>Generate per-floor test meshes (uniform grid ___m; offset ___m from glass—<em>fill in</em>).</li>
+            <li>In Rhino, split the extruded CKC tower into 70 floor slabs of equal height, one for each storey.</li>
+            <li>Extract per-floor slab façade surfaces from GH tower stack.</li>
+            <li>Filter out floor & facades surfaces.</li>
+            <li>Calculate per‑floor façade and floor areas, and then sum the per‑floor values to find the overall totals.</li>
           </ol>
 
           <h5 style="color: #000; margin: 1rem 0;">Aggregate areas:</h5>
@@ -344,7 +400,7 @@
                 <tr>
                   <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Period</td>
                   <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">1 Jan – 31 Dec</td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>Mar</strong>, <strong>Jun</strong>, <strong>Dec</strong> (exact ranges: ___)</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>Mar</strong>, <strong>Jun</strong>, <strong>Dec</strong> (21<sup>st</sup>,22<sup>nd</sup>)</td>
                   <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Same periods as tower</td>
                 </tr>
                 <tr>
@@ -435,12 +491,7 @@
               <li>The yellow mesh dome is the Ladybug Sun‑Path, showing the sun’s position for every hour of the year. Vector rays are included to visualize the direction of incoming light.</li>
             </ul>
 
-            <h5 style="color: #000; margin-bottom: 1rem;">Design take‑away (non‑technical)</h5>
-            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00;">
-              <p style="color: #666; line-height: 1.7; margin: 0;">
-                The upper third of the tower bakes in Hong Kong's sun for more than half the day, while ground‑level glass spends most of the year in shadow cast by neighbouring skyscrapers. Shading and high‑performance glass should therefore be concentrated at the top, whereas lower floors can prioritize daylight and views.
-              </p>
-            </div>
+            
           </div>
         </div>
 
@@ -565,18 +616,13 @@
           <div style="margin: 2rem 0;">
             <h5 style="color: #000; margin-bottom: 1rem;">What you're seeing</h5>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
-              <li>Each façade panel is coloured by the total hours of direct sunshine it receives during the March equinox, indicating potential overheating risks. 
-                These panels will require effective shading solutions, while others may benefit from increased glazing to optimize daylighting.
-              </li>
+                <li>Panels show direct‑sun hours for the March equinox period (EPW sun positions, 1‑hour timestep).</li>
+                <li>Blue → shaded (≤ 3 h day⁻¹) | Orange/Red → sun‑struck (≥ 5 h day⁻¹) on the 0–7 h scale.</li>
+                <li>Pattern: North-west and south-west façades are most exposed; mid to upper north-east and south-east bands remain shaded by adjacent towers.</li>
+                <li>Ground plane: East park = longer midday sun; SW plaza = dappled by tower shade.</li>
             </ul>
 
-            <h5 style="color: #000; margin-bottom: 1rem;">Design take‑away (non‑technical)</h5>
-            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00;">
-              <p style="color: #666; line-height: 1.7; margin: 0;">
-                The analysis highlights façade panels that receive excessive sun during the March equinox, indicating potential overheating risks. 
-                These panels will require effective shading solutions, while others may benefit from increased glazing to optimize daylighting.
-              </p>
-            </div>
+            
           </div>
         </div>
 
@@ -603,8 +649,8 @@
                   <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>69 %</strong> (green outline, figure 10f)</td>
                 </tr>
                 <tr>
-                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Panels < 3 h day⁻¹</strong></td>
-                  <td style="padding: 1rem; color: #666;"><strong>1 %</strong> (green outline, figure 10e)</td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Panels < 3 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>1 %</strong> (green outline, figure 10e)</td>
                 </tr>
               </tbody>
             </table>
@@ -620,12 +666,12 @@
               <tbody>
                 <tr>
                   <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Cheung Kong Park</strong></td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">consistently <strong>3–5 h day⁻¹</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">consistently <strong>5-6 h day⁻¹</strong></td>
                   <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Peak summer heat; essential shade structures & water features recommended.</td>
                 </tr>
                 <tr>
                   <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Chater Garden</strong></td>
-                  <td style="padding: 1rem; color: #666;">variable <strong>5–6 h day⁻¹</strong> with tower shadows</td>
+                  <td style="padding: 1rem; color: #666;">variable <strong>3-5 h day⁻¹</strong> with tower shadows</td>
                   <td style="padding: 1rem; color: #666;">Strategic shading; avoid midday events; focus on early morning programming.</td>
                 </tr>
               </tbody>
@@ -677,7 +723,7 @@
             
             <!-- June Carousel Controls -->
             <button id="junePrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
-            <button id="juneNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width:  40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+            <button id="juneNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
             
             <!-- June Carousel Indicators -->
             <div id="juneIndicators" style="text-align: center; margin-top: 1rem;">
@@ -694,18 +740,13 @@
           <div style="margin: 2rem 0;">
             <h5 style="color: #000; margin-bottom: 1rem;">What you're seeing</h5>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
-              <li>Each façade panel is coloured by the total hours of direct sunshine it receives during the June solstice, with only a few panels in the shade. 
-                This information is crucial for optimizing solar energy capture and ensuring adequate shading for thermal comfort.
-              </li>
+                <li>Panels show direct‑sun hours for the June solstice period (EPW sun positions, 1‑hour timestep).</li>
+                <li><strong>Blue → shaded</strong> (≤ 3 h day⁻¹) | <strong>Orange/Red → sun‑struck</strong> (≥ 5 h day⁻¹) on the 0–7 h scale.</li>
+                <li>Pattern: Nearly the entire façade exceeds 5 h day⁻¹, with the upper storeys consistently red; only a narrow lower north-east and south-east wedge remains ≤ 3 h day⁻¹ due to masking by adjacent towers.</li> 
+                <li>Ground plane: Both parks are sun‑rich in June with more sun hours in , with brief diagonal shade tracks; prioritize shade structures/trees and heat‑mitigation features.</li>
             </ul>
 
-            <h5 style="color: #000; margin-bottom: 1rem;">Design take‑away (non‑technical)</h5>
-            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00;">
-              <p style="color: #666; line-height: 1.7; margin: 0;">
-                The analysis reveals that most of the CKC tower receives ample sunlight during the June solstice, with only a few panels in the shade. 
-                This information is crucial for optimizing solar energy capture and ensuring adequate shading for thermal comfort.
-              </p>
-            </div>
+            
           </div>
         </div>
         
@@ -823,19 +864,82 @@
           <div style="margin: 2rem 0;">
             <h5 style="color: #000; margin-bottom: 1rem;">What you're seeing</h5>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
-              <li>Each façade panel is coloured by the total hours of direct sunshine it receives during the December solstice period.</li>
-              <li><strong>Blue → shaded</strong> (< 3 h day⁻¹) | <strong>Green → moderate sun</strong> (3–5 h day⁻¹) | <strong>Red → sun‑struck</strong> (> 5 h day⁻¹).</li>
-              <li>The overlaid numbers indicate the exact daily sun‑hour totals for key panels.</li>
+                <li>Panels show direct‑sun hours for the December solstice period (EPW sun positions, 1‑hour timestep).</li>
+                <li>Blue → shaded (≤ 3 h day⁻¹) | Orange/Red → sun‑exposed (≥ 5 h day⁻¹) on the 0–7 h scale.</li>
+                <li>Pattern: Low winter sun from the south gives the south-east and south-west façades, especially upper storeys—longest exposure; north-east and north-west faces are shaded completely, with only edge bands catching morning/late‑day sun.</li>
+                <li>Masking: Lower floors facing the south are heavily shadowed by adjacent towers; exposure increases sharply above nearby rooflines.</li>
+                <li>Ground plane: Both parks see ~3–5 h/day, with longer morning sun on the east park and extended shadow lanes across the SW plaza.</li>
             </ul>
 
-            <h5 style="color: #000; margin-bottom: 1rem;">Design take‑away (non‑technical)</h5>
-            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00;">
-              <p style="color: #666; line-height: 1.7; margin: 0;">
-                The analysis shows that during the December solstice, most of the CKC tower receives limited direct sunlight, 
-                with significant shading on the lower floors. This highlights the importance of considering seasonal sun path 
-                and shading from surrounding buildings in the design of façade systems.
-              </p>
-            </div>
+            
+          </div>
+        </div>
+        
+        <!-- Design Guidance Table -->
+        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+          <h4 style="color: #000; margin-bottom: 1rem;">Design Guidance: Sun Hour Thresholds by Season</h4>
+          <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+            Based on the analysis results and office building requirements in Hong Kong's subtropical climate, 
+            the following thresholds provide practical guidance for façade design decisions:
+          </p>
+          
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8f9fa;">
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Season / Use</th>
+                  <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Low / Acceptable</th>
+                  <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Caution</th>
+                  <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">High‑risk → Shade / Low‑SHGC</th>
+                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Rationale</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>March (shoulder)</strong></td>
+                  <td style="padding: 1rem; text-align: center; border-bottom: 1px solid #e9ecef; color: #666;"><strong>≤ 2 h/day</strong></td>
+                  <td style="padding: 1rem; text-align: center; border-bottom: 1px solid #e9ecef; color: #666;">2–5 h/day</td>
+                  <td style="padding: 1rem; text-align: center; border-bottom: 1px solid #e9ecef; color: #666;"><strong>> 5 h/day</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; line-height: 1.6;">
+                    Offices aren't seeking residential sunlight targets; >5 h/day in March already flags overheating risk. 
+                    EN 17037's 1.5–4 h guidance is for <em>dwellings</em> and supports using <strong>lower</strong> caps in cooling‑led offices. 
+                    (<a href="https://www.rehva.eu/rehva-journal/chapter/en-17037-a-step-forward-new-computational-methods-with-sunlight-daylight-and-quality-views-for-regenerative-design" style="color: #ff6b00; text-decoration: none;">REHVA</a>, 
+                    <a href="https://www.sageglass.com/industry-insights/first-european-standard-daylight-buildings" style="color: #ff6b00; text-decoration: none;">sageglass.com</a>)
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>June (summer peak)</strong></td>
+                  <td style="padding: 1rem; text-align: center; border-bottom: 1px solid #e9ecef; color: #666;"><strong>≤ 3 h/day</strong></td>
+                  <td style="padding: 1rem; text-align: center; border-bottom: 1px solid #e9ecef; color: #666;">3–5 h/day</td>
+                  <td style="padding: 1rem; text-align: center; border-bottom: 1px solid #e9ecef; color: #666;"><strong>> 5 h/day</strong></td>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; line-height: 1.6;">
+                    Analysis shows 69% of panels >5 h/day in June; treat these as priority shading/glazing control zones. 
+                    Summer peak conditions require aggressive solar control to maintain thermal comfort and reduce cooling loads.
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>December (winter benefit)</strong></td>
+                  <td style="padding: 1rem; text-align: center; color: #666;"><strong>< 3 h/day: limited benefit</strong></td>
+                  <td style="padding: 1rem; text-align: center; color: #666;">3–5 h/day: useful</td>
+                  <td style="padding: 1rem; text-align: center; color: #666;"><strong>> 5 h/day: maximize gains</strong></td>
+                  <td style="padding: 1rem; color: #666; line-height: 1.6;">
+                    Winter gains are comparatively small but welcome; analysis shows 50% <3 h/day and 34% >5 h/day. 
+                    Focus on wind protection and envelope performance rather than solar gains during this period.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Key Takeaways -->
+          <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00; margin-top: 2rem;">
+            <h5 style="color: #000; margin-bottom: 1rem;">Key Design Implications</h5>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin: 0;">
+              <li><strong>Priority shading zones:</strong> North-east & north-west façades showing >5 h/day in March/June</li>
+              <li><strong>Glazing strategy:</strong> High-performance low-SHGC glazing for high-risk zones, standard glazing for winter gain areas</li>
+              <li><strong>Adaptive systems:</strong> Consider operable shading that responds to seasonal patterns</li>
+              <li><strong>Interior programming:</strong> Locate heat-sensitive functions away from high solar load areas</li>
+            </ul>
           </div>
         </div>
         
@@ -974,6 +1078,68 @@
             </div>
           </div>
 
+          <!-- Solar Radiation Thresholds Table -->
+          <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+            <h4 style="color: #000; margin-bottom: 1rem;">Solar Radiation Analysis Thresholds</h4>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+              The following thresholds provide practical guidance for interpreting radiation values and selecting appropriate façade strategies:
+            </p>
+            
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: #f8f9fa;">
+                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Indicator</th>
+                    <th style="padding: 1rem; text-align: center; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Units</th>
+                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Bands / Thresholds</th>
+                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000; font-weight: 600;">Typical Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Total incident</strong></td>
+                    <td style="padding: 1rem; text-align: center; border-bottom: 1px solid #e9ecef; color: #666;">kWh·m²⁻¹</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; line-height: 1.6;">
+                      <strong>≥ 1050</strong> critical • <strong>825–1050</strong> high • <strong>590–825</strong> moderate • <strong>350–590</strong> low • <strong>< 350</strong> very low
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; line-height: 1.6;">
+                      Critical/high: external shading + low SHGC. Moderate: selective control. Low/very low: daylight opportunity; watch glare.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Direct</strong></td>
+                    <td style="padding: 1rem; text-align: center; border-bottom: 1px solid #e9ecef; color: #666;">kWh·m²⁻¹</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; line-height: 1.6;">
+                      <strong>≥ 600</strong> high • <strong>300–600</strong> moderate • <strong>< 300</strong> low
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; line-height: 1.6;">
+                      High: prioritize shading. Moderate: tune SHGC/controls. Low: glare management only.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Diffuse</strong></td>
+                    <td style="padding: 1rem; text-align: center; border-bottom: 1px solid #e9ecef; color: #666;">kWh·m²⁻¹</td>
+                    <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; line-height: 1.6;">
+                      <strong>≥ 470</strong> high • <strong>235–470</strong> moderate • <strong>< 235</strong> low
+                    </td>
+                    <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; line-height: 1.6;">
+                      High: glare‑sensitive daylight controls.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Benefit / Harm</strong> <em>(bal. temp 12 °C)</em></td>
+                    <td style="padding: 1rem; text-align: center; color: #666;">kWh·m²⁻¹</td>
+                    <td style="padding: 1rem; color: #666; line-height: 1.6;">
+                      <strong>> +700</strong> strongly detrimental • <strong>+300 to +700</strong> detrimental • <strong>−100 to +300</strong> near‑neutral • <strong>< −100</strong> beneficial
+                    </td>
+                    <td style="padding: 1rem; color: #666; line-height: 1.6;">
+                      Detrimental: shading + low SHGC. Near‑neutral: standard glazing. Beneficial: allow higher VT / moderate SHGC.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
     
         </div>
 
@@ -1163,7 +1329,7 @@
       
       <!-- Tech Stack Section -->
       <!-- <div style="background: linear-gradient(135deg, #ff6b00, #e55a00); color: white; padding: 2rem; margin: 2rem 0; border-radius: 12px; text-align: center;">
-        <h3 style="margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-tools" style="margin-right: 0.5rem;"></i>Tech Stack</h3>
+        <h3 style="margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-tools" style="margin-right:  0.5rem;"></i>Tech Stack</h3>
         <p style="margin: 0; line-height: 1.6;">Rhino + Grasshopper, Ladybug Tools, Climate Studio, EPW Weather Data</p>
       </div> -->
 
