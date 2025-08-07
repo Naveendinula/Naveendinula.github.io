@@ -1939,3 +1939,13 @@ section {
     transform: scale(1.02) !important;
     box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
 }
+
+/* Global text selection color */
+::selection {
+    background: #ff6b00;
+    color: #fff; /* Ensure readability on orange */
+}
+::-moz-selection {
+    background: #ff6b00;
+    color: #fff;
+}
