@@ -84,11 +84,9 @@ class EmailUtils {
     }
 }
 
-// Create instance and expose globally
+// Create instance and expose globally (classic script compatible)
 const emailUtils = new EmailUtils();
 
-// Expose the main function globally for onclick handlers
+// Expose functions globally for inline onclick handlers
 window.copyEmailToClipboard = (event) => emailUtils.copyEmailToClipboard(event);
-
-// Export for module usage
-export default EmailUtils;
+window.closeEmailPopup = () => emailUtils.closeEmailPopup();
