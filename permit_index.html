@@ -1,0 +1,2388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Permit Map</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', 'monospace'],
+                    },
+                    colors: {
+                        'glass': {
+                            50: 'rgba(255, 255, 255, 0.05)',
+                            100: 'rgba(255, 255, 255, 0.1)',
+                            200: 'rgba(255, 255, 255, 0.15)',
+                        },
+                        'dark': {
+                            800: 'rgba(15, 15, 15, 0.95)',
+                            900: 'rgba(0, 0, 0, 0.95)',
+                        }
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+            overflow: hidden;
+        }
+        
+        /* Custom Tailwind Components */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Enhanced Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: linear-gradient(145deg, rgba(55, 65, 81, 0.8), rgba(31, 41, 55, 0.9));
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .toggle-switch.active {
+            background: linear-gradient(145deg, #3b82f6, #2563eb);
+            border-color: #60a5fa;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .toggle-slider {
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(26px);
+            background: linear-gradient(145deg, #ffffff, #e2e8f0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+        /* Enhanced Popup Styling */
+        .mapboxgl-popup-content {
+            background: rgba(15, 15, 15, 0.95);
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            min-width: 280px;
+            max-width: 350px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8), 0 4px 16px rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(20px);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .mapboxgl-popup-content h3 {
+            margin: 0 0 12px 0;
+            color: #60a5fa;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+            padding-bottom: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .mapboxgl-popup-close-button {
+            color: #ffffff;
+            font-size: 20px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .mapboxgl-popup-close-button:hover {
+            background: rgba(59, 130, 246, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        /* --- Enhanced Popup Styling --- */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .stat-card {
+            position: relative;
+            background: linear-gradient(145deg, rgba(30,41,59,0.85), rgba(17,24,39,0.85));
+            padding: 8px 10px 10px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(59,130,246,0.25);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02), 0 2px 6px -1px rgba(0,0,0,0.6);
+        }
+        .stat-card:before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, #1d4ed8, #3b82f6, #60a5fa);
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            opacity: 0.9;
+        }
+        .stat-label { font-size: 10px; letter-spacing: .3px; text-transform: uppercase; color: #93c5fd; font-weight: 600; }
+        .stat-value { font-size: 16px; font-weight: 700; color: #ffffff; line-height: 1.1; margin-top: 3px; }
+        .stat-sub { font-size: 10px; color: #9ca3af; margin-top: 2px; }
+        .progress-wrapper { margin: 3px 0 12px 0; }
+        .progress-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+        .progress-head span { font-size:11px; font-weight:600; color:#d1d5db; }
+        .progress-bar { position:relative; background:rgba(31,41,55,0.6); border:1px solid rgba(59,130,246,0.3); height:12px; border-radius:6px; overflow:hidden; }
+        .progress-fill { position:absolute; top:0; left:0; bottom:0; background:linear-gradient(90deg,#1d4ed8,#2563eb,#3b82f6); box-shadow:0 0 6px #3b82f6aa; }
+        .category-chips { display:flex; flex-wrap:wrap; gap:4px; margin:0 0 10px 0; }
+        .chip { font-size:10px; padding:3px 6px; border-radius:12px; background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.35); color:#bfdbfe; display:inline-flex; align-items:center; gap:3px; }
+        .chip-count { background:#3b82f6; color:#fff; font-weight:600; font-size:9px; padding:1px 5px; border-radius:10px; }
+        .mini-bars { display:flex; flex-direction:column; gap:6px; }
+        .mini-row { display:grid; grid-template-columns:80px 1fr 35px; gap:6px; align-items:center; }
+        .mini-label { font-size:10px; color:#9ca3af; font-weight:500; }
+        .mini-bar { position:relative; background:rgba(31,41,55,0.55); height:8px; border-radius:4px; overflow:hidden; border:1px solid rgba(59,130,246,0.25); }
+        .mini-fill { position:absolute; top:0; left:0; bottom:0; background:linear-gradient(90deg,#0ea5e9,#3b82f6); }
+        .mini-val { font-size:10px; font-weight:600; color:#e5e7eb; text-align:right; }
+        .section-title { font-size:11px; font-weight:700; letter-spacing:.3px; color:#60a5fa; margin:0 0 6px 0; text-transform:uppercase; }
+        .divider { margin:12px 0 8px 0; height:1px; background:linear-gradient(90deg,transparent,rgba(59,130,246,0.5),transparent); border:none; }
+        .empty-msg { font-size:11px; color:#9ca3af; font-style:italic; padding:6px 0; }
+        
+        /* --- Bottom Drawer Styles --- */
+        .bottom-drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 45vh;
+            min-height: 200px;
+            max-height: 80vh;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px 12px 0 0;
+            color: white;
+            font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
+            resize: vertical;
+            overflow: hidden;
+        }
+        .bottom-drawer.open {
+            transform: translateY(0);
+        }
+        .drawer-handle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px;
+            cursor: ns-resize;
+            transition: background-color 0.2s;
+            position: relative;
+            user-select: none;
+        }
+        .drawer-handle:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .handle-bar {
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            transition: background-color 0.2s;
+            pointer-events: none;
+        }
+        .drawer-handle:hover .handle-bar {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .resize-indicator {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+        .drawer-handle:hover .resize-indicator {
+            opacity: 1;
+        }
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .drawer-title h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #60a5fa;
+        }
+        .feature-count {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-left: 12px;
+        }
+        .close-button {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .tab-navigation {
+            display: flex;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .tab-navigation::-webkit-scrollbar {
+            display: none;
+        }
+        .tab-button {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 13px;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+        }
+        .tab-button.active {
+            color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+            border-bottom-color: #60a5fa;
+        }
+        .tab-icon {
+            font-size: 14px;
+        }
+        .tab-label {
+            font-weight: 500;
+        }
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(96, 165, 250, 0.6) rgba(255, 255, 255, 0.1);
+        }
+        .tab-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .tab-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        .tab-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, rgba(96, 165, 250, 0.8), rgba(59, 130, 246, 0.6));
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .tab-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, rgba(96, 165, 250, 1), rgba(59, 130, 246, 0.8));
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .kpi-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .kpi-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 4px;
+        }
+        .kpi-unit {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        /* Enhanced Chart Containers */
+        .chart-container {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        .chart-container:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+        }
+        .chart-title {
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        .chart-subtitle {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        .chart-content {
+            height: 300px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .charts-grid {
+            display: grid;
+            gap: 24px;
+        }
+        .charts-grid.two-column {
+            grid-template-columns: 1fr 1fr;
+        }
+        @media (max-width: 768px) {
+            .charts-grid.two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Enhanced Loading States */
+        .loading {
+            text-align: center;
+            color: #9ca3af;
+            font-style: italic;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(59, 130, 246, 0.2);
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Glassmorphism Effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Enhanced Animations */
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        @media (max-width: 1024px) {
+            .charts-grid.two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .bottom-drawer {
+                height: 60vh;
+            }
+            .drawer-header {
+                padding: 12px 16px;
+            }
+            .tab-content {
+                padding: 16px;
+            }
+            .tab-button {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+        }
+        
+        .drawer-open-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        .drawer-open-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+        
+        details.popup-details {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+        details.popup-details summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            color: #bfdbfe;
+            font-weight: 700;
+            border-radius: 8px;
+        }
+        details.popup-details summary::-webkit-details-marker { display: none; }
+        .summary-label { display:flex; gap:8px; align-items:center; }
+        .summary-chevron { transition: transform 0.22s ease; color:#93c5fd; }
+        details[open] .summary-chevron { transform: rotate(90deg); }
+        .popup-details-content { margin-top:8px; padding-top:8px; border-top:1px dashed rgba(59,130,246,0.12); }
+    </style>
+</head>
+<body>
+    <div id="map" class="w-screen h-screen"></div>
+    
+    <!-- Enhanced Layer Control with Tailwind -->
+    <div class="fixed top-4 right-4 z-10 w-72 bg-dark-800 backdrop-blur-xl text-white p-6 rounded-xl border border-blue-500/30 shadow-2xl">
+        <h3 class="text-xl font-semibold mb-5 pb-3 border-b border-blue-500/30 text-blue-400">
+            Map Layers
+        </h3>
+        
+        <div class="space-y-4">
+            <div class="flex items-center justify-between py-2">
+                <span class="text-gray-200 font-medium">Ward Boundaries</span>
+                <div class="toggle-switch active" id="ward-toggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between py-2">
+                <span class="text-gray-200 font-medium">Community Boundaries</span>
+                <div class="toggle-switch" id="community-toggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stylish Analytics Button -->
+        <div class="mt-6 pt-6 border-t border-blue-500/30">
+            <button 
+                class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 
+                       text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 
+                       shadow-lg hover:shadow-xl hover:scale-105 active:scale-95
+                       border border-blue-400/50 backdrop-blur-sm"
+                onclick="openDrawer()">
+                <span class="flex items-center justify-center gap-2">
+                    Analytics Panel
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Enhanced Bottom Drawer with Tailwind -->
+    <div class="bottom-drawer" id="bottom-drawer">
+        <!-- Stylish Handle bar -->
+        <div class="drawer-handle group" id="drawer-handle">
+            <div class="handle-bar bg-white/30 group-hover:bg-white/50"></div>
+            <div class="resize-indicator text-xs text-white/40 group-hover:opacity-100">↕ Drag to resize</div>
+        </div>
+
+        <!-- Enhanced Header -->
+        <div class="drawer-header bg-gradient-to-r from-blue-600/10 to-purple-600/10 border-b border-white/10">
+            <div class="drawer-title">
+                <h2 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    Retrofit Analysis Dashboard
+                </h2>
+                <span class="feature-count inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-sm rounded-full border border-blue-500/30" id="feature-count">
+                    0 permits
+                </span>
+            </div>
+            <button class="close-button hover:bg-red-500/20 hover:text-red-300 rounded-lg transition-all duration-200" onclick="closeDrawer()">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Enhanced Tab Navigation -->
+        <div class="tab-navigation flex overflow-x-auto bg-black/30 border-b border-white/10 scrollbar-hide">
+            <button class="tab-button group flex items-center gap-2 px-6 py-4 text-sm font-medium transition-all duration-300 
+                           border-b-2 border-transparent hover:bg-white/5 hover:border-blue-400/50 
+                           data-[active]:border-blue-400 data-[active]:bg-blue-500/10 data-[active]:text-blue-300
+                           whitespace-nowrap active" 
+                    data-tab="overview" onclick="switchTab('overview')">
+                <span>Overview</span>
+            </button>
+            <button class="tab-button group flex items-center gap-2 px-6 py-4 text-sm font-medium transition-all duration-300 
+                           border-b-2 border-transparent hover:bg-white/5 hover:border-blue-400/50 
+                           data-[active]:border-blue-400 data-[active]:bg-blue-500/10 data-[active]:text-blue-300
+                           whitespace-nowrap" 
+                    data-tab="trends" onclick="switchTab('trends')">
+                <span>Trends</span>
+            </button>
+            <button class="tab-button group flex items-center gap-2 px-6 py-4 text-sm font-medium transition-all duration-300 
+                           border-b-2 border-transparent hover:bg-white/5 hover:border-blue-400/50 
+                           data-[active]:border-blue-400 data-[active]:bg-blue-500/10 data-[active]:text-blue-300
+                           whitespace-nowrap" 
+                    data-tab="processing" onclick="switchTab('processing')">
+                <span>Processing Time</span>
+            </button>
+        </div>
+
+        <!-- Enhanced Tab Content -->
+        <div class="tab-content flex-1 overflow-y-auto p-6 bg-gradient-to-br from-black/20 to-blue-900/10" id="tab-content">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+    </div>
+
+
+    <script>
+        const MAPBOX_TOKEN = 'MAPBOX_TOKEN_REMOVED';
+        
+        // Set the Mapbox access token
+        mapboxgl.accessToken = MAPBOX_TOKEN;
+
+        // Store CSV data for analysis
+        let wardData = new Map();
+        let communityData = new Map();
+
+        // Function to parse CSV
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            const headers = lines[0].split(',');
+            const data = new Map();
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                const rowData = {};
+                headers.forEach((header, index) => {
+                    const value = values[index];
+                    // Convert numeric values
+                    rowData[header] = isNaN(value) || value === '' ? value : Number(value);
+                });
+                // Use the first column as key (WARD or COMMUNITY_AREA)
+                const key = values[0];
+                if (key && key !== '') {
+                    data.set(key, rowData);
+                }
+            }
+            return data;
+        }
+
+        // Parse CSV to array of objects (for chart data)
+        function parseCSVToArray(text) {
+            const lines = text.trim().split('\n');
+            const headers = lines[0].split(',');
+            const data = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                const rowData = {};
+                headers.forEach((header, index) => {
+                    const value = values[index];
+                    // Convert numeric values, handle dates
+                    if (header.includes('date') || header.includes('week_start') || header.includes('month')) {
+                        rowData[header] = value; // Keep as string for date parsing
+                    } else {
+                        rowData[header] = isNaN(value) || value === '' ? value : Number(value);
+                    }
+                });
+                data.push(rowData);
+            }
+            return data;
+        }
+
+        // Load CSV file and parse to array
+        async function loadCSVData(filename) {
+            try {
+                const response = await fetch(`./assets/data/retrofit-v2/${filename}`);
+                const text = await response.text();
+                return parseCSVToArray(text);
+            } catch (error) {
+                console.error(`Error loading ${filename}:`, error);
+                return [];
+            }
+        }
+
+        // Initialize the map
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v11', // Dark theme
+            center: [-87.6298, 41.8781], // Chicago coordinates
+            zoom: 10,
+            pitch: 0,
+            bearing: 0
+        });
+
+        // Add navigation controls
+        map.addControl(new mapboxgl.NavigationControl());
+
+        // Add fullscreen control
+        map.addControl(new mapboxgl.FullscreenControl());
+
+        // Wait for the map to load
+        map.on('load', async () => {
+            console.log('Map loaded successfully');
+            
+            // Load CSV data
+            try {
+                const [wardResponse, communityResponse] = await Promise.all([
+                    fetch('./assets/data/retrofit-v2/ward_summary.csv'),
+                    fetch('./assets/data/retrofit-v2/community_summary.csv')
+                ]);
+                
+                const wardCSV = await wardResponse.text();
+                const communityCSV = await communityResponse.text();
+                
+                wardData = parseCSV(wardCSV);
+                communityData = parseCSV(communityCSV);
+                
+                console.log('CSV data loaded:', wardData.size, 'wards,', communityData.size, 'communities');
+            } catch (error) {
+                console.error('Error loading CSV data:', error);
+            }
+            
+            // Add ward boundaries source
+            map.addSource('ward-boundaries', {
+                type: 'geojson',
+                data: './assets/data/retrofit-v2/ward_boundaries.geojson',
+                generateId: true // This generates unique IDs for features
+            });
+
+            // Add ward boundaries layer (initially visible)
+            map.addLayer({
+                id: 'ward-boundaries-fill',
+                type: 'fill',
+                source: 'ward-boundaries',
+                layout: {
+                    visibility: 'visible'
+                },
+                paint: {
+                    'fill-color': '#088',
+                    'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0.8,
+                        0.3
+                    ]
+                }
+            });
+
+            // Add ward boundaries outline
+            map.addLayer({
+                id: 'ward-boundaries-line',
+                type: 'line',
+                source: 'ward-boundaries',
+                layout: {
+                    visibility: 'visible'
+                },
+                paint: {
+                    'line-color': '#088',
+                    'line-width': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        3,
+                        2
+                    ],
+                    'line-opacity': 0.8
+                }
+            });
+
+            // Add community boundaries source
+            map.addSource('community-boundaries', {
+                type: 'geojson',
+                data: './assets/data/retrofit-v2/community_boundaries.geojson',
+                generateId: true // This generates unique IDs for features
+            });
+
+            // Add community boundaries layer (initially hidden)
+            map.addLayer({
+                id: 'community-boundaries-fill',
+                type: 'fill',
+                source: 'community-boundaries',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'fill-color': '#880',
+                    'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0.7,
+                        0.25
+                    ]
+                }
+            });
+
+            // Add community boundaries outline
+            map.addLayer({
+                id: 'community-boundaries-line',
+                type: 'line',
+                source: 'community-boundaries',
+                layout: {
+                    visibility: 'none'
+                },
+                paint: {
+                    'line-color': '#880',
+                    'line-width': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        2.5,
+                        1.5
+                    ],
+                    'line-opacity': 0.6
+                }
+            });
+        });
+
+        // Function to get analytics data for a boundary
+        function getAnalyticsData(feature, boundaryType) {
+            const props = feature.properties;
+            let key, data;
+            
+            if (boundaryType === 'Ward') {
+                // Try different possible ward identifier fields
+                key = props.WARD || props.ward_num || props.ward || props.WARD_NUM || props.name || props.AREA_SHORT;
+                data = wardData.get(String(key));
+            } else {
+                // For community boundaries, use area_numbe or area_num_1 which matches COMMUNITY_AREA in CSV
+                key = props.area_numbe || props.area_num_1 || props.AREA_SHORT || props.AREA_S_CD || 
+                      props.community || props.COMMUNITY_AREA || props.name || props.OBJECTID;
+                
+                // Try the area number first (this should be the main match)
+                data = communityData.get(String(key));
+                
+                // If no match, try alternative keys
+                if (!data && props.area_num_1) {
+                    data = communityData.get(String(props.area_num_1));
+                }
+                if (!data && props.area_numbe) {
+                    data = communityData.get(String(props.area_numbe));
+                }
+                if (!data && props.community) {
+                    // Try matching by community name
+                    for (let [csvKey, csvData] of communityData.entries()) {
+                        if (csvData.COMMUNITY_AREA && String(csvData.COMMUNITY_AREA) === String(key)) {
+                            data = csvData;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (!data) {
+                console.log(`No data found for ${boundaryType} with key: ${key}`);
+                console.log('Available properties:', Object.keys(props));
+                console.log('Sample CSV keys:', 
+                    boundaryType === 'Ward' ? Array.from(wardData.keys()).slice(0, 10) : 
+                    Array.from(communityData.keys()).slice(0, 10));
+                return {
+                    error: `No data found for ${boundaryType} ${key}`,
+                    key: key
+                };
+            }
+            
+            console.log(`Found data for ${boundaryType} ${key}:`, data);
+            
+            return {
+                key: key,
+                permits: data.permits || 0,
+                scoreSum: data.score_sum || 0,
+                retrofitLikely: data.retrofit_likely || 0,
+                heatPump: data.heat_pump || 0,
+                insulation: data.insulation || 0,
+                blower: data.blower || 0,
+                ductwork: data.ductwork || 0,
+                elecUpgrade: data.elec_upg || 0,
+                hvac: data.hvac || 0,
+                lighting: data.lighting || 0,
+                envelope: data.envelope || 0
+            };
+        }
+
+        // Function to create detailed popup content
+        function createPopupContent(feature, boundaryType) {
+            const data = getAnalyticsData(feature, boundaryType);
+            const props = feature.properties;
+            const name = props.name || props.AREA_NAME || props.ward_name || 
+                        props.community_name || `${boundaryType} ${data.key}`;
+            let content = `<h3>${name}</h3>`;
+            if (data.error) {
+                content += `<div class="loading">${data.error}</div>`;
+                return content;
+            }
+
+            // Helpers
+            const fmt = (v) => v !== undefined && v !== null ? v.toLocaleString() : '0';
+            const safeDivPct = (num, den) => den > 0 ? Math.round((num / den) * 100) : 0;
+
+            const retrofitRate = safeDivPct(data.retrofitLikely, data.permits);
+
+            // Key metrics cards
+            content += '<div class="stat-grid">';
+            const metricCards = [
+                { label: 'Permits', value: fmt(data.permits) },
+                { label: 'Retrofit Likely', value: fmt(data.retrofitLikely) },
+                { label: 'Retrofit Rate', value: retrofitRate + '%' },
+                { label: 'Score Sum', value: fmt(data.scoreSum) }
+            ];
+            metricCards.forEach(m => {
+                content += `<div class="stat-card"><div class="stat-label">${m.label}</div><div class="stat-value">${m.value}</div></div>`;
+            });
+            content += '</div>'; // stat-grid
+
+            // Progress bar section
+            content += `
+                <div class="progress-wrapper">
+                    <div class="progress-head"><span>Retrofit Rate</span><span class="progress-head-val">${retrofitRate}%</span></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:${retrofitRate}%;"></div></div>
+                </div>
+            `;
+
+            // Category chips (show non-zero counts)
+            const categories = [
+                { key: 'heatPump', label: 'Heat Pump', value: data.heatPump },
+                { key: 'insulation', label: 'Insulation', value: data.insulation },
+                { key: 'hvac', label: 'HVAC', value: data.hvac },
+                { key: 'elecUpgrade', label: 'Elec Upgrade', value: data.elecUpgrade },
+                { key: 'ductwork', label: 'Ductwork', value: data.ductwork },
+                { key: 'lighting', label: 'Lighting', value: data.lighting },
+                { key: 'envelope', label: 'Envelope', value: data.envelope }
+            ];
+            const nonZeroCats = categories.filter(c => c.value > 0).sort((a,b) => b.value - a.value);
+            // Collapsible categories + distribution
+            content += '<hr class="divider" />';
+            content += `
+                <details class="popup-details">
+                    <summary>
+                        <div class="summary-label"><span class="section-title">Activity Categories</span></div>
+                        <div class="summary-chevron">▶</div>
+                    </summary>
+                    <div class="popup-details-content">
+            `;
+
+            if (nonZeroCats.length === 0) {
+                content += '<div class="empty-msg">No category activity recorded.</div>';
+            } else {
+                content += '<div class="category-chips">';
+                nonZeroCats.slice(0,7).forEach(c => {
+                    content += `<div class="chip"><span>${c.label}</span><span class="chip-count">${fmt(c.value)}</span></div>`;
+                });
+                content += '</div>';
+            }
+
+            // Distribution mini bars
+            const totalCat = nonZeroCats.reduce((acc,c)=> acc + c.value, 0);
+            content += '<div style="margin-top:8px;">';
+            content += '<div class="section-title" style="margin-top:4px;">Category Distribution</div>';
+            if (totalCat === 0) {
+                content += '<div class="empty-msg">No distribution to display.</div>';
+            } else {
+                content += '<div class="mini-bars">';
+                nonZeroCats.forEach(c => {
+                    const pct = safeDivPct(c.value, totalCat);
+                    content += `
+                        <div class="mini-row">
+                            <span class="mini-label">${c.label}</span>
+                            <div class="mini-bar"><div class="mini-fill" style="width:${pct}%;"></div></div>
+                            <span class="mini-val">${pct}%</span>
+                        </div>`;
+                });
+                content += '</div>';
+            }
+
+            content += '</div></div></details>';
+
+            return content;
+        }
+
+        // Hover state management
+        let hoveredWardId = null;
+        let hoveredCommunityId = null;
+
+        // Toggle functionality for ward boundaries
+        document.getElementById('ward-toggle').addEventListener('click', function() {
+            const wardToggle = this;
+            const communityToggle = document.getElementById('community-toggle');
+            const isActive = wardToggle.classList.contains('active');
+            
+            if (isActive) {
+                // Hide ward boundaries
+                map.setLayoutProperty('ward-boundaries-fill', 'visibility', 'none');
+                map.setLayoutProperty('ward-boundaries-line', 'visibility', 'none');
+                wardToggle.classList.remove('active');
+            } else {
+                // Hide community boundaries first (only one layer active at a time)
+                map.setLayoutProperty('community-boundaries-fill', 'visibility', 'none');
+                map.setLayoutProperty('community-boundaries-line', 'visibility', 'none');
+                communityToggle.classList.remove('active');
+                
+                // Show ward boundaries
+                map.setLayoutProperty('ward-boundaries-fill', 'visibility', 'visible');
+                map.setLayoutProperty('ward-boundaries-line', 'visibility', 'visible');
+                wardToggle.classList.add('active');
+            }
+        });
+
+        // Toggle functionality for community boundaries
+        document.getElementById('community-toggle').addEventListener('click', function() {
+            const communityToggle = this;
+            const wardToggle = document.getElementById('ward-toggle');
+            const isActive = communityToggle.classList.contains('active');
+            
+            if (isActive) {
+                // Hide community boundaries
+                map.setLayoutProperty('community-boundaries-fill', 'visibility', 'none');
+                map.setLayoutProperty('community-boundaries-line', 'visibility', 'none');
+                communityToggle.classList.remove('active');
+            } else {
+                // Hide ward boundaries first (only one layer active at a time)
+                map.setLayoutProperty('ward-boundaries-fill', 'visibility', 'none');
+                map.setLayoutProperty('ward-boundaries-line', 'visibility', 'none');
+                wardToggle.classList.remove('active');
+                
+                // Show community boundaries
+                map.setLayoutProperty('community-boundaries-fill', 'visibility', 'visible');
+                map.setLayoutProperty('community-boundaries-line', 'visibility', 'visible');
+                communityToggle.classList.add('active');
+            }
+        });
+
+        // Ward boundaries hover effects (visual only)
+        map.on('mousemove', 'ward-boundaries-fill', (e) => {
+            if (e.features.length > 0) {
+                if (hoveredWardId !== null) {
+                    map.setFeatureState(
+                        { source: 'ward-boundaries', id: hoveredWardId },
+                        { hover: false }
+                    );
+                }
+                hoveredWardId = e.features[0].id;
+                console.log('Ward hover ID:', hoveredWardId); // Debug log
+                map.setFeatureState(
+                    { source: 'ward-boundaries', id: hoveredWardId },
+                    { hover: true }
+                );
+            }
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        map.on('mouseleave', 'ward-boundaries-fill', () => {
+            if (hoveredWardId !== null) {
+                map.setFeatureState(
+                    { source: 'ward-boundaries', id: hoveredWardId },
+                    { hover: false }
+                );
+            }
+            hoveredWardId = null;
+            map.getCanvas().style.cursor = '';
+        });
+
+        // Community boundaries hover effects (visual only)
+        map.on('mousemove', 'community-boundaries-fill', (e) => {
+            if (e.features.length > 0) {
+                if (hoveredCommunityId !== null) {
+                    map.setFeatureState(
+                        { source: 'community-boundaries', id: hoveredCommunityId },
+                        { hover: false }
+                    );
+                }
+                hoveredCommunityId = e.features[0].id;
+                console.log('Community hover ID:', hoveredCommunityId); // Debug log
+                map.setFeatureState(
+                    { source: 'community-boundaries', id: hoveredCommunityId },
+                    { hover: true }
+                );
+            }
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        map.on('mouseleave', 'community-boundaries-fill', () => {
+            if (hoveredCommunityId !== null) {
+                map.setFeatureState(
+                    { source: 'community-boundaries', id: hoveredCommunityId },
+                    { hover: false }
+                );
+            }
+            hoveredCommunityId = null;
+            map.getCanvas().style.cursor = '';
+        });
+
+        // Enhanced click events with CSV analytics
+        map.on('click', 'ward-boundaries-fill', (e) => {
+            const feature = e.features[0];
+            const content = createPopupContent(feature, 'Ward');
+            
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(content)
+                .addTo(map);
+        });
+
+        map.on('click', 'community-boundaries-fill', (e) => {
+            const feature = e.features[0];
+            const content = createPopupContent(feature, 'Community');
+            
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(content)
+                .addTo(map);
+        });
+
+        // Handle map errors
+        map.on('error', (e) => {
+            console.error('Map error:', e);
+        });
+
+        // --- Bottom Drawer Functions ---
+        let currentTab = 'overview';
+        let isDrawerOpen = false;
+        let isResizing = false;
+        let startY = 0;
+        let startHeight = 0;
+
+        // Initialize resize functionality
+        function initDrawerResize() {
+            const drawer = document.getElementById('bottom-drawer');
+            const handle = document.getElementById('drawer-handle');
+
+            handle.addEventListener('mousedown', function(e) {
+                // Check if it's a single click (not drag) to toggle
+                const clickStartTime = Date.now();
+                const clickStartY = e.clientY;
+                
+                isResizing = true;
+                startY = e.clientY;
+                startHeight = drawer.offsetHeight;
+                
+                document.addEventListener('mousemove', handleResize);
+                document.addEventListener('mouseup', function stopResize(e) {
+                    document.removeEventListener('mousemove', handleResize);
+                    document.removeEventListener('mouseup', stopResize);
+                    
+                    // If it was a quick click without much movement, toggle drawer
+                    const clickDuration = Date.now() - clickStartTime;
+                    const clickMovement = Math.abs(e.clientY - clickStartY);
+                    
+                    if (clickDuration < 200 && clickMovement < 5) {
+                        toggleDrawer();
+                    }
+                    
+                    isResizing = false;
+                });
+                
+                e.preventDefault();
+            });
+        }
+
+        function handleResize(e) {
+            if (!isResizing) return;
+            
+            const drawer = document.getElementById('bottom-drawer');
+            const deltaY = startY - e.clientY; // Inverted because we're measuring from bottom
+            const newHeight = startHeight + deltaY;
+            
+            // Constrain height between min and max
+            const minHeight = 200;
+            const maxHeight = window.innerHeight * 0.8;
+            const constrainedHeight = Math.max(minHeight, Math.min(maxHeight, newHeight));
+            
+            drawer.style.height = constrainedHeight + 'px';
+            
+            // Trigger chart resize if drawer is open
+            if (isDrawerOpen && currentTab === 'overview') {
+                setTimeout(() => {
+                    // Resize charts after layout change
+                    const pulseChart = echarts.getInstanceByDom(document.getElementById('retrofit-pulse-chart'));
+                    const leaderboardChart = echarts.getInstanceByDom(document.getElementById('processing-leaderboard-chart'));
+                    
+                    if (pulseChart) pulseChart.resize();
+                    if (leaderboardChart) leaderboardChart.resize();
+                }, 50);
+            }
+        }
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('bottom-drawer');
+            isDrawerOpen = !isDrawerOpen;
+            
+            if (isDrawerOpen) {
+                drawer.classList.add('open');
+                updateDrawerContent();
+            } else {
+                drawer.classList.remove('open');
+            }
+        }
+
+        function openDrawer() {
+            const drawer = document.getElementById('bottom-drawer');
+            if (!isDrawerOpen) {
+                drawer.classList.add('open');
+                isDrawerOpen = true;
+                updateDrawerContent();
+                // Initialize resize functionality after drawer is open
+                if (!drawer.hasResizeListener) {
+                    initDrawerResize();
+                    drawer.hasResizeListener = true;
+                }
+            }
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('bottom-drawer');
+            drawer.classList.remove('open');
+            isDrawerOpen = false;
+        }
+
+        function switchTab(tabId) {
+            // Update active tab button with Tailwind classes
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('border-blue-400', 'bg-blue-500/10', 'text-blue-300');
+                btn.classList.add('border-transparent');
+            });
+            
+            const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
+            activeTab.classList.add('active');
+            activeTab.classList.remove('border-transparent');
+            activeTab.classList.add('border-blue-400', 'bg-blue-500/10', 'text-blue-300');
+            
+            currentTab = tabId;
+            updateDrawerContent();
+        }
+
+        function updateDrawerContent() {
+            const content = document.getElementById('tab-content');
+            const featureCount = document.getElementById('feature-count');
+            
+            // Wait for CSV data to be loaded
+            if (wardData.size === 0 && communityData.size === 0) {
+                console.log('CSV data not loaded yet, waiting...');
+                setTimeout(updateDrawerContent, 100);
+                return;
+            }
+            
+            // Calculate basic stats from loaded CSV data
+            // Filter out empty or '0' keys which are not valid ward/community identifiers
+            const totalWards = Array.from(wardData.keys()).filter(k => k && k !== '0').length;
+            const totalCommunities = Array.from(communityData.keys()).filter(k => k && k !== '0').length;
+
+            // Avoid double-counting: ward and community summaries both aggregate the same underlying permits.
+            // Use ward-level aggregation as the canonical permits count (or replace with a unique-feature count if available).
+            const totalPermits = Array.from(wardData.values()).reduce((sum, ward) => sum + (ward.permits || 0), 0);
+            
+            featureCount.textContent = `${totalPermits.toLocaleString()} permits`;
+            
+            console.log('Updating drawer content for tab:', currentTab);
+            console.log('Data available - Wards:', totalWards, 'Communities:', totalCommunities, 'Total permits (ward agg):', totalPermits);
+            
+            switch (currentTab) {
+                case 'overview':
+                    content.innerHTML = generateOverviewContent(totalPermits, totalWards, totalCommunities);
+                    // Initialize charts after content is added - increased delay to ensure DOM is ready
+                    setTimeout(async () => {
+                        console.log('Initializing charts...');
+                        await initRetrofitPulseChart();
+                        await initProcessingLeaderboardChart();
+                    }, 200);
+                    break;
+                case 'trends':
+                    content.innerHTML = generateTrendsContent();
+                    setTimeout(async () => {
+                        console.log('Initializing trends charts...');
+                        await initCumulativeRetrofitsChart();
+                        await initProcessingTimeTrendChart();
+                    }, 200);
+                    break;
+                case 'processing':
+                    content.innerHTML = generateProcessingContent();
+                    setTimeout(async () => {
+                        console.log('Initializing processing charts...');
+                        await initWardProcessingLeaderboardChart();
+                        await initProcessingTimelineChart();
+                    }, 200);
+                    break;
+                default:
+                    content.innerHTML = generateOverviewContent(totalPermits, totalWards, totalCommunities);
+            }
+        }
+
+        function generateOverviewContent(totalPermits, totalWards, totalCommunities) {
+            return `
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Total Permits</div>
+                        <div class="kpi-value">${totalPermits.toLocaleString()}</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Ward Areas</div>
+                        <div class="kpi-value">${totalWards}</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Communities</div>
+                        <div class="kpi-value">${totalCommunities}</div>
+                    </div>
+                </div>
+                
+                <div class="charts-grid two-column" style="margin-bottom: 24px;">
+                    <div class="chart-container">
+                        <div class="chart-title">Retrofit Activity Pulse (Last 12 Months)</div>
+                        <div class="chart-content" id="retrofit-pulse-chart" style="height: 300px;"></div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-title">Permit Processing Time – Leaderboard by Ward</div>
+                        <div class="chart-content" id="processing-leaderboard-chart" style="height: 300px;"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateTrendsContent() {
+            return `
+                <div class="charts-grid two-column">
+                    <div class="chart-container">
+                        <div class="chart-title">Cumulative Retrofits Over Time</div>
+                        <div class="chart-content" id="cumulative-retrofits-chart" style="height: 300px;"></div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-title">Average Permit Processing Time Over Time</div>
+                        <div class="chart-content" id="processing-time-trend-chart" style="height: 300px;"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateProcessingContent() {
+            return `
+                <div class="charts-grid two-column">
+                    <div class="chart-container">
+                        <div class="chart-title">Ward Processing Leaderboard</div>
+                        <div class="chart-subtitle">Median permit processing time by ward (fastest → slowest)</div>
+                        <div class="chart-content" id="ward-processing-leaderboard-chart" style="height: 400px;"></div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-title">Processing Time Timeline</div>
+                        <div class="chart-subtitle">Citywide median processing time trends with category breakdown</div>
+                        <div class="chart-content" id="processing-timeline-chart" style="height: 400px;"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- Chart Functions ---
+        
+        // Generate weekly data for retrofit activity pulse from CSV
+        async function generateRetrofitPulseData() {
+            const weeklyData = await loadCSVData('retrofit_activity_weekly.csv');
+            
+            if (weeklyData.length === 0) {
+                console.error('No weekly data loaded, falling back to empty data');
+                return [];
+            }
+            
+            console.log('Loaded weekly retrofit data:', weeklyData.length, 'weeks');
+            
+            // Convert to expected format and sort by week_start
+            const weeks = weeklyData.map(row => ({
+                week: row.iso_year_week,
+                weekStart: new Date(row.week_start),
+                HEAT_PUMP: row.HEAT_PUMP || 0,
+                INSULATION: row.INSULATION || 0,
+                ELECTRICAL_UPGRADE: row.ELECTRICAL_UPGRADE || 0,
+                ENVELOPE: row.ENVELOPE || 0,
+                HVAC_GENERAL: row.HVAC_GENERAL || 0,
+                LIGHTING_RETROFIT: row.LIGHTING_RETROFIT || 0,
+                total: row.unique_total || 0,
+                stackedTotal: row.stacked_total || 0,
+                rollingAverage: row.rolling_avg_4w || 0
+            })).sort((a, b) => a.weekStart - b.weekStart);
+            
+            // Take last 52 weeks for the chart
+            return weeks.slice(-52);
+        }
+        
+        // Generate processing time leaderboard data from CSV
+        async function generateProcessingLeaderboardData() {
+            const wardProcessingData = await loadCSVData('processing_time_by_ward.csv');
+            
+            if (wardProcessingData.length === 0) {
+                console.error('No ward processing data loaded, falling back to empty data');
+                return { wards: [], cityMedian: 30 };
+            }
+            
+            console.log('Loaded ward processing data:', wardProcessingData.length, 'wards');
+            
+            // Sort by median processing time (fastest first) and take top 12
+            const sortedWards = wardProcessingData
+                .filter(ward => ward.WARD && ward.median_days > 0)
+                .sort((a, b) => a.median_days - b.median_days)
+                .slice(0, 12);
+            
+            // Calculate city median from all wards
+            const allMedians = wardProcessingData
+                .filter(ward => ward.median_days > 0)
+                .map(ward => ward.median_days);
+            const cityMedian = allMedians.length > 0 ? 
+                Math.round((allMedians.reduce((sum, val) => sum + val, 0) / allMedians.length) * 10) / 10 : 30;
+            
+            const wardLeaderboard = sortedWards.map(ward => ({
+                ward: ward.WARD,
+                volume: ward.permits || 0,
+                retrofitLikely: 0, // Not available in processing CSV
+                retrofitRate: 0,   // Not available in processing CSV
+                median: ward.median_days,
+                p25: ward.p25 || Math.round(ward.median_days * 0.75),
+                p75: ward.p75 || Math.round(ward.median_days * 1.35),
+                isFasterThanCity: ward.median_days < cityMedian
+            }));
+            
+            console.log('Ward leaderboard generated:', wardLeaderboard.length, 'wards, city median:', cityMedian);
+            
+            return { wards: wardLeaderboard, cityMedian: cityMedian };
+        }
+        
+        async function initRetrofitPulseChart() {
+            const chartElement = document.getElementById('retrofit-pulse-chart');
+            console.log('Chart element found:', chartElement);
+            if (!chartElement) {
+                console.error('retrofit-pulse-chart element not found');
+                return;
+            }
+            
+            const chart = echarts.init(chartElement, 'dark');
+            const pulseData = await generateRetrofitPulseData();
+            console.log('Pulse data generated:', pulseData.length, 'weeks');
+            
+            const actionableCategories = ['HEAT_PUMP', 'INSULATION', 'ELECTRICAL_UPGRADE', 'ENVELOPE', 'HVAC_GENERAL', 'LIGHTING_RETROFIT'];
+            const categoryColors = {
+                'HEAT_PUMP': '#dc2626',
+                'INSULATION': '#ea580c', 
+                'ELECTRICAL_UPGRADE': '#d97706',
+                'ENVELOPE': '#65a30d',
+                'HVAC_GENERAL': '#2563eb',
+                'LIGHTING_RETROFIT': '#0284c7'
+            };
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+                    axisPointer: { type: 'cross' }
+                },
+                legend: {
+                    data: [...actionableCategories.map(cat => cat.replace(/_/g, ' ')), '4-Week Rolling Avg'],
+                    textStyle: { color: '#cbd5e1', fontSize: 10, fontFamily: 'JetBrains Mono' },
+                    top: 5
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        start: 75, // Show last 25% of data by default
+                        end: 100,
+                        height: 20,
+                        bottom: 5,
+                        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                        fillerColor: 'rgba(59, 130, 246, 0.3)',
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        handleStyle: {
+                            color: '#3b82f6',
+                            borderColor: '#60a5fa'
+                        },
+                        textStyle: {
+                            color: '#94a3b8',
+                            fontFamily: 'JetBrains Mono',
+                            fontSize: 10
+                        }
+                    },
+                    {
+                        type: 'inside',
+                        start: 75,
+                        end: 100
+                    }
+                ],
+                grid: {
+                    left: '8%',
+                    right: '4%',
+                    bottom: '15%',
+                    top: '18%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: pulseData.map(d => d.week),
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { 
+                        color: '#9ca3af', 
+                        fontSize: 9,
+                        fontFamily: 'JetBrains Mono',
+                        interval: Math.floor(pulseData.length / 8)
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Count',
+                    nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
+                    splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+                },
+                series: [
+                    ...actionableCategories.map(category => ({
+                        name: category.replace(/_/g, ' '),
+                        type: 'line',
+                        stack: 'total',
+                        areaStyle: { color: categoryColors[category] || '#666' },
+                        lineStyle: { color: categoryColors[category] || '#666', width: 0 },
+                        itemStyle: { color: categoryColors[category] || '#666' },
+                        emphasis: { focus: 'series' },
+                        data: pulseData.map(d => d[category] || 0),
+                        symbol: 'none'
+                    })),
+                    {
+                        name: '4-Week Rolling Avg',
+                        type: 'line',
+                        data: pulseData.map(d => d.rollingAverage),
+                        lineStyle: { color: '#ffffff', width: 2, type: 'solid' },
+                        itemStyle: { color: '#ffffff' },
+                        symbol: 'circle',
+                        symbolSize: 3,
+                        z: 10
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            
+            const handleResize = () => chart.resize();
+            window.addEventListener('resize', handleResize);
+            
+            // Store chart instance for manual resize during drawer resize
+            chartElement._chartInstance = chart;
+        }
+        
+        async function initProcessingLeaderboardChart() {
+            const chartElement = document.getElementById('processing-leaderboard-chart');
+            console.log('Processing chart element found:', chartElement);
+            if (!chartElement) {
+                console.error('processing-leaderboard-chart element not found');
+                return;
+            }
+            
+            const chart = echarts.init(chartElement, 'dark');
+            const leaderboardData = await generateProcessingLeaderboardData();
+            console.log('Leaderboard data generated:', leaderboardData.wards.length, 'wards');
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+                    axisPointer: { type: 'shadow' },
+                    formatter: (params) => {
+                        const data = params[0];
+                        const wardInfo = leaderboardData.wards[data.dataIndex];
+                        return `
+                            <div style="font-family: JetBrains Mono;">
+                                <div style="font-weight: bold; color: #60a5fa;">Ward ${data.name}</div>
+                                <div>Volume: ${wardInfo.volume.toLocaleString()} permits</div>
+                                <div>Retrofit Likely: ${wardInfo.retrofitLikely.toLocaleString()} (${wardInfo.retrofitRate}%)</div>
+                                <div>Median: ${wardInfo.median} days</div>
+                                <div>Range: ${wardInfo.p25} - ${wardInfo.p75} days</div>
+                                <div style="color: ${wardInfo.isFasterThanCity ? '#16a34a' : '#dc2626'};">
+                                    ${wardInfo.isFasterThanCity ? 'Faster' : 'Slower'} than city median (${leaderboardData.cityMedian} days)
+                                </div>
+                            </div>
+                        `;
+                    }
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        start: 0,
+                        end: Math.min(100, (12 / leaderboardData.wards.length) * 100), // Show top 12 wards by default
+                        height: 20,
+                        bottom: 5,
+                        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                        fillerColor: 'rgba(59, 130, 246, 0.3)',
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        handleStyle: {
+                            color: '#3b82f6',
+                            borderColor: '#60a5fa'
+                        },
+                        textStyle: {
+                            color: '#94a3b8',
+                            fontFamily: 'JetBrains Mono',
+                            fontSize: 10
+                        }
+                    },
+                    {
+                        type: 'inside',
+                        start: 0,
+                        end: Math.min(100, (12 / leaderboardData.wards.length) * 100)
+                    }
+                ],
+                grid: {
+                    left: '8%',
+                    right: '4%',
+                    bottom: '15%',
+                    top: '10%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: leaderboardData.wards.map(d => `Ward ${d.ward}`),
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { 
+                        color: '#9ca3af', 
+                        fontSize: 10,
+                        fontFamily: 'JetBrains Mono',
+                        rotate: 45
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Median Processing Time (days)',
+                    nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { 
+                        color: '#9ca3af', 
+                        fontSize: 10,
+                        fontFamily: 'JetBrains Mono'
+                    },
+                    splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        data: leaderboardData.wards.map(d => ({
+                            value: d.median,
+                            itemStyle: {
+                                color: d.isFasterThanCity ? '#16a34a' : '#dc2626' // Green for faster, red for slower
+                            }
+                        })),
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    },
+                    {
+                        type: 'scatter',
+                        data: leaderboardData.wards.map((d, index) => [index, d.median, d.volume]),
+                        symbolSize: function(data) {
+                            // Scale volume to reasonable dot size based on actual permit volumes
+                            const maxVolume = Math.max(...leaderboardData.wards.map(w => w.volume));
+                            const minSize = 6;
+                            const maxSize = 15;
+                            return minSize + ((data[2] / maxVolume) * (maxSize - minSize));
+                        },
+                        itemStyle: {
+                            color: '#ffffff',
+                            opacity: 0.8
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                color: '#60a5fa',
+                                opacity: 1
+                            }
+                        }
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            
+            const handleResize = () => chart.resize();
+            window.addEventListener('resize', handleResize);
+            
+            // Store chart instance for manual resize during drawer resize
+            chartElement._chartInstance = chart;
+        }
+
+        // --- Trends Tab Charts ---
+        
+        // Generate cumulative retrofit data over time from CSV
+        async function generateCumulativeRetrofitData() {
+            const weeklyData = await loadCSVData('retrofit_activity_weekly.csv');
+            
+            if (weeklyData.length === 0) {
+                console.error('No weekly data loaded for cumulative chart');
+                return [];
+            }
+            
+            // Sort by week_start and compute cumulative sums
+            const sortedWeeks = weeklyData
+                .map(row => ({
+                    week: row.iso_year_week,
+                    date: new Date(row.week_start),
+                    HEAT_PUMP: row.HEAT_PUMP || 0,
+                    INSULATION: row.INSULATION || 0,
+                    ELECTRICAL_UPGRADE: row.ELECTRICAL_UPGRADE || 0,
+                    ENVELOPE: row.ENVELOPE || 0,
+                    HVAC_GENERAL: row.HVAC_GENERAL || 0,
+                    LIGHTING_RETROFIT: row.LIGHTING_RETROFIT || 0
+                }))
+                .sort((a, b) => a.date - b.date);
+            
+            // Calculate cumulative totals
+            let cumulativeTotals = {
+                HEAT_PUMP: 0,
+                INSULATION: 0,
+                ELECTRICAL_UPGRADE: 0,
+                ENVELOPE: 0,
+                HVAC_GENERAL: 0,
+                LIGHTING_RETROFIT: 0
+            };
+            
+            const weeks = sortedWeeks.map(week => {
+                // Add this week's counts to cumulative totals
+                Object.keys(cumulativeTotals).forEach(category => {
+                    cumulativeTotals[category] += week[category];
+                });
+                
+                return {
+                    week: week.week,
+                    date: week.date,
+                    ...{ ...cumulativeTotals } // Clone current cumulative state
+                };
+            });
+            
+            // Take last 72 weeks (18 months) for the chart
+            return weeks.slice(-72);
+        }
+        
+        // Generate processing time trend data from CSV
+        async function generateProcessingTimeTrendData() {
+            const monthlyData = await loadCSVData('processing_time_monthly.csv');
+            
+            if (monthlyData.length === 0) {
+                console.error('No monthly processing data loaded');
+                return [];
+            }
+            
+            console.log('Loaded monthly processing data:', monthlyData.length, 'months');
+            
+            // Convert to expected format and sort by month
+            const months = monthlyData.map(row => ({
+                month: new Date(row.month).toLocaleString('default', { month: 'short', year: 'numeric' }),
+                date: new Date(row.month),
+                cityAverage: row.city_median_days || 0,
+                fastWards: row.fast_wards_days || 0,
+                slowWards: row.slow_wards_days || 0
+            })).sort((a, b) => a.date - b.date);
+            
+            return months;
+        }
+        
+        async function initCumulativeRetrofitsChart() {
+            const chartElement = document.getElementById('cumulative-retrofits-chart');
+            if (!chartElement) {
+                console.error('cumulative-retrofits-chart element not found');
+                return;
+            }
+            
+            const chart = echarts.init(chartElement, 'dark');
+            const cumulativeData = await generateCumulativeRetrofitData();
+            
+            const actionableCategories = ['HEAT_PUMP', 'INSULATION', 'ELECTRICAL_UPGRADE', 'ENVELOPE', 'HVAC_GENERAL', 'LIGHTING_RETROFIT'];
+            const categoryColors = {
+                'HEAT_PUMP': '#dc2626',
+                'INSULATION': '#ea580c', 
+                'ELECTRICAL_UPGRADE': '#d97706',
+                'ENVELOPE': '#65a30d',
+                'HVAC_GENERAL': '#2563eb',
+                'LIGHTING_RETROFIT': '#0284c7'
+            };
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+                    axisPointer: { type: 'cross' },
+                    formatter: function(params) {
+                        let result = `<div style="font-family: JetBrains Mono;"><strong>${params[0].name}</strong><br/>`;
+                        params.forEach(param => {
+                            result += `<span style="color: ${param.color};">● ${param.seriesName}: ${param.value.toLocaleString()}</span><br/>`;
+                        });
+                        return result + '</div>';
+                    }
+                },
+                legend: {
+                    data: actionableCategories.map(cat => cat.replace(/_/g, ' ')),
+                    textStyle: { color: '#cbd5e1', fontSize: 10, fontFamily: 'JetBrains Mono' },
+                    top: 5
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        start: 60, // Show last 40% of data by default
+                        end: 100,
+                        height: 20,
+                        bottom: 5,
+                        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                        fillerColor: 'rgba(59, 130, 246, 0.3)',
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        handleStyle: {
+                            color: '#3b82f6',
+                            borderColor: '#60a5fa'
+                        },
+                        textStyle: {
+                            color: '#94a3b8',
+                            fontFamily: 'JetBrains Mono',
+                            fontSize: 10
+                        }
+                    },
+                    {
+                        type: 'inside',
+                        start: 60,
+                        end: 100
+                    }
+                ],
+                grid: {
+                    left: '8%',
+                    right: '4%',
+                    bottom: '15%',
+                    top: '18%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: cumulativeData.map(d => d.week),
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { 
+                        color: '#9ca3af', 
+                        fontSize: 9,
+                        fontFamily: 'JetBrains Mono',
+                        interval: Math.floor(cumulativeData.length / 8)
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Cumulative Count',
+                    nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
+                    splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+                },
+                series: actionableCategories.map(category => ({
+                    name: category.replace(/_/g, ' '),
+                    type: 'line',
+                    data: cumulativeData.map(d => d[category]),
+                    lineStyle: { color: categoryColors[category], width: 3 },
+                    itemStyle: { color: categoryColors[category] },
+                    symbol: 'circle',
+                    symbolSize: 4,
+                    smooth: true
+                }))
+            };
+            
+            chart.setOption(option);
+            
+            const handleResize = () => chart.resize();
+            window.addEventListener('resize', handleResize);
+            chartElement._chartInstance = chart;
+        }
+        
+        async function initProcessingTimeTrendChart() {
+            const chartElement = document.getElementById('processing-time-trend-chart');
+            if (!chartElement) {
+                console.error('processing-time-trend-chart element not found');
+                return;
+            }
+            
+            const chart = echarts.init(chartElement, 'dark');
+            const trendData = await generateProcessingTimeTrendData();
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+                    axisPointer: { type: 'cross' },
+                    formatter: function(params) {
+                        let result = `<div style="font-family: JetBrains Mono;"><strong>${params[0].name}</strong><br/>`;
+                        params.forEach(param => {
+                            result += `<span style="color: ${param.color};">● ${param.seriesName}: ${param.value} days</span><br/>`;
+                        });
+                        return result + '</div>';
+                    }
+                },
+                legend: {
+                    data: ['City Average', 'Fastest Wards', 'Slowest Wards'],
+                    textStyle: { color: '#cbd5e1', fontSize: 10, fontFamily: 'JetBrains Mono' },
+                    top: 5
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        start: Math.max(0, 100 - (12 / trendData.length) * 100), // Show last 12 months by default
+                        end: 100,
+                        height: 20,
+                        bottom: 5,
+                        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                        fillerColor: 'rgba(59, 130, 246, 0.3)',
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        handleStyle: {
+                            color: '#3b82f6',
+                            borderColor: '#60a5fa'
+                        },
+                        textStyle: {
+                            color: '#94a3b8',
+                            fontFamily: 'JetBrains Mono',
+                            fontSize: 10
+                        }
+                    },
+                    {
+                        type: 'inside',
+                        start: Math.max(0, 100 - (12 / trendData.length) * 100),
+                        end: 100
+                    }
+                ],
+                grid: {
+                    left: '8%',
+                    right: '4%',
+                    bottom: '15%',
+                    top: '18%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: trendData.map(d => d.month),
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { 
+                        color: '#9ca3af', 
+                        fontSize: 9,
+                        fontFamily: 'JetBrains Mono',
+                        rotate: 45
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Processing Time (days)',
+                    nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
+                    splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+                },
+                series: [
+                    {
+                        name: 'City Average',
+                        type: 'line',
+                        data: trendData.map(d => d.cityAverage),
+                        lineStyle: { color: '#60a5fa', width: 3 },
+                        itemStyle: { color: '#60a5fa' },
+                        symbol: 'circle',
+                        symbolSize: 6,
+                        smooth: true
+                    },
+                    {
+                        name: 'Fastest Wards',
+                        type: 'line',
+                        data: trendData.map(d => d.fastWards),
+                        lineStyle: { color: '#16a34a', width: 2, type: 'dashed' },
+                        itemStyle: { color: '#16a34a' },
+                        symbol: 'triangle',
+                        symbolSize: 5,
+                        smooth: true
+                    },
+                    {
+                        name: 'Slowest Wards',
+                        type: 'line',
+                        data: trendData.map(d => d.slowWards),
+                        lineStyle: { color: '#dc2626', width: 2, type: 'dashed' },
+                        itemStyle: { color: '#dc2626' },
+                        symbol: 'diamond',
+                        symbolSize: 5,
+                        smooth: true
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            
+            const handleResize = () => chart.resize();
+            window.addEventListener('resize', handleResize);
+            chartElement._chartInstance = chart;
+        }
+
+        // --- Processing Tab Charts ---
+        
+        // Generate ward processing leaderboard data from CSV
+        async function generateWardProcessingLeaderboardData() {
+            const wardProcessingData = await loadCSVData('processing_time_by_ward.csv');
+            
+            if (wardProcessingData.length === 0) {
+                console.error('No ward processing data loaded');
+                return {
+                    wards: [],
+                    cityMedian: 0
+                };
+            }
+            
+            console.log('Loaded ward processing data:', wardProcessingData.length, 'wards');
+            
+            // Create leaderboard by processing time (ascending - fastest first)
+            const wards = wardProcessingData
+                .filter(row => row.WARD && row.median_days !== undefined && parseInt(row.permits) > 0)
+                .map(row => ({
+                    ward: `Ward ${row.WARD}`,
+                    wardNum: row.WARD,
+                    medianTime: parseFloat(row.median_days),
+                    p25: parseFloat(row.p25) || parseFloat(row.median_days) * 0.7,
+                    p75: parseFloat(row.p75) || parseFloat(row.median_days) * 1.4,
+                    volume: parseInt(row.permits),
+                    retrofitLikely: parseInt(row.retrofit_permits) || 0,
+                    retrofitRate: Math.round((parseInt(row.retrofit_permits) || 0) / parseInt(row.permits) * 100),
+                    complexity: (parseInt(row.retrofit_permits) || 0) / parseInt(row.permits)
+                }))
+                .sort((a, b) => a.medianTime - b.medianTime); // Sort fastest to slowest
+            
+            const cityMedian = wards.reduce((sum, w) => sum + w.medianTime, 0) / wards.length;
+            
+            return {
+                wards: wards,
+                cityMedian: Math.round(cityMedian * 10) / 10
+            };
+        }
+        
+        // Generate processing timeline data with category breakdown from CSV
+        async function generateProcessingTimelineData() {
+            const monthlyData = await loadCSVData('processing_time_monthly.csv');
+            
+            if (monthlyData.length === 0) {
+                console.error('No monthly processing timeline data loaded');
+                return [];
+            }
+            
+            console.log('Loaded monthly timeline data:', monthlyData.length, 'months');
+            
+            // Convert to expected format and sort by month
+            const months = monthlyData.map(row => ({
+                month: new Date(row.month).toLocaleString('default', { month: 'short', year: 'numeric' }),
+                date: new Date(row.month),
+                cityMedian: parseFloat(row.city_median_days) || 0,
+                heat_pump: parseFloat(row.HEAT_PUMP_median_days) || 0,
+                insulation: parseFloat(row.INSULATION_median_days) || 0,
+                elec_upg: parseFloat(row.ELECTRICAL_UPGRADE_median_days) || 0,
+                envelope: parseFloat(row.ENVELOPE_median_days) || 0,
+                hvac: parseFloat(row.HVAC_GENERAL_median_days) || 0,
+                lighting: parseFloat(row.LIGHTING_RETROFIT_median_days) || 0
+            })).sort((a, b) => a.date - b.date);
+            
+            return months;
+        }
+        
+        async function initWardProcessingLeaderboardChart() {
+            const chartElement = document.getElementById('ward-processing-leaderboard-chart');
+            if (!chartElement) {
+                console.error('ward-processing-leaderboard-chart element not found');
+                return;
+            }
+            
+            const chart = echarts.init(chartElement, 'dark');
+            const leaderboardData = await generateWardProcessingLeaderboardData();
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+                    axisPointer: { type: 'shadow' },
+                    formatter: (params) => {
+                        const data = params[0];
+                        const wardInfo = leaderboardData.wards[data.dataIndex];
+                        const isFast = wardInfo.medianTime < leaderboardData.cityMedian;
+                        return `
+                            <div style="font-family: JetBrains Mono;">
+                                <div style="font-weight: bold; color: #60a5fa;">${wardInfo.ward}</div>
+                                <div>Median: ${wardInfo.medianTime} days</div>
+                                <div>Range: ${wardInfo.p25} - ${wardInfo.p75} days</div>
+                                <div>Volume: ${wardInfo.volume.toLocaleString()} permits</div>
+                                <div>Retrofit Rate: ${wardInfo.retrofitRate}%</div>
+                                <div style="color: ${isFast ? '#16a34a' : '#dc2626'};">
+                                    ${isFast ? 'Faster' : 'Slower'} than city median (${leaderboardData.cityMedian} days)
+                                </div>
+                            </div>
+                        `;
+                    }
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        yAxisIndex: 0,
+                        start: 0,
+                        end: Math.min(100, (20 / leaderboardData.wards.length) * 100), // Show top 20 wards by default
+                        width: 15,
+                        right: 5,
+                        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                        fillerColor: 'rgba(59, 130, 246, 0.3)',
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        handleStyle: {
+                            color: '#3b82f6',
+                            borderColor: '#60a5fa'
+                        },
+                        textStyle: {
+                            color: '#94a3b8',
+                            fontFamily: 'JetBrains Mono',
+                            fontSize: 10
+                        }
+                    },
+                    {
+                        type: 'inside',
+                        yAxisIndex: 0,
+                        start: 0,
+                        end: Math.min(100, (20 / leaderboardData.wards.length) * 100)
+                    }
+                ],
+                grid: {
+                    left: '25%',
+                    right: '8%',
+                    bottom: '8%',
+                    top: '8%'
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Median Processing Time (days)',
+                    nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
+                    splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+                },
+                yAxis: {
+                    type: 'category',
+                    data: leaderboardData.wards.map(d => d.ward.replace('Ward ', 'W')),
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { 
+                        color: '#9ca3af', 
+                        fontSize: 9,
+                        fontFamily: 'JetBrains Mono'
+                    },
+                    inverse: true // Fastest at top
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        data: leaderboardData.wards.map((d, index) => {
+                            // Color gradient from green (fastest) to red (slowest)
+                            const ratio = index / (leaderboardData.wards.length - 1);
+                            const greenComponent = Math.round(22 + (220 - 22) * (1 - ratio));
+                            const redComponent = Math.round(220 * ratio + 22 * (1 - ratio));
+                            const color = `rgb(${redComponent}, ${greenComponent}, 38)`;
+                            
+                            return {
+                                value: d.medianTime,
+                                itemStyle: { color }
+                            };
+                        }),
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                        markLine: {
+                            data: [
+                                {
+                                    xAxis: leaderboardData.cityMedian,
+                                    lineStyle: { color: '#60a5fa', width: 2, type: 'dashed' },
+                                    label: {
+                                        formatter: 'City Median: {c} days',
+                                        color: '#60a5fa',
+                                        fontFamily: 'JetBrains Mono',
+                                        fontSize: 10
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            
+            const handleResize = () => chart.resize();
+            window.addEventListener('resize', handleResize);
+            chartElement._chartInstance = chart;
+        }
+        
+        async function initProcessingTimelineChart() {
+            const chartElement = document.getElementById('processing-timeline-chart');
+            if (!chartElement) {
+                console.error('processing-timeline-chart element not found');
+                return;
+            }
+            
+            const chart = echarts.init(chartElement, 'dark');
+            const timelineData = await generateProcessingTimelineData();
+            
+            const categoryColors = {
+                'cityMedian': '#60a5fa',
+                'heat_pump': '#dc2626',
+                'insulation': '#ea580c',
+                'elec_upg': '#d97706',
+                'envelope': '#65a30d',
+                'hvac': '#2563eb',
+                'lighting': '#0284c7'
+            };
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+                    axisPointer: { type: 'cross' },
+                    formatter: function(params) {
+                        let result = `<div style="font-family: JetBrains Mono;"><strong>${params[0].name}</strong><br/>`;
+                        params.forEach(param => {
+                            const label = param.seriesName === 'cityMedian' ? 'City Median' : 
+                                         param.seriesName.replace('_', ' ').toUpperCase();
+                            result += `<span style="color: ${param.color};">● ${label}: ${param.value} days</span><br/>`;
+                        });
+                        return result + '</div>';
+                    }
+                },
+                legend: {
+                    data: ['City Median', 'Heat Pump', 'Insulation', 'Electrical Upgrade', 'Envelope', 'HVAC', 'Lighting'],
+                    textStyle: { color: '#cbd5e1', fontSize: 9, fontFamily: 'JetBrains Mono' },
+                    top: 5
+                },
+                dataZoom: [
+                    {
+                        type: 'slider',
+                        start: Math.max(0, 100 - (18 / timelineData.length) * 100), // Show last 18 months by default
+                        end: 100,
+                        height: 20,
+                        bottom: 5,
+                        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                        fillerColor: 'rgba(59, 130, 246, 0.3)',
+                        borderColor: 'rgba(59, 130, 246, 0.5)',
+                        handleStyle: {
+                            color: '#3b82f6',
+                            borderColor: '#60a5fa'
+                        },
+                        textStyle: {
+                            color: '#94a3b8',
+                            fontFamily: 'JetBrains Mono',
+                            fontSize: 10
+                        }
+                    },
+                    {
+                        type: 'inside',
+                        start: Math.max(0, 100 - (18 / timelineData.length) * 100),
+                        end: 100
+                    }
+                ],
+                grid: {
+                    left: '8%',
+                    right: '4%',
+                    bottom: '20%',
+                    top: '22%'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: timelineData.map(d => d.month),
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { 
+                        color: '#9ca3af', 
+                        fontSize: 9,
+                        fontFamily: 'JetBrains Mono',
+                        rotate: 45
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Processing Time (days)',
+                    nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
+                    axisLine: { lineStyle: { color: '#374151' } },
+                    axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
+                    splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+                },
+                series: [
+                    {
+                        name: 'cityMedian',
+                        type: 'line',
+                        data: timelineData.map(d => d.cityMedian),
+                        lineStyle: { color: categoryColors.cityMedian, width: 4 },
+                        itemStyle: { color: categoryColors.cityMedian },
+                        symbol: 'circle',
+                        symbolSize: 6,
+                        smooth: true,
+                        z: 10
+                    },
+                    {
+                        name: 'heat_pump',
+                        type: 'line',
+                        data: timelineData.map(d => d.heat_pump),
+                        lineStyle: { color: categoryColors.heat_pump, width: 2, type: 'dashed' },
+                        itemStyle: { color: categoryColors.heat_pump },
+                        symbol: 'triangle',
+                        symbolSize: 4,
+                        smooth: true
+                    },
+                    {
+                        name: 'insulation',
+                        type: 'line',
+                        data: timelineData.map(d => d.insulation),
+                        lineStyle: { color: categoryColors.insulation, width: 2, type: 'dashed' },
+                        itemStyle: { color: categoryColors.insulation },
+                        symbol: 'diamond',
+                        symbolSize: 4,
+                        smooth: true
+                    },
+                    {
+                        name: 'elec_upg',
+                        type: 'line',
+                        data: timelineData.map(d => d.elec_upg),
+                        lineStyle: { color: categoryColors.elec_upg, width: 2, type: 'dashed' },
+                        itemStyle: { color: categoryColors.elec_upg },
+                        symbol: 'rect',
+                        symbolSize: 4,
+                        smooth: true
+                    },
+                    {
+                        name: 'envelope',
+                        type: 'line',
+                        data: timelineData.map(d => d.envelope),
+                        lineStyle: { color: categoryColors.envelope, width: 2, type: 'dashed' },
+                        itemStyle: { color: categoryColors.envelope },
+                        symbol: 'roundRect',
+                        symbolSize: 4,
+                        smooth: true
+                    },
+                    {
+                        name: 'hvac',
+                        type: 'line',
+                        data: timelineData.map(d => d.hvac),
+                        lineStyle: { color: categoryColors.hvac, width: 2, type: 'dashed' },
+                        itemStyle: { color: categoryColors.hvac },
+                        symbol: 'pin',
+                        symbolSize: 4,
+                        smooth: true
+                    },
+                    {
+                        name: 'lighting',
+                        type: 'line',
+                        data: timelineData.map(d => d.lighting),
+                        lineStyle: { color: categoryColors.lighting, width: 2, type: 'dashed' },
+                        itemStyle: { color: categoryColors.lighting },
+                        symbol: 'arrow',
+                        symbolSize: 4,
+                        smooth: true
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            
+            const handleResize = () => chart.resize();
+            window.addEventListener('resize', handleResize);
+            chartElement._chartInstance = chart;
+        }
+    </script>
+</body>
+</html>
