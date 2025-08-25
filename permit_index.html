@@ -815,7 +815,7 @@
         };
 
         // Summary window functions
-        function typewriterEffect(element, htmlContent, speed = 30) {
+        function typewriterEffect(element, htmlContent, speed = 10) {
             // Create a temporary container to parse the HTML
             const tempContainer = document.createElement('div');
             tempContainer.innerHTML = htmlContent;
@@ -888,7 +888,7 @@
             summaryTitle.textContent = summaryData[type].title;
             
             // Use typewriter effect for content while preserving HTML structure
-            typewriterEffect(summaryContent, summaryData[type].content, 25);
+            typewriterEffect(summaryContent, summaryData[type].content, 10);
             
             summaryWindow.classList.add('visible');
         }
