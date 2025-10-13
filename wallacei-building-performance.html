@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-Objective Building Performance Optimization · Portfolio</title>
+
+  <!-- === External Dependencies === -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- === Modular Stylesheets === -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="assets/css/building-analytics.css" />
+</head>
+<body>
+  <!-- === Vertical navigation === -->
+  <nav class="vertical-nav">
+    <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
+    <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
+    <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
+  </nav>
+
+  <div class="content-box">
+    <div class="powerbi-wrapper">
+      <!-- Back link -->
+      <div class="back-navigation"><a href="portfolio.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Portfolio</a></div>
+
+      <!-- Header -->
+      <header class="powerbi-header">
+        <h1 class="powerbi-title">Multi-Objective Optimization of Building Envelope Using Wallacei</h1>
+        <p class="powerbi-description"><em>Exploring the trade-offs between thermal comfort, energy use, and daylight through evolutionary algorithms.</em></p>
+        <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #ff6b00;">
+          <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Optimization Workflow</h3>
+          <p style="color: #444; line-height: 1.7;">
+            <strong>Tools:</strong> Rhino + Grasshopper + Ladybug Tools 1.8 + Honeybee + Wallacei X<br>
+            <strong>EPW/STAT Source:</strong> <a href="https://climate.onebuilding.org/WMO_Region_4_North_and_Central_America/USA_United_States_of_America/WA_Washington/USA_WA_Seattle-Tacoma.Intl.AP.727930_TMYx.zip" style="color: #ff6b00; text-decoration: none;">Seattle-Tacoma International Airport TMYx</a><br>
+            <strong>Model Geometry:</strong> Two adjacent shoebox zones, each 450 m³ (15m W × 10m L × 3m H)<br>
+            <strong>Analysis Scope:</strong> 5,000 design iterations across 100 generations optimizing façade parameters for energy, comfort, and daylight.
+          </p>
+        </div>
+      </header>
+
+      <!-- Main Content Container -->
+      <div style="max-width: 1200px; margin: 0 auto;">
+        <!-- 1. Introduction -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">1. Introduction</h2>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+                This project explores how parametric optimization can enhance the environmental performance of building envelopes. Using the Wallacei plugin for Grasshopper, we analyzed how variations in façade parameters influence energy demand and thermal comfort.
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                Through a multi-objective evolutionary algorithm (MOEA), Wallacei generated and evaluated 5,000 design solutions, optimizing simultaneously for:
+            </p>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+                <li><strong>Cooling Load</strong></li>
+                <li><strong>Heating Load</strong></li>
+                <li><strong>Overheating Risk (%)</strong></li>
+            </ul>
+        </section>
+
+        <!-- 2. Optimization Setup -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">2. Optimization Setup</h2>
+            
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Simulation Summary:</h3>
+            <div style="overflow-x: auto; margin-bottom: 2rem;">
+                <table style="width: 100%; border-collapse: collapse; background: #f8f9fa; border-radius: 8px; overflow: hidden;">
+                    <thead>
+                        <tr style="background: #ff6b00; color: white;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #e9ecef;">Parameter</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #e9ecef;">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Population Size</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">50</td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Generations</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">100</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Total Evaluations</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">5,000</td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Evaluation Time</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">~10 seconds per simulation</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Total Runtime</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">~16 hours</td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Objectives</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Cooling, Heating, Overheating %</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Crossover Rate</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">0.9</td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Mutation Rate</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">1/n (≈ 0.125)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Distribution Index</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">20</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Genome (8 Genes):</h3>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; background: #f8f9fa; border-radius: 8px; overflow: hidden;">
+                    <thead>
+                        <tr style="background: #ff6b00; color: white;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #e9ecef;">Gene</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #e9ecef;">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333; font-family: 'JetBrains Mono', monospace;">wlc_eastfacade</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">East WWR</td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333; font-family: 'JetBrains Mono', monospace;">wlc_northfacade</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">North WWR</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333; font-family: 'JetBrains Mono', monospace;">wlc_southfacade</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">South WWR</td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333; font-family: 'JetBrains Mono', monospace;">wlc_westfacade</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">West WWR</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333; font-family: 'JetBrains Mono', monospace;">wlc_orientation</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Building rotation</td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333; font-family: 'JetBrains Mono', monospace;">wlc_shadeangle</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Shading angle</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333; font-family: 'JetBrains Mono', monospace;">wlc_shadedepth</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Shading projection depth</td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333; font-family: 'JetBrains Mono', monospace;">wlc_windowconstruction</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Window type (SHGC/U-value)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Gene Visualization Carousel -->
+            <h3 style="color: #000; margin: 2rem 0 1rem; font-size: 1.3rem;">Gene Visualization:</h3>
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="genesCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="genesCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/genes1.png" alt="Genes Visualization 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> WWR genes</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/genes2.png" alt="Genes Visualization 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Louver shade genes</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/genes3.png" alt="Genes Visualization 3" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 3.</strong> Building orientation genes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="genesPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="genesNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="genesIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="genes-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="genes-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="genes-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Objective Space Analysis -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">3. Objective Space Analysis</h2>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+                The Objective Space in Wallacei visualizes the performance of all 5,000 simulated design options across the three optimization goals — Cooling, Heating, and Overheating Risk. Each point represents a design solution, and together they form a 3D surface known as the Pareto front.
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                This surface illustrates the trade-offs between objectives:
+            </p>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+                <li><strong>Cooling vs. Overheating:</strong> As cooling demand decreases, overheating tends to rise — reducing energy use often means accepting higher indoor temperatures during hot periods.</li>
+                <li><strong>Heating vs. Overheating:</strong> Reducing heating demand can also increase overheating, since designs that capture more solar gain in winter may cause excess heat in summer.</li>
+                <li><strong>Cooling vs. Heating:</strong> These two objectives are naturally opposing — strategies that help one often worsen the other.</li>
+            </ul>
+            <p style="color: #666; line-height: 1.7;">
+                Rather than a single "best" design, the Pareto front reveals a spectrum of optimal solutions, each balancing energy and comfort differently. This enables the designer to choose based on priorities — for instance, minimizing overheating risk versus maximizing energy savings.
+            </p>
+
+            <!-- Objective Space Visualization Carousel -->
+            <h3 style="color: #000; margin: 2rem 0 1rem; font-size: 1.3rem;">Objective Space Visualizations:</h3>
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="objectiveCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="objectiveCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/paretofrontsol1.png" alt="Pareto Front Solution 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Pareto front solutions - view 1</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/paretofrontsol2.png" alt="Pareto Front Solution 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Pareto front solutions - view 2</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/objective1.png" alt="Objective Space 1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 3.</strong> Fitness objective - cooling and heating</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/objective2.png" alt="Objective Space 2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 4.</strong> Fitness objective - overheating%</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="objectivePrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="objectiveNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="objectiveIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="objective-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="objective-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="objective-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="objective-indicator" data-slide="3" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Standard Deviation Analysis -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">4. Standard Deviation Analysis</h2>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The Standard Deviation (SD) graphs and trend lines visualize how solution diversity changed over generations.
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                High deviation indicates exploration (broad variation between solutions), while low deviation shows convergence (similar, high-performing designs).
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 2rem;">
+                Tracking SD across objectives helps reveal when the algorithm stabilizes — signaling a balanced optimization process.
+            </p>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Cooling Load (FO1)</h3>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1rem;">
+                <li>Early generations show high variation (red curves), reflecting broad exploration of cooling strategies.</li>
+                <li>As evolution progresses, curves tighten into blue clusters, and the SD trend line flattens — indicating stabilization and convergence toward consistent, efficient cooling solutions.</li>
+            </ul>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Heating Load (FO2)</h3>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1rem;">
+                <li>Initial generations show wider performance spread, which gradually narrows as the algorithm learns optimal heating strategies.</li>
+                <li>The SD trend rises and then levels off, showing that the population converged around stable heating performance with reduced variability.</li>
+            </ul>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Overheating Percentage (FO3)</h3>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1rem;">
+                <li>High initial deviation highlights early exploration of comfort performance.</li>
+                <li>Over time, curves contract, and the SD trend stabilizes — marking reduced performance volatility and convergence toward well-performing comfort zones.</li>
+            </ul>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Summary</h3>
+            <p style="color: #666; line-height: 1.7;">
+                Across all three objectives, Wallacei's SD analysis shows a smooth transition from exploration → convergence, confirming that the evolutionary process effectively balanced diversity and optimization stability.
+            </p>
+
+            <!-- Standard Deviation Visualization Carousel -->
+            <h3 style="color: #000; margin: 2rem 0 1rem; font-size: 1.3rem;">Standard Deviation Visualizations:</h3>
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="sdCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="sdCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sdgraphfo1.png" alt="SD Graph FO1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Standard deviation graph - Cooling Load (FO1)</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sdgraphfo2.png" alt="SD Graph FO2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Standard deviation graph - Heating Load (FO2)</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sdgraphfo3.png" alt="SD Graph FO3" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 3.</strong> Standard deviation graph - Overheating Percentage (FO3)</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sdtrendlinefo1.png" alt="SD Trend Line FO1" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 4.</strong> SD trend line - Cooling Load (FO1)</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sdtrendlinefo2.png" alt="SD Trend Line FO2" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 5.</strong> SD trend line - Heating Load (FO2)</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sdtrendlinefo3.png" alt="SD Trend Line FO3" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 6.</strong> SD trend line - Overheating Percentage (FO3)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="sdPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="sdNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="sdIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="sd-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="sd-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="sd-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="sd-indicator" data-slide="3" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="sd-indicator" data-slide="4" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="sd-indicator" data-slide="5" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Clustering & Solution Grouping -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">5. Clustering & Solution Grouping</h2>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+                To better understand the range of optimized designs, K-means clustering was applied to the Pareto front solutions. This method grouped designs with similar performance characteristics across the three objectives — Cooling, Heating, and Overheating %.
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+                The clustering revealed three distinct performance families, each representing a different design trade-off strategy:
+            </p>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+                <li><strong>Cluster 1:</strong> Low cooling demand but slightly higher overheating risk</li>
+                <li><strong>Cluster 2:</strong> Balanced trade-offs between all objectives</li>
+                <li><strong>Cluster 3:</strong> Higher heating demand but well-controlled overheating</li>
+            </ul>
+        </section>
+
+        <!-- 6. Balanced Fitness Objective Analysis -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">6. Balanced Fitness Objective Analysis</h2>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                This section explores one of the most balanced solutions identified in the optimization — a design that maintains equilibrium across Cooling Load, Heating Load, and Overheating Risk (%).
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 2rem;">
+                The goal here was not to minimize one objective at the cost of another, but to achieve a harmonized thermal performance that supports comfort and energy efficiency.
+            </p>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Balanced Solution Overview</h3>
+            
+            <!-- Balanced Solution Overview Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="balancedOverviewCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="balancedOverviewCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/diamondgraphbalanced.png" alt="Diamond Graph Balanced" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Diamond graph - balanced fitness solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/genevisbalanced.png" alt="Gene Visualization Balanced" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Genomic visualization - balanced solution (Generation 99 - Index 49)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="balancedOverviewPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="balancedOverviewNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="balancedOverviewIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="balanced-overview-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="balanced-overview-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The diamond graph shows a solution positioned near the center of all three fitness axes — representing a well-balanced trade-off between cooling, heating, and overheating.
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The genomic visualization reveals the gene configuration responsible for this balance, including moderate window-to-wall ratios (WWR) on each façade, optimized shading geometry, and effective orientation. These parameters together stabilize indoor temperatures year-round.
+            </p>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Energy Load Distribution</h3>
+            
+            <!-- Energy Load Distribution Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="energyLoadCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="energyLoadCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/energyloadbalanced.png" alt="Energy Load Balanced" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Monthly energy load distribution - balanced solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/coolheatingbalanced.png" alt="Cooling Heating Balanced" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Heating and cooling load breakdown - balanced solution</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="energyLoadPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="energyLoadNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="energyLoadIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="energy-load-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="energy-load-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The building is heating-dominated, with winter peaks around 60–70 kWh/day — slightly higher than ideal for a high-performance or Passive House envelope — while cooling demand remains modest and well-controlled in summer.            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The energy balance chart shows stable internal and solar gains but relatively large envelope and ventilation losses, suggesting that improving insulation or ERV heat-recovery efficiency could significantly lower overall heating demand.
+            </p>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Including Heat Recovery (HB Ideal Air Component)</h3>
+            
+            <!-- Heat Recovery Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="heatRecoveryCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="heatRecoveryCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/energyloadwithheatrecoverybalanced.png" alt="Energy Load with Heat Recovery" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Energy load with heat recovery system</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/coolheatingwithheatrecoverybalanced.png" alt="Cooling Heating with Heat Recovery" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Heating and cooling with heat recovery</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/hbidealair.png" alt="HB Ideal Air Component" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 3.</strong> HB Ideal Air component configuration</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="heatRecoveryPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="heatRecoveryNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="heatRecoveryIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="heat-recovery-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="heat-recovery-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="heat-recovery-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                Adding the Ideal Air HVAC with 85% sensible and 65% latent recovery dramatically reduced winter heating loads and stabilized year-round energy flows by recovering exhaust heat and moisture.
+            </p>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The energy balance graph shows reduced ventilation and conduction losses, confirming that the building now performs closer to a Passive-House-level ventilation standard, with improved thermal stability and lower overall energy demand.
+            </p>
+
+        </section>
+
+        <!-- 7. Overheating 10% Fitness Objective Analysis -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">7. Overheating 10% Fitness Objective Analysis</h2>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                This section examines a solution optimized to minimize overheating risk, achieving an annual overheating level close to 10%.
+                Unlike the balanced case, this configuration prioritizes thermal comfort during hot periods, reducing the time occupants experience temperatures above comfort thresholds.
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 2rem;">
+                However, by emphasizing overheating reduction, the optimization introduces trade-offs — slightly increased heating demand during cooler months and reduced solar heat gains due to more shading and smaller window areas.
+                The aim of this analysis is to understand how focusing on comfort affects overall energy balance and seasonal performance.
+            </p>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Balanced Solution Overview</h3>
+            
+            <!-- Balanced Solution Overview Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="overheating10OverviewCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="overheating10OverviewCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/diamondgraphoverheating.png" alt="Diamond Graph Overheating" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Diamond graph - overheating optimized solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/genevisoverheating.png" alt="Gene Visualization Overheating" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Genomic visualization - overheating optimized solution (Generation 15 - Index 22)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="overheating10OverviewPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="overheating10OverviewNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="overheating10OverviewIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="overheating10-overview-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="overheating10-overview-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The diamond graph shows a solution positioned near the center of all three fitness axes — representing a well-balanced trade-off between cooling, heating, and overheating.
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The genomic visualization reveals the gene configuration responsible for this balance, including moderate window-to-wall ratios (WWR) on each façade, optimized shading geometry, and effective orientation. These parameters together stabilize indoor temperatures year-round.
+            </p>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Energy Load Distribution</h3>
+            
+            <!-- Energy Load Distribution Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="overheating10EnergyLoadCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="overheating10EnergyLoadCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/energyloadoverheating.png" alt="Energy Load Overheating" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Monthly energy load distribution - overheating optimized solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/coolingheatingoverheating.png" alt="Cooling Heating Overheating" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Heating and cooling load breakdown - overheating optimized solution</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="overheating10EnergyLoadPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="overheating10EnergyLoadNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="overheating10EnergyLoadIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="overheating10-energy-load-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="overheating10-energy-load-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The overheating-focused solution shows a clear shift toward comfort-oriented performance, with reduced summer cooling loads and limited overheating periods throughout the year. However, this comes at the cost of a higher heating demand, particularly evident in the winter peaks between 50–80 kWh/day.</p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The energy balance graph indicates that while internal and solar gains remain steady, solar contributions are lower compared to the balanced case due to deeper shading and smaller window areas. This results in reduced passive gains in winter and greater reliance on mechanical heating.
+                Envelope and ventilation losses remain dominant, suggesting that enhancing façade insulation or integrating heat recovery could offset the additional heating load while maintaining low overheating levels.
+            </p>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Including Heat Recovery (HB Ideal Air Component)</h3>
+            
+            <!-- Heat Recovery Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="overheating10HeatRecoveryCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="overheating10HeatRecoveryCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/energyloadwithheatrecoveryoverheating.png" alt="Energy Load with Heat Recovery Overheating" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Energy load with heat recovery system - overheating optimized solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/coolingheatingwithheatrecoveryoverheating.png" alt="Cooling Heating with Heat Recovery Overheating" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Heating and cooling with heat recovery - overheating optimized solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/hbidealair.png" alt="HB Ideal Air Component" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 3.</strong> HB Ideal Air component configuration</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="overheating10HeatRecoveryPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="overheating10HeatRecoveryNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="overheating10HeatRecoveryIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="overheating10-heat-recovery-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="overheating10-heat-recovery-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="overheating10-heat-recovery-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                After adding the Ideal Air system (0.85 sensible / 0.65 latent recovery), winter heating peaks dropped from around 60–70 kWh/day to under 20 kWh/day, confirming that most ventilation heat losses were recaptured. The smoother heating pattern and reduced frequency of spikes show that the system now maintains a more stable indoor temperature, minimizing large swings between heating and cooling seasons.    
+            </p>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The energy balance plot shows noticeably smaller ventilation and conduction losses, with total monthly load amplitude shrinking from roughly ±250 kWh to ±180–200 kWh. Internal and solar gains remain constant, indicating the load reduction is purely from recovered heat and moisture. Overall, the building now performs closer to Passive-House thermal standards, with higher energy efficiency, steadier comfort, and lower annual HVAC demand.
+            </p>
+
+        </section>
+
+        <!-- 8. Worst case parameters -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">8. Worst case parameters</h2>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                This section examines the lowest-performing configuration from the optimization process — a scenario that illustrates how unfavourable façade parameters and orientation choices can lead to poor thermal performance. The diamond graph shows a clear imbalance between objectives, with extremely high heating demand and minimal cooling or overheating risk. This configuration reflects a non-optimized envelope, where limited solar exposure, low insulation quality, and ineffective shading result in inefficient energy behaviour.
+            </p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 2rem;">
+                The energy load profiles confirm a heating-dominated building, with pronounced winter peaks reaching 60–75 kWh/day and minimal summer cooling demand. The lack of passive solar gains forces heavy reliance on mechanical heating, while conduction and ventilation losses remain substantial throughout the year. Together, these patterns highlight how critical parameter selection and envelope design are in achieving thermal balance — and how strategic optimization can transform energy-intensive solutions into efficient, climate-responsive designs.
+            </p>
+
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Worst Case Solution Overview</h3>
+            
+            <!-- Worst Case Solution Overview Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="worstCaseOverviewCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="worstCaseOverviewCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/diamondgraphworstcase.png" alt="Diamond Graph Worst Case" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Diamond graph - worst case solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/genevisworstcase.png" alt="Gene Visualization Worst Case" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Genomic visualization - worst case solution (Generation 99 - Index 1)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="worstCaseOverviewPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="worstCaseOverviewNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="worstCaseOverviewIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="worst-case-overview-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="worst-case-overview-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The diamond graph highlights the lowest-performing solution within the optimization, revealing a design that performs poorly across all fitness objectives — particularly in heating demand. While cooling and overheating values remain low, this is largely due to limited solar exposure and poor passive gain, rather than true efficiency. The configuration demonstrates how imbalanced façade parameters, such as suboptimal orientation, insufficient glazing, and inadequate shading, can severely compromise thermal performance.    
+            </p>
+            <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Energy Load Distribution</h3>
+            
+            <!-- Energy Load Distribution Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="worstCaseEnergyLoadCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="worstCaseEnergyLoadCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/energyloadworstcase.png" alt="Energy Load Worst Case" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Monthly energy load distribution - worst case solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/coolheatingworstcase.png" alt="Cooling Heating Worst Case" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> Heating and cooling load breakdown - worst case solution</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="worstCaseEnergyLoadPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="worstCaseEnergyLoadNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="worstCaseEnergyLoadIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="worst-case-energy-load-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="worst-case-energy-load-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The worst-performing configuration exhibits a clear shift toward inefficient thermal behaviour, with exceptionally high heating demand and minimal passive gains throughout the year. Winter peaks reach up to 70–80 kWh/day, reflecting substantial heat loss through the envelope and weak insulation performance. Cooling demand remains negligible, indicating that while overheating is controlled, it results from an overly conservative and energy-intensive design.</p>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The energy balance graph shows dominant conduction and ventilation losses, while solar and internal gains contribute only marginally to the overall energy profile. This imbalance leads to persistent reliance on mechanical heating to maintain comfort conditions. Improving façade insulation, optimizing window orientation, or incorporating heat-recovery ventilation could significantly reduce these losses, transforming this configuration from an energy-heavy system into one that approaches a balanced, climate-responsive performance.    
+            </p>
+
+            
+
+        </section>
+
+        <!-- 9. Daylight Analysis -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">9. Daylight Analysis</h2>
+            
+            <!-- Daylight Analysis Carousel -->
+            <div style="position: relative; margin: 2rem 0; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div id="daylightCarousel" style="overflow: hidden; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); height: 500px;">
+                    <div id="daylightCarouselSlides" style="display: flex; transition: transform 0.5s ease; height: 100%;">
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sDAvisualizationbalanced.png" alt="sDA Visualization Balanced" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 1.</strong> Spatial Daylight Autonomy visualization - balanced solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sDAvaluesbalanced.png" alt="sDA Values Balanced" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 2.</strong> sDA values - balanced solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sDAvisualizationworstcase.png" alt="sDA Visualization Worst Case" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 3.</strong> Spatial Daylight Autonomy visualization - worst case solution</p>
+                            </div>
+                        </div>
+                        <div style="min-width: 100%; text-align: center; display: flex; flex-direction: column;">
+                            <img src="assets/images/wallacei analysis/sDAvaluesworstcase.png" alt="sDA Values Worst Case" style="width: 100%; height: 400px; object-fit: contain; display: block;" />
+                            <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; margin: 0; flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Figure 4.</strong> sDA values - worst case solution</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Controls -->
+                <button id="daylightPrevBtn" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">‹</button>
+                <button id="daylightNextBtn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 16px; z-index: 10; display: flex; align-items: center; justify-content: center;">›</button>
+                
+                <!-- Carousel Indicators -->
+                <div id="daylightIndicators" style="text-align: center; margin-top: 1rem;">
+                    <span class="daylight-indicator" data-slide="0" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ff6b00; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 1;"></span>
+                    <span class="daylight-indicator" data-slide="1" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="daylight-indicator" data-slide="2" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                    <span class="daylight-indicator" data-slide="3" style="height: 12px; width: 12px; margin: 0 5px; background-color: #ccc; border-radius: 50%; display: inline-block; cursor: pointer; opacity: 0.5;"></span>
+                </div>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+                The optimization impacted daylighting significantly:
+            </p>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; background: #f8f9fa; border-radius: 8px; overflow: hidden;">
+                    <thead>
+                        <tr style="background: #ff6b00; color: white;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #e9ecef;">Case</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #e9ecef;">sDA Room 1</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #e9ecef;">sDA Room 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Best-case</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #4caf50; text-align: center; font-weight: 600;">87.8%</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #4caf50; text-align: center; font-weight: 600;">82.5%</td>
+                        </tr>
+                        <tr style="background: white;">
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Worst-case</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #f44336; text-align: center; font-weight: 600;">59.2%</td>
+                            <td style="padding: 12px; border: 1px solid #e9ecef; color: #f44336; text-align: center; font-weight: 600;">54.5%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="color: #666; line-height: 1.7; margin-top: 2rem; margin-bottom: 1rem;">
+                The Spatial Daylight Autonomy (sDA) results for the balanced configuration indicate strong daylight performance, with sDA values of 0.87 and 0.82 across the two analyzed zones. This means that over 80% of the floor area receives sufficient daylight (above 300 lux) for at least 50% of the occupied hours annually.
+            </p>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                The daylight distribution map shows that the periphery of the space achieves the highest daylight levels (80–90%), while central zones experience reduced daylight penetration, dropping below 40% in some areas. This pattern suggests an effective balance between daylight access and glare control, resulting from the optimized façade parameters — including moderate window sizing, appropriate orientation, and efficient shading depth.
+            </p>
+
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
+                Overall, the balanced solution demonstrates a well-calibrated trade-off between visual comfort and energy efficiency, achieving high daylight autonomy without excessive solar gain or overheating risk.
+            </p>
+        </section>
+
+        <!-- 12. Conclusion -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">12. Conclusion</h2>
+            <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+                This project demonstrates how Wallacei enables data-driven design:
+            </p>
+            <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 2rem;">
+                <li>Visualizes complex trade-offs in building performance</li>
+                <li>Identifies clusters of optimal designs for varied priorities</li>
+                <li>Empowers decision-making with clear metrics</li>
+            </ul>
+
+            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ff6b00;">
+                <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;">🔁 Future Improvements</h3>
+                <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+                    <li>Automated sensitivity analysis</li>
+                    <li>Integration with daylight and visual comfort</li>
+                    <li>Multi-zone optimization scenarios</li>
+                </ul>
+            </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); cursor: pointer;">
+    <div class="modal-content" style="position: relative; margin: auto; display: block; width: 90%; max-width: 1200px; max-height: 90%; top: 50%; transform: translateY(-50%);">
+      <img id="modalImage" style="width: 100%; height: auto; border-radius: 8px;">
+      <div id="modalCaption" style="color: #fff; text-align: center; padding: 20px; font-size: 1rem; line-height: 1.5;"></div>
+      <span class="close" style="position: absolute; top: 15px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s;">&times;</span>
+    </div>
+  </div>
+
+  <!-- === JavaScript Modules === -->
+  <!-- Commented out as this page has all carousel functionality inline -->
+  <!-- <script src="assets/js/config.js"></script>
+  <script src="assets/js/utils/dom-utils.js"></script>
+  <script src="assets/js/utils/animation-utils.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/main.js"></script> -->
+  <script src="assets/js/image-modal.js"></script>
+  <script>
+    // Ensure portfolio nav button stays active on this page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Remove active class from all nav buttons first
+      const navButtons = document.querySelectorAll('.nav-button');
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Add active class to portfolio button since this is a portfolio detail page
+      const portfolioButton = document.querySelector('.nav-button[data-page="portfolio"]');
+      if (portfolioButton) {
+        portfolioButton.classList.add('active');
+      }
+
+      // Genes Carousel functionality
+      let genesSlideIndex = 0;
+      const totalGenesSlides = 3;
+      
+      const genesPrevBtn = document.getElementById('genesPrevBtn');
+      const genesNextBtn = document.getElementById('genesNextBtn');
+      const genesIndicators = document.querySelectorAll('.genes-indicator');
+      
+      function showGenesSlide(index) {
+        const slides = document.getElementById('genesCarouselSlides');
+        if (index >= totalGenesSlides) {
+          genesSlideIndex = 0;
+        } else if (index < 0) {
+          genesSlideIndex = totalGenesSlides - 1;
+        } else {
+          genesSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${genesSlideIndex * 100}%)`;
+        
+        // Update indicators
+        genesIndicators.forEach((indicator, idx) => {
+          if (idx === genesSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (genesPrevBtn) {
+        genesPrevBtn.addEventListener('click', () => {
+          showGenesSlide(genesSlideIndex - 1);
+        });
+      }
+      
+      if (genesNextBtn) {
+        genesNextBtn.addEventListener('click', () => {
+          showGenesSlide(genesSlideIndex + 1);
+        });
+      }
+      
+      genesIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showGenesSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showGenesSlide(0);
+
+      // Objective Space Carousel functionality
+      let objectiveSlideIndex = 0;
+      const totalObjectiveSlides = 4;
+      
+      const objectivePrevBtn = document.getElementById('objectivePrevBtn');
+      const objectiveNextBtn = document.getElementById('objectiveNextBtn');
+      const objectiveIndicators = document.querySelectorAll('.objective-indicator');
+      
+      function showObjectiveSlide(index) {
+        const slides = document.getElementById('objectiveCarouselSlides');
+        if (index >= totalObjectiveSlides) {
+          objectiveSlideIndex = 0;
+        } else if (index < 0) {
+          objectiveSlideIndex = totalObjectiveSlides - 1;
+        } else {
+          objectiveSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${objectiveSlideIndex * 100}%)`;
+        
+        // Update indicators
+        objectiveIndicators.forEach((indicator, idx) => {
+          if (idx === objectiveSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (objectivePrevBtn) {
+        objectivePrevBtn.addEventListener('click', () => {
+          showObjectiveSlide(objectiveSlideIndex - 1);
+        });
+      }
+      
+      if (objectiveNextBtn) {
+        objectiveNextBtn.addEventListener('click', () => {
+          showObjectiveSlide(objectiveSlideIndex + 1);
+        });
+      }
+      
+      objectiveIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showObjectiveSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showObjectiveSlide(0);
+
+      // Standard Deviation Carousel functionality
+      let sdSlideIndex = 0;
+      const totalSdSlides = 6;
+      
+      const sdPrevBtn = document.getElementById('sdPrevBtn');
+      const sdNextBtn = document.getElementById('sdNextBtn');
+      const sdIndicators = document.querySelectorAll('.sd-indicator');
+      
+      function showSdSlide(index) {
+        const slides = document.getElementById('sdCarouselSlides');
+        if (index >= totalSdSlides) {
+          sdSlideIndex = 0;
+        } else if (index < 0) {
+          sdSlideIndex = totalSdSlides - 1;
+        } else {
+          sdSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${sdSlideIndex * 100}%)`;
+        
+        // Update indicators
+        sdIndicators.forEach((indicator, idx) => {
+          if (idx === sdSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (sdPrevBtn) {
+        sdPrevBtn.addEventListener('click', () => {
+          showSdSlide(sdSlideIndex - 1);
+        });
+      }
+      
+      if (sdNextBtn) {
+        sdNextBtn.addEventListener('click', () => {
+          showSdSlide(sdSlideIndex + 1);
+        });
+      }
+      
+      sdIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showSdSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showSdSlide(0);
+
+      // Balanced Overview Carousel functionality
+      let balancedOverviewSlideIndex = 0;
+      const totalBalancedOverviewSlides = 2;
+      
+      const balancedOverviewPrevBtn = document.getElementById('balancedOverviewPrevBtn');
+      const balancedOverviewNextBtn = document.getElementById('balancedOverviewNextBtn');
+      const balancedOverviewIndicators = document.querySelectorAll('.balanced-overview-indicator');
+      
+      function showBalancedOverviewSlide(index) {
+        const slides = document.getElementById('balancedOverviewCarouselSlides');
+        if (index >= totalBalancedOverviewSlides) {
+          balancedOverviewSlideIndex = 0;
+        } else if (index < 0) {
+          balancedOverviewSlideIndex = totalBalancedOverviewSlides - 1;
+        } else {
+          balancedOverviewSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${balancedOverviewSlideIndex * 100}%)`;
+        
+        // Update indicators
+        balancedOverviewIndicators.forEach((indicator, idx) => {
+          if (idx === balancedOverviewSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (balancedOverviewPrevBtn) {
+        balancedOverviewPrevBtn.addEventListener('click', () => {
+          showBalancedOverviewSlide(balancedOverviewSlideIndex - 1);
+        });
+      }
+      
+      if (balancedOverviewNextBtn) {
+        balancedOverviewNextBtn.addEventListener('click', () => {
+          showBalancedOverviewSlide(balancedOverviewSlideIndex + 1);
+        });
+      }
+      
+      balancedOverviewIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showBalancedOverviewSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showBalancedOverviewSlide(0);
+
+      // Energy Load Carousel functionality
+      let energyLoadSlideIndex = 0;
+      const totalEnergyLoadSlides = 2;
+      
+      const energyLoadPrevBtn = document.getElementById('energyLoadPrevBtn');
+      const energyLoadNextBtn = document.getElementById('energyLoadNextBtn');
+      const energyLoadIndicators = document.querySelectorAll('.energy-load-indicator');
+      
+      function showEnergyLoadSlide(index) {
+        const slides = document.getElementById('energyLoadCarouselSlides');
+        if (index >= totalEnergyLoadSlides) {
+          energyLoadSlideIndex = 0;
+        } else if (index < 0) {
+          energyLoadSlideIndex = totalEnergyLoadSlides - 1;
+        } else {
+          energyLoadSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${energyLoadSlideIndex * 100}%)`;
+        
+        // Update indicators
+        energyLoadIndicators.forEach((indicator, idx) => {
+          if (idx === energyLoadSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (energyLoadPrevBtn) {
+        energyLoadPrevBtn.addEventListener('click', () => {
+          showEnergyLoadSlide(energyLoadSlideIndex - 1);
+        });
+      }
+      
+      if (energyLoadNextBtn) {
+        energyLoadNextBtn.addEventListener('click', () => {
+          showEnergyLoadSlide(energyLoadSlideIndex + 1);
+        });
+      }
+      
+      energyLoadIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showEnergyLoadSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showEnergyLoadSlide(0);
+
+      // Heat Recovery Carousel functionality
+      let heatRecoverySlideIndex = 0;
+      const totalHeatRecoverySlides = 3;
+      
+      const heatRecoveryPrevBtn = document.getElementById('heatRecoveryPrevBtn');
+      const heatRecoveryNextBtn = document.getElementById('heatRecoveryNextBtn');
+      const heatRecoveryIndicators = document.querySelectorAll('.heat-recovery-indicator');
+      
+      function showHeatRecoverySlide(index) {
+        const slides = document.getElementById('heatRecoveryCarouselSlides');
+        if (index >= totalHeatRecoverySlides) {
+          heatRecoverySlideIndex = 0;
+        } else if (index < 0) {
+          heatRecoverySlideIndex = totalHeatRecoverySlides - 1;
+        } else {
+          heatRecoverySlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${heatRecoverySlideIndex * 100}%)`;
+        
+        // Update indicators
+        heatRecoveryIndicators.forEach((indicator, idx) => {
+          if (idx === heatRecoverySlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (heatRecoveryPrevBtn) {
+        heatRecoveryPrevBtn.addEventListener('click', () => {
+          showHeatRecoverySlide(heatRecoverySlideIndex - 1);
+        });
+      }
+      
+      if (heatRecoveryNextBtn) {
+        heatRecoveryNextBtn.addEventListener('click', () => {
+          showHeatRecoverySlide(heatRecoverySlideIndex + 1);
+        });
+      }
+      
+      heatRecoveryIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showHeatRecoverySlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showHeatRecoverySlide(0);
+
+      // Overheating 10% Overview Carousel functionality
+      let overheating10OverviewSlideIndex = 0;
+      const totalOverheating10OverviewSlides = 2;
+      
+      const overheating10OverviewPrevBtn = document.getElementById('overheating10OverviewPrevBtn');
+      const overheating10OverviewNextBtn = document.getElementById('overheating10OverviewNextBtn');
+      const overheating10OverviewIndicators = document.querySelectorAll('.overheating10-overview-indicator');
+      
+      function showOverheating10OverviewSlide(index) {
+        const slides = document.getElementById('overheating10OverviewCarouselSlides');
+        if (index >= totalOverheating10OverviewSlides) {
+          overheating10OverviewSlideIndex = 0;
+        } else if (index < 0) {
+          overheating10OverviewSlideIndex = totalOverheating10OverviewSlides - 1;
+        } else {
+          overheating10OverviewSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${overheating10OverviewSlideIndex * 100}%)`;
+        
+        // Update indicators
+        overheating10OverviewIndicators.forEach((indicator, idx) => {
+          if (idx === overheating10OverviewSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (overheating10OverviewPrevBtn) {
+        overheating10OverviewPrevBtn.addEventListener('click', () => {
+          showOverheating10OverviewSlide(overheating10OverviewSlideIndex - 1);
+        });
+      }
+      
+      if (overheating10OverviewNextBtn) {
+        overheating10OverviewNextBtn.addEventListener('click', () => {
+          showOverheating10OverviewSlide(overheating10OverviewSlideIndex + 1);
+        });
+      }
+      
+      overheating10OverviewIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showOverheating10OverviewSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showOverheating10OverviewSlide(0);
+
+      // Overheating 10% Energy Load Carousel functionality
+      let overheating10EnergyLoadSlideIndex = 0;
+      const totalOverheating10EnergyLoadSlides = 2;
+      
+      const overheating10EnergyLoadPrevBtn = document.getElementById('overheating10EnergyLoadPrevBtn');
+      const overheating10EnergyLoadNextBtn = document.getElementById('overheating10EnergyLoadNextBtn');
+      const overheating10EnergyLoadIndicators = document.querySelectorAll('.overheating10-energy-load-indicator');
+      
+      function showOverheating10EnergyLoadSlide(index) {
+        const slides = document.getElementById('overheating10EnergyLoadCarouselSlides');
+        if (index >= totalOverheating10EnergyLoadSlides) {
+          overheating10EnergyLoadSlideIndex = 0;
+        } else if (index < 0) {
+          overheating10EnergyLoadSlideIndex = totalOverheating10EnergyLoadSlides - 1;
+        } else {
+          overheating10EnergyLoadSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${overheating10EnergyLoadSlideIndex * 100}%)`;
+        
+        // Update indicators
+        overheating10EnergyLoadIndicators.forEach((indicator, idx) => {
+          if (idx === overheating10EnergyLoadSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (overheating10EnergyLoadPrevBtn) {
+        overheating10EnergyLoadPrevBtn.addEventListener('click', () => {
+          showOverheating10EnergyLoadSlide(overheating10EnergyLoadSlideIndex - 1);
+        });
+      }
+      
+      if (overheating10EnergyLoadNextBtn) {
+        overheating10EnergyLoadNextBtn.addEventListener('click', () => {
+          showOverheating10EnergyLoadSlide(overheating10EnergyLoadSlideIndex + 1);
+        });
+      }
+      
+      overheating10EnergyLoadIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showOverheating10EnergyLoadSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showOverheating10EnergyLoadSlide(0);
+
+      // Overheating 10% Heat Recovery Carousel functionality
+      let overheating10HeatRecoverySlideIndex = 0;
+      const totalOverheating10HeatRecoverySlides = 3;
+      
+      const overheating10HeatRecoveryPrevBtn = document.getElementById('overheating10HeatRecoveryPrevBtn');
+      const overheating10HeatRecoveryNextBtn = document.getElementById('overheating10HeatRecoveryNextBtn');
+      const overheating10HeatRecoveryIndicators = document.querySelectorAll('.overheating10-heat-recovery-indicator');
+      
+      function showOverheating10HeatRecoverySlide(index) {
+        const slides = document.getElementById('overheating10HeatRecoveryCarouselSlides');
+        if (index >= totalOverheating10HeatRecoverySlides) {
+          overheating10HeatRecoverySlideIndex = 0;
+        } else if (index < 0) {
+          overheating10HeatRecoverySlideIndex = totalOverheating10HeatRecoverySlides - 1;
+        } else {
+          overheating10HeatRecoverySlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${overheating10HeatRecoverySlideIndex * 100}%)`;
+        
+        // Update indicators
+        overheating10HeatRecoveryIndicators.forEach((indicator, idx) => {
+          if (idx === overheating10HeatRecoverySlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (overheating10HeatRecoveryPrevBtn) {
+        overheating10HeatRecoveryPrevBtn.addEventListener('click', () => {
+          showOverheating10HeatRecoverySlide(overheating10HeatRecoverySlideIndex - 1);
+        });
+      }
+      
+      if (overheating10HeatRecoveryNextBtn) {
+        overheating10HeatRecoveryNextBtn.addEventListener('click', () => {
+          showOverheating10HeatRecoverySlide(overheating10HeatRecoverySlideIndex + 1);
+        });
+      }
+      
+      overheating10HeatRecoveryIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showOverheating10HeatRecoverySlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showOverheating10HeatRecoverySlide(0);
+
+      // Worst Case Overview Carousel functionality
+      let worstCaseOverviewSlideIndex = 0;
+      const totalWorstCaseOverviewSlides = 2;
+      
+      const worstCaseOverviewPrevBtn = document.getElementById('worstCaseOverviewPrevBtn');
+      const worstCaseOverviewNextBtn = document.getElementById('worstCaseOverviewNextBtn');
+      const worstCaseOverviewIndicators = document.querySelectorAll('.worst-case-overview-indicator');
+      
+      function showWorstCaseOverviewSlide(index) {
+        const slides = document.getElementById('worstCaseOverviewCarouselSlides');
+        if (index >= totalWorstCaseOverviewSlides) {
+          worstCaseOverviewSlideIndex = 0;
+        } else if (index < 0) {
+          worstCaseOverviewSlideIndex = totalWorstCaseOverviewSlides - 1;
+        } else {
+          worstCaseOverviewSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${worstCaseOverviewSlideIndex * 100}%)`;
+        
+        // Update indicators
+        worstCaseOverviewIndicators.forEach((indicator, idx) => {
+          if (idx === worstCaseOverviewSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (worstCaseOverviewPrevBtn) {
+        worstCaseOverviewPrevBtn.addEventListener('click', () => {
+          showWorstCaseOverviewSlide(worstCaseOverviewSlideIndex - 1);
+        });
+      }
+      
+      if (worstCaseOverviewNextBtn) {
+        worstCaseOverviewNextBtn.addEventListener('click', () => {
+          showWorstCaseOverviewSlide(worstCaseOverviewSlideIndex + 1);
+        });
+      }
+      
+      worstCaseOverviewIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showWorstCaseOverviewSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showWorstCaseOverviewSlide(0);
+
+      // Worst Case Energy Load Carousel functionality
+      let worstCaseEnergyLoadSlideIndex = 0;
+      const totalWorstCaseEnergyLoadSlides = 2;
+      
+      const worstCaseEnergyLoadPrevBtn = document.getElementById('worstCaseEnergyLoadPrevBtn');
+      const worstCaseEnergyLoadNextBtn = document.getElementById('worstCaseEnergyLoadNextBtn');
+      const worstCaseEnergyLoadIndicators = document.querySelectorAll('.worst-case-energy-load-indicator');
+      
+      function showWorstCaseEnergyLoadSlide(index) {
+        const slides = document.getElementById('worstCaseEnergyLoadCarouselSlides');
+        if (index >= totalWorstCaseEnergyLoadSlides) {
+          worstCaseEnergyLoadSlideIndex = 0;
+        } else if (index < 0) {
+          worstCaseEnergyLoadSlideIndex = totalWorstCaseEnergyLoadSlides - 1;
+        } else {
+          worstCaseEnergyLoadSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${worstCaseEnergyLoadSlideIndex * 100}%)`;
+        
+        // Update indicators
+        worstCaseEnergyLoadIndicators.forEach((indicator, idx) => {
+          if (idx === worstCaseEnergyLoadSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      if (worstCaseEnergyLoadPrevBtn) {
+        worstCaseEnergyLoadPrevBtn.addEventListener('click', () => {
+          showWorstCaseEnergyLoadSlide(worstCaseEnergyLoadSlideIndex - 1);
+        });
+      }
+      
+      if (worstCaseEnergyLoadNextBtn) {
+        worstCaseEnergyLoadNextBtn.addEventListener('click', () => {
+          showWorstCaseEnergyLoadSlide(worstCaseEnergyLoadSlideIndex + 1);
+        });
+      }
+      
+      worstCaseEnergyLoadIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showWorstCaseEnergyLoadSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showWorstCaseEnergyLoadSlide(0);
+
+      // Daylight Carousel functionality
+      let daylightSlideIndex = 0;
+      const totalDaylightSlides = 4;
+      
+      function showDaylightSlide(index) {
+        const slides = document.getElementById('daylightCarouselSlides');
+        if (!slides) return;
+        
+        if (index >= totalDaylightSlides) {
+          daylightSlideIndex = 0;
+        } else if (index < 0) {
+          daylightSlideIndex = totalDaylightSlides - 1;
+        } else {
+          daylightSlideIndex = index;
+        }
+        
+        slides.style.transform = `translateX(-${daylightSlideIndex * 100}%)`;
+        
+        // Update indicators
+        const daylightIndicators = document.querySelectorAll('.daylight-indicator');
+        daylightIndicators.forEach((indicator, idx) => {
+          if (idx === daylightSlideIndex) {
+            indicator.style.backgroundColor = '#ff6b00';
+            indicator.style.opacity = '1';
+          } else {
+            indicator.style.backgroundColor = '#ccc';
+            indicator.style.opacity = '0.5';
+          }
+        });
+      }
+      
+      // Button event listeners
+      const daylightPrevBtn = document.getElementById('daylightPrevBtn');
+      if (daylightPrevBtn) {
+        daylightPrevBtn.addEventListener('click', () => {
+          showDaylightSlide(daylightSlideIndex - 1);
+        });
+      }
+      
+      const daylightNextBtn = document.getElementById('daylightNextBtn');
+      if (daylightNextBtn) {
+        daylightNextBtn.addEventListener('click', () => {
+          showDaylightSlide(daylightSlideIndex + 1);
+        });
+      }
+      
+      // Indicator event listeners
+      const daylightIndicators = document.querySelectorAll('.daylight-indicator');
+      daylightIndicators.forEach((indicator, idx) => {
+        indicator.addEventListener('click', () => {
+          showDaylightSlide(idx);
+        });
+      });
+      
+      // Initialize first slide
+      showDaylightSlide(0);
+    });
+  </script>
+</body>
+</html>

@@ -553,6 +553,23 @@
             opacity: 1;
             visibility: visible;
         }
+        
+        /* Hover Tooltip Styles */
+        .hover-tooltip .mapboxgl-popup-content {
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffffff;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            min-width: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hover-tooltip .mapboxgl-popup-tip {
+            border-top-color: rgba(0, 0, 0, 0.9);
+        }
         .summary-header {
             display: flex;
             align-items: center;
@@ -815,64 +832,58 @@
         };
 
         // Summary window functions
-        function typewriterEffect(element, htmlContent, speed = 10) {
-            // Create a temporary container to parse the HTML
-            const tempContainer = document.createElement('div');
-            tempContainer.innerHTML = htmlContent;
+        function typewriterEffect(element, htmlContent, speed = 30) {
+            // Create temporary container to parse HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = htmlContent;
             
-            // Clear the target element but preserve its structure
+            // Clear target element
             element.innerHTML = '';
             
-            // Get all text nodes from the parsed HTML
-            const textNodes = [];
+            // Extract text content while preserving HTML structure
+            const textSegments = [];
             
-            function extractTextNodes(node, targetParent) {
+            function processNode(node, parentElement) {
                 for (let child of node.childNodes) {
                     if (child.nodeType === Node.TEXT_NODE) {
                         const text = child.textContent;
                         if (text.trim()) {
-                            textNodes.push({
-                                text: text,
-                                parent: targetParent,
-                                originalLength: text.length
+                            // Create text node in target
+                            const textNode = document.createTextNode('');
+                            parentElement.appendChild(textNode);
+                            textSegments.push({
+                                textNode: textNode,
+                                fullText: text,
+                                currentIndex: 0
                             });
-                            // Create empty text node in target
-                            const emptyTextNode = document.createTextNode('');
-                            targetParent.appendChild(emptyTextNode);
                         }
                     } else if (child.nodeType === Node.ELEMENT_NODE) {
-                        // Clone the element structure
+                        // Clone element with attributes
                         const clonedElement = child.cloneNode(false);
-                        targetParent.appendChild(clonedElement);
-                        extractTextNodes(child, clonedElement);
+                        parentElement.appendChild(clonedElement);
+                        processNode(child, clonedElement);
                     }
                 }
             }
             
-            extractTextNodes(tempContainer, element);
+            processNode(tempDiv, element);
             
             // Animate typing
-            let currentNodeIndex = 0;
-            let currentCharIndex = 0;
+            let segmentIndex = 0;
             
             function typeNextChar() {
-                if (currentNodeIndex >= textNodes.length) return;
+                if (segmentIndex >= textSegments.length) return;
                 
-                const currentNode = textNodes[currentNodeIndex];
-                const currentText = currentNode.text;
+                const currentSegment = textSegments[segmentIndex];
+                const char = currentSegment.fullText[currentSegment.currentIndex];
                 
-                if (currentCharIndex < currentText.length) {
-                    // Find the text node in the target and update it
-                    const textNode = currentNode.parent.childNodes[0];
-                    if (textNode && textNode.nodeType === Node.TEXT_NODE) {
-                        textNode.textContent = currentText.substring(0, currentCharIndex + 1);
-                    }
-                    currentCharIndex++;
+                if (currentSegment.currentIndex < currentSegment.fullText.length) {
+                    currentSegment.textNode.textContent += char;
+                    currentSegment.currentIndex++;
                     setTimeout(typeNextChar, speed);
                 } else {
-                    // Move to next text node
-                    currentNodeIndex++;
-                    currentCharIndex = 0;
+                    // Move to next segment
+                    segmentIndex++;
                     setTimeout(typeNextChar, speed);
                 }
             }
@@ -887,10 +898,11 @@
             
             summaryTitle.textContent = summaryData[type].title;
             
-            // Use typewriter effect for content while preserving HTML structure
-            typewriterEffect(summaryContent, summaryData[type].content, 10);
-            
+            // Show window first, then start typing effect
             summaryWindow.classList.add('visible');
+            
+            // Use typewriter effect for content (faster speed)
+            typewriterEffect(summaryContent, summaryData[type].content, 2);
         }
 
         function closeSummaryWindow() {
@@ -1018,9 +1030,26 @@
         // Add fullscreen control
         map.addControl(new mapboxgl.FullscreenControl());
 
+        // Add map error handler
+        map.on('error', (e) => {
+            console.error('Map error:', e);
+        });
+
         // Wait for the map to load
         map.on('load', async () => {
             console.log('Map loaded successfully');
+            
+            // Test if GeoJSON file is accessible
+            try {
+                const testResponse = await fetch('./assets/data/retrofit-v2/ward_boundaries.geojson');
+                if (!testResponse.ok) {
+                    console.error('Ward boundaries GeoJSON file not found or inaccessible:', testResponse.status);
+                } else {
+                    console.log('Ward boundaries GeoJSON file is accessible');
+                }
+            } catch (error) {
+                console.error('Error testing ward boundaries GeoJSON accessibility:', error);
+            }
             
             // Load CSV data
             try {
@@ -1040,76 +1069,117 @@
                 console.error('Error loading CSV data:', error);
             }
             
-            // Add ward boundaries source
-            map.addSource('ward-boundaries', {
-                type: 'geojson',
-                data: './assets/data/retrofit-v2/ward_boundaries.geojson',
-                generateId: true // This generates unique IDs for features
-            });
+            // Add ward boundaries source with error handling
+            try {
+                console.log('Loading ward boundaries GeoJSON...');
+                map.addSource('ward-boundaries', {
+                    type: 'geojson',
+                    data: './assets/data/retrofit-v2/ward_boundaries.geojson',
+                    generateId: true // This generates unique IDs for features
+                });
+                console.log('Ward boundaries source added successfully');
+                
+                // Add source data event listeners
+                map.on('sourcedata', (e) => {
+                    if (e.sourceId === 'ward-boundaries') {
+                        if (e.isSourceLoaded) {
+                            console.log('Ward boundaries data loaded successfully');
+                        }
+                    }
+                });
+                
+                map.on('sourcedataloading', (e) => {
+                    if (e.sourceId === 'ward-boundaries') {
+                        console.log('Ward boundaries data loading...');
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error adding ward boundaries source:', error);
+                return;
+            }
 
             // Add ward boundaries layer (initially visible)
-            map.addLayer({
-                id: 'ward-boundaries-fill',
-                type: 'fill',
-                source: 'ward-boundaries',
-                layout: {
-                    visibility: 'visible'
-                },
-                paint: {
-                    'fill-color': '#088',
-                    'fill-opacity': [
-                        'case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        0.8,
-                        0.3
-                    ]
-                }
-            });
+            try {
+                console.log('Adding ward boundaries fill layer...');
+                map.addLayer({
+                    id: 'ward-boundaries-fill',
+                    type: 'fill',
+                    source: 'ward-boundaries',
+                    layout: {
+                        visibility: 'visible'
+                    },
+                    paint: {
+                        'fill-color': '#088',
+                        'fill-opacity': [
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            0.8,
+                            0.3
+                        ]
+                    }
+                });
+                console.log('Ward boundaries fill layer added successfully');
+            } catch (error) {
+                console.error('Error adding ward boundaries fill layer:', error);
+            }
 
             // Add ward boundaries outline
-            map.addLayer({
-                id: 'ward-boundaries-line',
-                type: 'line',
-                source: 'ward-boundaries',
-                layout: {
-                    visibility: 'visible'
-                },
-                paint: {
-                    'line-color': '#088',
-                    'line-width': [
-                        'case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        3,
-                        2
-                    ],
-                    'line-opacity': 0.8
-                }
-            });
+            try {
+                console.log('Adding ward boundaries line layer...');
+                map.addLayer({
+                    id: 'ward-boundaries-line',
+                    type: 'line',
+                    source: 'ward-boundaries',
+                    layout: {
+                        visibility: 'visible'
+                    },
+                    paint: {
+                        'line-color': '#088',
+                        'line-width': [
+                            'case',
+                            ['boolean', ['feature-state', 'hover'], false],
+                            3,
+                            2
+                        ],
+                        'line-opacity': 0.8
+                    }
+                });
+                console.log('Ward boundaries line layer added successfully');
+            } catch (error) {
+                console.error('Error adding ward boundaries line layer:', error);
+            }
             
             // Add highlighted wards layer for specific wards (42, 27, 1, 41, 39, 45) - Pulsing outline only
-            map.addLayer({
-                id: 'highlighted-wards-line',
-                type: 'line',
-                source: 'ward-boundaries',
-                layout: {
-                    visibility: 'none'
-                },
-                paint: {
-                    'line-color': '#ff6b35',
-                    'line-width': [
-                        'case',
-                        ['in', ['get', 'ward'], ['literal', ['42', '27', '1', '41', '39', '45']]],
-                        4,
-                        0
-                    ],
-                    'line-opacity': [
-                        'case',
-                        ['in', ['get', 'ward'], ['literal', ['42', '27', '1', '41', '39', '45']]],
-                        0.8,
-                        0
-                    ]
-                }
-            });
+            try {
+                console.log('Adding highlighted wards layer...');
+                map.addLayer({
+                    id: 'highlighted-wards-line',
+                    type: 'line',
+                    source: 'ward-boundaries',
+                    layout: {
+                        visibility: 'none'
+                    },
+                    paint: {
+                        'line-color': '#ff6b35',
+                        'line-width': [
+                            'case',
+                            ['in', ['get', 'ward'], ['literal', ['42', '27', '1', '41', '39', '45']]],
+                            4,
+                            0
+                        ],
+                        'line-opacity': [
+                            'case',
+                            ['in', ['get', 'ward'], ['literal', ['42', '27', '1', '41', '39', '45']]],
+                            0.8,
+                            0
+                        ]
+                    }
+                });
+                console.log('Highlighted wards layer added successfully');
+            } catch (error) {
+                console.error('Error adding highlighted wards layer:', error);
+            }
 
             // Add community boundaries source
             map.addSource('community-boundaries', {
@@ -1181,6 +1251,23 @@
                     ]
                 }
             });
+            
+            // Initialize highlighted wards since ward-toggle is active by default
+            if (document.getElementById('ward-toggle').classList.contains('active')) {
+                // Small delay to ensure all layers are properly added
+                setTimeout(() => {
+                    // Show highlighted wards layer
+                    if (map.getLayer('highlighted-wards-line')) {
+                        map.setLayoutProperty('highlighted-wards-line', 'visibility', 'visible');
+                        startPulsingAnimation('ward');
+                    }
+                    
+                    // Show summary window after highlighted boundaries are visible
+                    setTimeout(() => {
+                        showSummaryWindow('ward');
+                    }, 1500);
+                }, 500);
+            }
         });
 
         // Function to get analytics data for a boundary
@@ -1347,6 +1434,7 @@
         // Hover state management
         let hoveredWardId = null;
         let hoveredCommunityId = null;
+        let hoverTooltip = null;
         
         // Pulsing animation variables
         let pulsingAnimations = {
@@ -1477,7 +1565,7 @@
             }
         });
 
-        // Ward boundaries hover effects (visual only)
+        // Ward boundaries hover effects with tooltip
         map.on('mousemove', 'ward-boundaries-fill', (e) => {
             if (e.features.length > 0) {
                 if (hoveredWardId !== null) {
@@ -1492,6 +1580,27 @@
                     { source: 'ward-boundaries', id: hoveredWardId },
                     { hover: true }
                 );
+                
+                // Get ward number from feature properties
+                const feature = e.features[0];
+                const wardNumber = feature.properties.WARD || feature.properties.ward_num || 
+                                 feature.properties.ward || feature.properties.WARD_NUM || 
+                                 feature.properties.name || feature.properties.AREA_SHORT || 'Unknown';
+                
+                // Remove existing tooltip
+                if (hoverTooltip) {
+                    hoverTooltip.remove();
+                }
+                
+                // Create new tooltip
+                hoverTooltip = new mapboxgl.Popup({
+                    closeButton: false,
+                    closeOnClick: false,
+                    className: 'hover-tooltip'
+                })
+                .setLngLat(e.lngLat)
+                .setHTML(`<div style="padding: 4px 8px; font-size: 12px; font-weight: bold;">Ward ${wardNumber}</div>`)
+                .addTo(map);
             }
             map.getCanvas().style.cursor = 'pointer';
         });
@@ -1505,9 +1614,15 @@
             }
             hoveredWardId = null;
             map.getCanvas().style.cursor = '';
+            
+            // Remove tooltip
+            if (hoverTooltip) {
+                hoverTooltip.remove();
+                hoverTooltip = null;
+            }
         });
 
-        // Community boundaries hover effects (visual only)
+        // Community boundaries hover effects with tooltip
         map.on('mousemove', 'community-boundaries-fill', (e) => {
             if (e.features.length > 0) {
                 if (hoveredCommunityId !== null) {
@@ -1522,6 +1637,28 @@
                     { source: 'community-boundaries', id: hoveredCommunityId },
                     { hover: true }
                 );
+                
+                // Get community number from feature properties
+                const feature = e.features[0];
+                const communityNumber = feature.properties.area_numbe || feature.properties.area_num_1 || 
+                                       feature.properties.AREA_SHORT || feature.properties.AREA_S_CD || 
+                                       feature.properties.community || feature.properties.COMMUNITY_AREA || 
+                                       feature.properties.name || feature.properties.OBJECTID || 'Unknown';
+                
+                // Remove existing tooltip
+                if (hoverTooltip) {
+                    hoverTooltip.remove();
+                }
+                
+                // Create new tooltip
+                hoverTooltip = new mapboxgl.Popup({
+                    closeButton: false,
+                    closeOnClick: false,
+                    className: 'hover-tooltip'
+                })
+                .setLngLat(e.lngLat)
+                .setHTML(`<div style="padding: 4px 8px; font-size: 12px; font-weight: bold;">Community ${communityNumber}</div>`)
+                .addTo(map);
             }
             map.getCanvas().style.cursor = 'pointer';
         });
@@ -1535,6 +1672,12 @@
             }
             hoveredCommunityId = null;
             map.getCanvas().style.cursor = '';
+            
+            // Remove tooltip
+            if (hoverTooltip) {
+                hoverTooltip.remove();
+                hoverTooltip = null;
+            }
         });
 
         // Enhanced click events with CSV analytics
@@ -1542,20 +1685,66 @@
             const feature = e.features[0];
             const content = createPopupContent(feature, 'Ward');
             
-            new mapboxgl.Popup()
-                .setLngLat(e.lngLat)
-                .setHTML(content)
-                .addTo(map);
+            // Calculate bounds of the clicked ward
+            const coordinates = feature.geometry.coordinates;
+            const bounds = new mapboxgl.LngLatBounds();
+            
+            // Handle different geometry types
+            if (feature.geometry.type === 'Polygon') {
+                coordinates[0].forEach(coord => bounds.extend(coord));
+            } else if (feature.geometry.type === 'MultiPolygon') {
+                coordinates.forEach(polygon => {
+                    polygon[0].forEach(coord => bounds.extend(coord));
+                });
+            }
+            
+            // Zoom to ward bounds with animation
+            map.fitBounds(bounds, {
+                padding: 50,
+                maxZoom: 14,
+                duration: 1000 // 1 second animation
+            });
+            
+            // Show popup after zoom animation starts
+            setTimeout(() => {
+                new mapboxgl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML(content)
+                    .addTo(map);
+            }, 200); // Small delay so popup appears during zoom
         });
 
         map.on('click', 'community-boundaries-fill', (e) => {
             const feature = e.features[0];
             const content = createPopupContent(feature, 'Community');
             
-            new mapboxgl.Popup()
-                .setLngLat(e.lngLat)
-                .setHTML(content)
-                .addTo(map);
+            // Calculate bounds of the clicked community
+            const coordinates = feature.geometry.coordinates;
+            const bounds = new mapboxgl.LngLatBounds();
+            
+            // Handle different geometry types
+            if (feature.geometry.type === 'Polygon') {
+                coordinates[0].forEach(coord => bounds.extend(coord));
+            } else if (feature.geometry.type === 'MultiPolygon') {
+                coordinates.forEach(polygon => {
+                    polygon[0].forEach(coord => bounds.extend(coord));
+                });
+            }
+            
+            // Zoom to community bounds with animation
+            map.fitBounds(bounds, {
+                padding: 50,
+                maxZoom: 14,
+                duration: 1000 // 1 second animation
+            });
+            
+            // Show popup after zoom animation starts
+            setTimeout(() => {
+                new mapboxgl.Popup()
+                    .setLngLat(e.lngLat)
+                    .setHTML(content)
+                    .addTo(map);
+            }, 200); // Small delay so popup appears during zoom
         });
 
         // Handle map errors
