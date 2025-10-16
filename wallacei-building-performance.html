@@ -49,10 +49,9 @@
         <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
             <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">1. Introduction</h2>
             <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
-                This project explores how parametric optimization can enhance the environmental performance of building envelopes. Using the Wallacei plugin for Grasshopper, we analyzed how variations in façade parameters influence energy demand and thermal comfort.
-            </p>
+                This project investigates how parametric optimization can enhance the environmental performance of building envelopes in marine climates. Using the Wallacei plugin for Grasshopper, a multi-objective evolutionary algorithm (MOEA) was applied to explore 5,000 façade design variations simulated through Honeybee-Energy (EnergyPlus).</p>
             <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
-                Through a multi-objective evolutionary algorithm (MOEA), Wallacei generated and evaluated 5,000 design solutions, optimizing simultaneously for:
+                The optimization targeted three competing objectives: minimizing heating load, cooling load, and overheating risk (%). It investigates how façade parameters such as window-to-wall ratio, shading depth, and orientation influence thermal comfort and energy performance. The study aims to identify balanced design configurations that enhance low-energy building envelopes while maintaining occupant comfort.
             </p>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
                 <li><strong>Cooling Load</strong></li>
@@ -218,18 +217,18 @@
         <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
             <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">3. Objective Space Analysis</h2>
             <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
-                The Objective Space in Wallacei visualizes the performance of all 5,000 simulated design options across the three optimization goals — Cooling, Heating, and Overheating Risk. Each point represents a design solution, and together they form a 3D surface known as the Pareto front.
+                The Objective Space in Wallacei visualizes the performance of all 5,000 simulated design options across the three optimization goals: cooling load, heating load, and overheating risk (%). Each point represents a unique façade configuration, collectively forming a Pareto front that reveals the trade-offs between competing objectives.    
             </p>
             <p style="color: #666; line-height: 1.7; margin-bottom: 1rem;">
                 This surface illustrates the trade-offs between objectives:
             </p>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
-                <li><strong>Cooling vs. Overheating:</strong> As cooling demand decreases, overheating tends to rise — reducing energy use often means accepting higher indoor temperatures during hot periods.</li>
-                <li><strong>Heating vs. Overheating:</strong> Reducing heating demand can also increase overheating, since designs that capture more solar gain in winter may cause excess heat in summer.</li>
-                <li><strong>Cooling vs. Heating:</strong> These two objectives are naturally opposing — strategies that help one often worsen the other.</li>
+                <li><strong>Heating vs. Cooling:</strong> When heating demand is minimized through higher solar gains and larger south-facing glazing, cooling demand tends to increase due to greater solar exposure.</li>
+                <li><strong>Heating vs. Overheating:</strong> Designs that lower heating demand often face higher overheating risk for the same reason—greater solar gain that benefits winter comfort can cause excessive summer heat.</li>
+                <li><strong>Cooling vs. Overheating:</strong> Solutions that minimize cooling load also tend to maintain low overheating percentages, but this comes with higher heating requirements caused by reduced passive solar gains.</li>
             </ul>
             <p style="color: #666; line-height: 1.7;">
-                Rather than a single "best" design, the Pareto front reveals a spectrum of optimal solutions, each balancing energy and comfort differently. This enables the designer to choose based on priorities — for instance, minimizing overheating risk versus maximizing energy savings.
+                This trade-off is characteristic of the marine climate in the Pacific Northwest, where mild summers and extended heating seasons create tension between minimizing winter heat loss and avoiding summer overheating. The Pareto front did not yield a single optimal configuration but rather a continuum of balanced solutions. From these, the most effective designs achieved moderate heating loads with controlled solar exposure, demonstrating that façade balance is more impactful than simply maximizing or minimizing a single objective.    
             </p>
 
             <!-- Objective Space Visualization Carousel -->
@@ -296,18 +295,21 @@
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1rem;">
                 <li>Early generations show high variation (red curves), reflecting broad exploration of cooling strategies.</li>
                 <li>As evolution progresses, curves tighten into blue clusters, and the SD trend line flattens — indicating stabilization and convergence toward consistent, efficient cooling solutions.</li>
+                <li>Cooling standard deviation appears to stabilize between 0.62 and 0.63 after generation 90.</li>
             </ul>
 
             <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Heating Load (FO2)</h3>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1rem;">
                 <li>Initial generations show wider performance spread, which gradually narrows as the algorithm learns optimal heating strategies.</li>
                 <li>The SD trend rises and then levels off, showing that the population converged around stable heating performance with reduced variability.</li>
+                <li>Heating standard deviation appears to stabilize between 2.9 and 3.0 after generation 90.</li>
             </ul>
 
             <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Overheating Percentage (FO3)</h3>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1rem;">
                 <li>High initial deviation highlights early exploration of comfort performance.</li>
                 <li>Over time, curves contract, and the SD trend stabilizes — marking reduced performance volatility and convergence toward well-performing comfort zones.</li>
+                <li>Heating standard deviation appears to stabilize between 9.0 and 9.2 after generation 90.</li>
             </ul>
 
             <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Summary</h3>
@@ -379,16 +381,22 @@
         <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
             <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">5. Clustering & Solution Grouping</h2>
             <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
-                To better understand the range of optimized designs, K-means clustering was applied to the Pareto front solutions. This method grouped designs with similar performance characteristics across the three objectives — Cooling, Heating, and Overheating %.
+                We applied K-means clustering to the Pareto set to reveal families of solutions with similar performance across Cooling, Heating, and Overheating%. Three distinct clusters emerged:    
             </p>
             <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
                 The clustering revealed three distinct performance families, each representing a different design trade-off strategy:
             </p>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
-                <li><strong>Cluster 1:</strong> Low cooling demand but slightly higher overheating risk</li>
-                <li><strong>Cluster 2:</strong> Balanced trade-offs between all objectives</li>
-                <li><strong>Cluster 3:</strong> Higher heating demand but well-controlled overheating</li>
+                <li><strong>Cluster 1:</strong> Solar-open designs: Lower heating but higher cooling and overheating%. These solutions generally feature higher WWR and/or higher SHGC with modest shading, which helps winter demand but elevates summer peaks.</li>
+                <li><strong>Cluster 2:</strong> Balanced designs: Comparable levels across all three objectives, typically landing near the ≤10% overheating constraint. Mid-range WWR, SHGC, and shading geometry characterize this group.</li>
+                <li><strong>Cluster 3:</strong> Solar-protected designs: Lower cooling and overheating% at the expense of higher heating. These solutions use lower WWR or SHGC and deeper/steeper shading to control summer gains.</li>
             </ul>
+            
+            <!-- K-means Clustering Visualization -->
+            <div style="margin: 2rem 0; text-align: center;">
+                <img src="assets/images/wallacei analysis/kmeanscluster.png" alt="K-means Clustering Visualization" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+                <p style="color: #666; margin-top: 1rem; font-style: italic; font-size: 0.9rem;">K-means clustering analysis showing three distinct performance groups</p>
+            </div>
         </section>
 
         <!-- 6. Balanced Fitness Objective Analysis -->
