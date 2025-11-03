@@ -31,30 +31,30 @@
       <!-- Header -->
       <header class="powerbi-header">
         <h1 class="powerbi-title">Building‑Level Electricity Analytics & Forecasting</h1>
-        <p class="powerbi-description">An advanced analytics platform that analyzes building-level electricity consumption patterns and provides predictive modeling capabilities for energy optimization. This comprehensive solution combines real-time data processing, machine learning forecasting, and interactive visualizations to enable data-driven energy management decisions.</p>
+        <p class="powerbi-description">A full end-to-end workflow that cleans raw interval-meter data from multi-year building electricity consumption, enriches it with weather and metadata, fills gaps, engineers features, and trains a LightGBM model to predict hourly kWh. The project reshapes messy CSV data into tidy format, aligns timestamps to UTC while retaining local time, detects and repairs zero-value outages and data gaps, and creates an interactive geospatial Folium dashboard to explore building-level energy usage patterns with seasonal toggles and clustered markers.</p>
       </header>
 
       <!-- Project Overview Section -->
       <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
         <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Project Overview</h2>
-        <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">This analytics platform transforms raw electricity consumption data into actionable insights through advanced statistical modeling and machine learning techniques. The system processes historical consumption patterns to identify trends, anomalies, and optimization opportunities while providing accurate forecasting for future energy demands.</p>
+        <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">This project tackles the common problem of messy, multi-year building electricity data by reshaping and unifying raw CSVs (one column = one building) into a tidy format, aligning timestamps to UTC while retaining local time, merging facility metadata and site-level weather data, detecting and repairing zero-value outages and short data gaps, engineering rich temporal, spatial, and building-size features, training a gradient-boosted tree (LightGBM) with group-aware cross-validation to predict hourly energy consumption, explaining drivers via feature importance, and visualizing consumption patterns on an interactive Folium map.</p>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
           <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ff6b00;">
-            <h3 style="color: #000; margin-bottom: 0.5rem; font-size: 1.1rem;"><i class="fas fa-chart-line" style="color: #ff6b00; margin-right: 0.5rem;"></i>Predictive Modeling</h3>
-            <p style="color: #666; font-size: 0.95rem; margin: 0;">Machine learning algorithms forecast energy consumption patterns with high accuracy for strategic planning.</p>
+            <h3 style="color: #000; margin-bottom: 0.5rem; font-size: 1.1rem;"><i class="fas fa-database" style="color: #ff6b00; margin-right: 0.5rem;"></i>ETL Pipeline</h3>
+            <p style="color: #666; font-size: 0.95rem; margin: 0;">Reshapes messy CSV data (one column = one building) into tidy long format, unifying multi-year meter readings.</p>
           </div>
           <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ff6b00;">
-            <h3 style="color: #000; margin-bottom: 0.5rem; font-size: 1.1rem;"><i class="fas fa-building" style="color: #ff6b00; margin-right: 0.5rem;"></i>Building-Level Analysis</h3>
-            <p style="color: #666; font-size: 0.95rem; margin: 0;">Granular analytics at the individual building level for precise energy management and optimization.</p>
+            <h3 style="color: #000; margin-bottom: 0.5rem; font-size: 1.1rem;"><i class="fas fa-clock" style="color: #ff6b00; margin-right: 0.5rem;"></i>Timezone Handling</h3>
+            <p style="color: #666; font-size: 0.95rem; margin: 0;">Per-building timezone conversion from local to UTC while preserving local timestamps, ensuring DST-safe operations.</p>
           </div>
           <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ff6b00;">
-            <h3 style="color: #000; margin-bottom: 0.5rem; font-size: 1.1rem;"><i class="fas fa-clock" style="color: #ff6b00; margin-right: 0.5rem;"></i>Real-Time Processing</h3>
-            <p style="color: #666; font-size: 0.95rem; margin: 0;">Live data ingestion and processing for immediate insights and rapid response to consumption anomalies.</p>
+            <h3 style="color: #000; margin-bottom: 0.5rem; font-size: 1.1rem;"><i class="fas fa-tools" style="color: #ff6b00; margin-right: 0.5rem;"></i>Data Quality</h3>
+            <p style="color: #666; font-size: 0.95rem; margin: 0;">Detects zero-value outages (≥24h blocks), fills short gaps (≤24h) with linear interpolation, and generates coverage reports.</p>
           </div>
           <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ff6b00;">
-            <h3 style="color: #000; margin-bottom: 0.5rem; font-size: 1.1rem;"><i class="fas fa-lightbulb" style="color: #ff6b00; margin-right: 0.5rem;"></i>Smart Optimization</h3>
-            <p style="color: #666; font-size: 0.95rem; margin: 0;">AI-driven recommendations for energy efficiency improvements and cost reduction strategies.</p>
+            <h3 style="color: #000; margin-bottom: 0.5rem; font-size: 1.1rem;"><i class="fas fa-brain" style="color: #ff6b00; margin-right: 0.5rem;"></i>LightGBM Forecasting</h3>
+            <p style="color: #666; font-size: 0.95rem; margin: 0;">Gradient-boosted trees with 5-fold GroupKFold cross-validation to predict hourly kWh consumption per building.</p>
           </div>
         </div>
       </section>
@@ -73,21 +73,24 @@
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
           <div>
-            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-database" style="color: #ff6b00; margin-right: 0.5rem;"></i>Data Pipeline</h3>
+            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-database" style="color: #ff6b00; margin-right: 0.5rem;"></i>Data Sources & Processing</h3>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
-              <li><strong>Data Sources:</strong> Smart meter readings, IoT sensors, building management systems</li>
-              <li><strong>Processing:</strong> Real-time ETL pipelines with Apache Kafka and Spark</li>
-              <li><strong>Storage:</strong> Time-series databases optimized for high-frequency data</li>
-              <li><strong>Quality:</strong> Automated data validation and anomaly detection</li>
+              <li><strong>Dataset:</strong> Building Data Genome Project 2 (BDG2) from ASHRAE Great Energy Predictor III</li>
+              <li><strong>Meter Data:</strong> Multi-year hourly electricity readings (electricity.csv)</li>
+              <li><strong>Metadata:</strong> Building info with timezone, site_id, coordinates, sqm, space usage</li>
+              <li><strong>Weather:</strong> Hourly air temperature per site (weather.csv)</li>
+              <li><strong>Storage:</strong> Columnar Parquet format with Snappy compression for fast I/O</li>
             </ul>
           </div>
           <div>
-            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-brain" style="color: #ff6b00; margin-right: 0.5rem;"></i>Machine Learning</h3>
+            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-brain" style="color: #ff6b00; margin-right: 0.5rem;"></i>Feature Engineering & Modeling</h3>
             <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
-              <li><strong>Algorithms:</strong> LSTM networks, ARIMA, Random Forest, XGBoost</li>
-              <li><strong>Features:</strong> Weather data, occupancy patterns, seasonal trends</li>
-              <li><strong>Validation:</strong> Cross-validation with rolling window approach</li>
-              <li><strong>Deployment:</strong> MLOps pipeline with automated model updates</li>
+              <li><strong>Algorithm:</strong> LightGBM gradient-boosted trees</li>
+              <li><strong>Temporal Features:</strong> Hour, day_of_week, month, is_weekend, cyclical sine/cosine encodings</li>
+              <li><strong>Building Features:</strong> sqm, sqm_category, log_sqm, primaryspaceusage, energy_intensity</li>
+              <li><strong>Weather:</strong> Air temperature integration</li>
+              <li><strong>Validation:</strong> 5-fold GroupKFold (group = building) to prevent data leakage</li>
+              <li><strong>Performance:</strong> MAE ≈ 30.4 kWh ± 4.5, training ~4 hours on 14 cores</li>
             </ul>
           </div>
         </div>
@@ -95,98 +98,101 @@
 
       <!-- Key Features Section -->
       <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 class="platform-title">Platform Capabilities</h2>
+        <h2 class="platform-title">Key Workflow Components</h2>
         
         <div class="capabilities-grid">
           <div class="capability-card">
             <div class="capability-icon">
-              <i class="fas fa-chart-area"></i>
+              <i class="fas fa-exchange-alt"></i>
             </div>
-            <h3>Consumption Analytics</h3>
-            <p>Deep analysis of electricity usage patterns with trend identification, peak demand analysis, and efficiency metrics.</p>
+            <h3>Data Reshaping</h3>
+            <p>Converts wide-format CSV (one column per building) to tidy long format, enabling efficient time-series operations across all buildings.</p>
           </div>
           
           <div class="capability-card">
             <div class="capability-icon">
-              <i class="fas fa-crystal-ball"></i>
+              <i class="fas fa-globe-americas"></i>
             </div>
-            <h3>Demand Forecasting</h3>
-            <p>Advanced ML models predict future electricity demand with configurable time horizons and confidence intervals.</p>
+            <h3>Timezone Alignment</h3>
+            <p>Per-building UTC conversion with DST-safe handling, preserving both local and UTC timestamps for multi-site analysis.</p>
           </div>
           
           <div class="capability-card">
             <div class="capability-icon">
-              <i class="fas fa-exclamation-triangle"></i>
+              <i class="fas fa-band-aid"></i>
             </div>
-            <h3>Anomaly Detection</h3>
-            <p>Real-time identification of unusual consumption patterns with automated alerts and root cause analysis.</p>
+            <h3>Gap Filling</h3>
+            <p>Identifies contiguous zero-value outages (≥24h), masks them to NaN, and efficiently interpolates short gaps (≤24h).</p>
           </div>
           
           <div class="capability-card">
             <div class="capability-icon">
-              <i class="fas fa-dollar-sign"></i>
+              <i class="fas fa-cogs"></i>
             </div>
-            <h3>Cost Optimization</h3>
-            <p>Intelligent recommendations for reducing electricity costs through demand response and peak shaving strategies.</p>
+            <h3>Feature Engineering</h3>
+            <p>Creates temporal (hour, DOW, month, cyclical encodings), building (sqm categories, energy intensity), and weather features.</p>
           </div>
           
           <div class="capability-card">
             <div class="capability-icon">
-              <i class="fas fa-leaf"></i>
+              <i class="fas fa-chart-line"></i>
             </div>
-            <h3>Sustainability Metrics</h3>
-            <p>Carbon footprint tracking and renewable energy integration analysis for environmental impact assessment.</p>
+            <h3>Model Training</h3>
+            <p>LightGBM with GroupKFold validation trains on engineered features, achieving MAE ~30 kWh with feature importance analysis.</p>
           </div>
           
           <div class="capability-card">
             <div class="capability-icon">
-              <i class="fas fa-mobile-alt"></i>
+              <i class="fas fa-map-marked-alt"></i>
             </div>
-            <h3>Mobile Dashboard</h3>
-            <p>Responsive web interface with mobile-optimized views for on-the-go monitoring and management.</p>
+            <h3>Interactive Visualization</h3>
+            <p>Folium geospatial dashboard with clustered markers, seasonal layer toggles (Winter/Spring/Summer/Fall), and building popups.</p>
           </div>
         </div>
       </section>
 
-      <!-- Impact & Results Section -->
+      <!-- Results & Analysis Section -->
       <section class="project-section" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Expected Impact & Benefits</h2>
+        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Project Results & Insights</h2>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
           <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
-            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-chart-line" style="color: #ff6b00; margin-right: 0.5rem;"></i>Energy Efficiency</h3>
-            <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">Projected 15-25% reduction in energy consumption through optimized usage patterns and proactive management.</p>
+            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-database" style="color: #ff6b00; margin-right: 0.5rem;"></i>Data Quality Improvements</h3>
+            <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">Successfully processed multi-year meter data with comprehensive quality assurance.</p>
             <ul style="color: #666; line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
-              <li>Peak demand reduction strategies</li>
-              <li>Equipment optimization recommendations</li>
-              <li>Behavioral change insights</li>
+              <li>Zero-value outage detection (≥24h blocks)</li>
+              <li>Linear interpolation for short gaps (≤24h)</li>
+              <li>Gap-length distribution analysis</li>
+              <li>Coverage reports per building</li>
             </ul>
           </div>
           
           <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
-            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-piggy-bank" style="color: #ff6b00; margin-right: 0.5rem;"></i>Cost Savings</h3>
-            <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">Significant operational cost reductions through intelligent demand management and predictive maintenance.</p>
+            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-chart-bar" style="color: #ff6b00; margin-right: 0.5rem;"></i>Model Performance</h3>
+            <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">LightGBM achieved strong predictive accuracy with explainable feature importance.</p>
             <ul style="color: #666; line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
-              <li>Reduced peak demand charges</li>
-              <li>Optimized utility rate structures</li>
-              <li>Preventive maintenance scheduling</li>
+              <li>MAE baseline: ~30.4 kWh ± 4.5 kWh</li>
+              <li>Training time: ~14,419 seconds (4 hours)</li>
+              <li>5-fold GroupKFold cross-validation</li>
+              <li>Feature importance rankings</li>
             </ul>
           </div>
           
           <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
-            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-globe" style="color: #ff6b00; margin-right: 0.5rem;"></i>Environmental Impact</h3>
-            <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">Substantial carbon footprint reduction through optimized energy consumption and renewable integration.</p>
+            <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-map" style="color: #ff6b00; margin-right: 0.5rem;"></i>Exploratory Analysis</h3>
+            <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">Interactive Folium dashboard reveals geographic consumption patterns.</p>
             <ul style="color: #666; line-height: 1.6; padding-left: 1.5rem; font-size: 0.95rem;">
-              <li>CO2 emissions tracking and reduction</li>
-              <li>Renewable energy optimization</li>
-              <li>Sustainability reporting capabilities</li>
+              <li>Building size distribution histograms</li>
+              <li>Energy vs. size boxplots (linear & log-scale)</li>
+              <li>Seasonal and work-hour averages</li>
+              <li>Clustered markers sized by avg kWh</li>
             </ul>
           </div>
         </div>
         
         <div style="background: white; padding: 2rem; margin-top: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); border-left: 6px solid #ff6b00;">
-          <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-rocket" style="color: #ff6b00; margin-right: 0.5rem;"></i>Future Roadmap</h3>
-          <p style="color: #666; line-height: 1.7;">The platform is designed for scalability and continuous improvement, with planned integrations for IoT sensor networks, advanced AI algorithms, and blockchain-based energy trading capabilities. Future versions will include expanded predictive capabilities, cross-building optimization, and integration with smart grid infrastructure.</p>
+          <h3 style="color: #000; margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-graduation-cap" style="color: #ff6b00; margin-right: 0.5rem;"></i>Technical Learning Outcomes</h3>
+          <p style="color: #666; line-height: 1.7;">This project demonstrates end-to-end data science workflows including ETL pipeline development, handling messy real-world time-series data with timezone complexities, robust data quality assurance with gap detection and filling strategies, scalable feature engineering for temporal and spatial patterns, rigorous model validation with group-aware cross-validation to prevent leakage, and interactive geospatial visualization using Folium. The workflow is built on the open-source Building Data Genome Project 2 dataset from the ASHRAE Great Energy Predictor III competition.</p>
         </div>
       </section>
       
