@@ -949,6 +949,34 @@ body {
     margin: 0;
 }
 
+/* Collapsible summary blocks */
+.collapsible {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.collapsible-content {
+    width: 100%;
+    overflow: hidden;
+    max-height: none;
+    transition: max-height 0.3s ease;
+}
+
+.collapsible-toggle {
+    display: none;
+    margin-top: 0.5rem;
+    padding: 0.35rem 0;
+    background: none;
+    border: none;
+    color: #ff6b00;
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 /* Skills Grid for About Page */
 .content-column .skills-grid {
     display: grid;
@@ -1282,8 +1310,31 @@ body {
         left: 20px;
         right: 20px;
         top: 20px;
-        bottom: 100px;
+        bottom: calc(100px + env(safe-area-inset-bottom));
         border-radius: 15px;
+        padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+    }
+
+    .content-row {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .label-column {
+        position: static;
+        top: auto;
+    }
+
+    .greeting-text {
+        font-size: 2.25rem;
+    }
+
+    .display-title {
+        font-size: 2rem;
+    }
+
+    .page-title {
+        font-size: 1.6rem;
     }
 
     .nav-button {
@@ -1291,6 +1342,7 @@ body {
         padding: 1rem;
         font-size: 14px;
         text-align: center;
+        min-height: 44px;
     }
 
     .nav-button::before {
@@ -1359,6 +1411,11 @@ body {
         grid-template-columns: repeat(3, 1fr);
         gap: 0.5rem;
     }
+
+    .content-column .skills-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+    }
     
     .skill-category {
         padding: 0.8rem;
@@ -1378,6 +1435,16 @@ body {
         grid-template-columns: 1fr;
     }
 
+    .portfolio-image {
+        height: auto;
+    }
+
+    .project-thumbnail {
+        width: 100%;
+        height: auto;
+        max-height: none;
+    }
+
     .contact-content {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -1392,8 +1459,23 @@ body {
     }
 
     .filter-btn {
-        padding: 6px 16px;
+        padding: 10px 18px;
         font-size: 0.9rem;
+        min-height: 44px;
+    }
+
+    .collapsible-toggle {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+
+    .collapsible:not(.expanded) .collapsible-content {
+        max-height: 7rem;
+    }
+
+    .collapsible.expanded .collapsible-content {
+        max-height: 1000px;
     }
 }
 
@@ -1412,14 +1494,16 @@ body {
         left: 10px;
         right: 10px;
         top: 10px;
-        bottom: 80px;
+        bottom: calc(80px + env(safe-area-inset-bottom));
         border-radius: 12px;
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
     }
 
     .nav-button {
         min-width: 60px;
         padding: 0.8rem 0.5rem;
         font-size: 12px;
+        min-height: 44px;
     }
 
     /* Tab buttons responsive styles for small screens */
@@ -1448,6 +1532,16 @@ body {
         font-size: 1.75rem;
     }
 
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+    }
+
+    .content-column .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+    }
+
     .section-title {
         font-size: 2rem;
     }
@@ -1466,6 +1560,15 @@ body {
 
     .portfolio-item {
         margin: 0 10px;
+    }
+
+    .portfolio-filters {
+        gap: 0.4rem;
+    }
+
+    .filter-btn {
+        padding: 10px 14px;
+        min-height: 44px;
     }
 
     .contact-methods {

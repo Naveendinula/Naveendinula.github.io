@@ -171,12 +171,38 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function initCollapsibles() {
+        const collapsibles = document.querySelectorAll('[data-collapsible]');
+
+        collapsibles.forEach(collapsible => {
+            if (collapsible.dataset.collapsibleReady === 'true') {
+                return;
+            }
+
+            const toggle = collapsible.querySelector('.collapsible-toggle');
+            const content = collapsible.querySelector('.collapsible-content');
+
+            if (!toggle || !content) {
+                return;
+            }
+
+            collapsible.dataset.collapsibleReady = 'true';
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.addEventListener('click', function() {
+                const isExpanded = collapsible.classList.toggle('expanded');
+                toggle.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+                toggle.textContent = isExpanded ? 'Show less' : 'Show more';
+            });
+        });
+    }
+
     // Initialize About Page Features
     function initAboutPage() {
         // Only run if we're on the about page (index.html)
         if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
             initTypingAnimation();
             initTimelineTabs();
+            initCollapsibles();
         }
     }
 
