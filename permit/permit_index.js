@@ -69,7 +69,9 @@ const elements = {
   tabButtons: Array.from(document.querySelectorAll('.tab-button')),
   tabContent: document.getElementById('tab-content'),
   featureCount: document.getElementById('feature-count'),
-  loadingScreen: document.getElementById('loading')
+  loadingScreen: document.getElementById('loading'),
+  projectTooltip: document.getElementById('project-tooltip'),
+  projectTooltipCloseButtons: Array.from(document.querySelectorAll('[data-tooltip-close]'))
 };
 
 function formatNumber(value) {
@@ -95,6 +97,36 @@ function formatRange(range) {
     return 'N/A';
   }
   return `${formatMonth(range.start)} - ${formatMonth(range.end)}`;
+}
+
+function initChartTooltips() {
+  const infoIcons = document.querySelectorAll('.chart-info-icon');
+  infoIcons.forEach((icon) => {
+    icon.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const tooltipId = `tooltip-${icon.dataset.tooltip}`;
+      const tooltip = document.getElementById(tooltipId);
+      if (tooltip) {
+        // Close all other tooltips first
+        document.querySelectorAll('.chart-tooltip.visible').forEach((t) => {
+          if (t.id !== tooltipId) {
+            t.classList.remove('visible');
+          }
+        });
+        // Toggle this tooltip
+        tooltip.classList.toggle('visible');
+      }
+    });
+  });
+
+  // Close tooltips when clicking outside
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.chart-info-icon') && !event.target.closest('.chart-tooltip')) {
+      document.querySelectorAll('.chart-tooltip.visible').forEach((t) => {
+        t.classList.remove('visible');
+      });
+    }
+  });
 }
 
 function renderProvenanceBlock(provenance, warnings) {
@@ -214,6 +246,20 @@ function closeSummaryWindow() {
   if (elements.summaryWindow) {
     elements.summaryWindow.classList.remove('visible');
   }
+}
+
+function showProjectTooltip() {
+  if (!elements.projectTooltip) {
+    return;
+  }
+  elements.projectTooltip.classList.add('visible');
+}
+
+function hideProjectTooltip() {
+  if (!elements.projectTooltip) {
+    return;
+  }
+  elements.projectTooltip.classList.remove('visible');
 }
 
 function initSummaryWindowDrag() {
@@ -609,11 +655,23 @@ function generateOverviewContent() {
     </div>
     <div class="charts-grid two-column" style="margin-bottom: 24px;">
       <div class="chart-container">
-        <div class="chart-title">Retrofit Activity Pulse (Last 12 Months)</div>
+        <div class="chart-title">
+          Retrofit Activity Pulse (Last 12 Months)
+          <span class="chart-info-icon" data-tooltip="retrofit-pulse">ⓘ</span>
+        </div>
+        <div class="chart-tooltip" id="tooltip-retrofit-pulse">
+          <strong>Analysis Insight:</strong> This stacked area chart visualizes weekly retrofit permit activity across six energy efficiency categories. The white rolling average line smooths out weekly volatility to reveal underlying trends. <em>Look for:</em> seasonal patterns (often peaks in spring/fall), category dominance shifts, and whether the rolling average is trending up or down—indicating momentum in retrofit adoption across Chicago.
+        </div>
         <div class="chart-content" id="retrofit-pulse-chart" style="height: 300px;"></div>
       </div>
       <div class="chart-container">
-        <div class="chart-title">Permit Processing Time - Leaderboard by Ward</div>
+        <div class="chart-title">
+          Permit Processing Time - Leaderboard by Ward
+          <span class="chart-info-icon" data-tooltip="processing-leaderboard">ⓘ</span>
+        </div>
+        <div class="chart-tooltip" id="tooltip-processing-leaderboard">
+          <strong>Analysis Insight:</strong> This bar chart ranks wards by median permit processing time. Green bars indicate wards faster than the city median; red bars are slower. Scatter points show permit volume—larger dots mean higher activity. <em>Key takeaway:</em> High-volume wards with fast processing indicate efficient permit offices, while slow high-volume wards may signal resource constraints or bottlenecks worth investigating.
+        </div>
         <div class="chart-content" id="processing-leaderboard-chart" style="height: 300px;"></div>
       </div>
     </div>
@@ -627,11 +685,23 @@ function generateTrendsContent() {
     ${renderProvenanceBlock(provenance, warnings)}
     <div class="charts-grid two-column">
       <div class="chart-container">
-        <div class="chart-title">Cumulative Retrofits Over Time</div>
+        <div class="chart-title">
+          Cumulative Retrofits Over Time
+          <span class="chart-info-icon" data-tooltip="cumulative-retrofits">ⓘ</span>
+        </div>
+        <div class="chart-tooltip" id="tooltip-cumulative-retrofits">
+          <strong>Analysis Insight:</strong> This line chart shows the cumulative growth of retrofit permits by category over time. Steeper slopes indicate periods of accelerated adoption. <em>Look for:</em> which categories are growing fastest (steepest lines), inflection points where growth accelerated or slowed, and relative market share between categories. Categories with flattening curves may indicate market saturation or policy changes.
+        </div>
         <div class="chart-content" id="cumulative-retrofits-chart" style="height: 300px;"></div>
       </div>
       <div class="chart-container">
-        <div class="chart-title">Median Permit Processing Time Over Time</div>
+        <div class="chart-title">
+          Median Permit Processing Time Over Time
+          <span class="chart-info-icon" data-tooltip="processing-trend">ⓘ</span>
+        </div>
+        <div class="chart-tooltip" id="tooltip-processing-trend">
+          <strong>Analysis Insight:</strong> This chart tracks citywide permit processing efficiency over time. The blue line shows city median, while dashed lines show fastest and slowest ward averages. <em>Key insights:</em> A narrowing gap between fast and slow wards suggests improving consistency; widening gaps indicate growing inequity. Upward trends may signal capacity issues, while downward trends reflect process improvements.
+        </div>
         <div class="chart-content" id="processing-time-trend-chart" style="height: 300px;"></div>
       </div>
     </div>
@@ -645,13 +715,25 @@ function generateProcessingContent() {
     ${renderProvenanceBlock(provenance, warnings)}
     <div class="charts-grid two-column">
       <div class="chart-container">
-        <div class="chart-title">Ward Processing Leaderboard</div>
+        <div class="chart-title">
+          Ward Processing Leaderboard
+          <span class="chart-info-icon" data-tooltip="ward-leaderboard">ⓘ</span>
+        </div>
         <div class="chart-subtitle">Median permit processing time by ward (fastest - slowest)</div>
+        <div class="chart-tooltip" id="tooltip-ward-leaderboard">
+          <strong>Analysis Insight:</strong> This horizontal bar chart ranks all wards from fastest to slowest median processing time. The gradient coloring (green→red) highlights performance variance. The dashed blue line marks the city median. <em>Actionable insight:</em> Wards far below the median can serve as models for best practices; those significantly above may need additional resources or process review.
+        </div>
         <div class="chart-content" id="ward-processing-leaderboard-chart" style="height: 400px;"></div>
       </div>
       <div class="chart-container">
-        <div class="chart-title">Processing Time Timeline</div>
+        <div class="chart-title">
+          Processing Time Timeline
+          <span class="chart-info-icon" data-tooltip="processing-timeline">ⓘ</span>
+        </div>
         <div class="chart-subtitle">Citywide median processing time trends with category breakdown</div>
+        <div class="chart-tooltip" id="tooltip-processing-timeline">
+          <strong>Analysis Insight:</strong> This multi-line chart shows how processing times vary by retrofit category over time. The bold blue line is the city median; dashed lines represent specific categories (Heat Pump, Insulation, etc.). <em>Look for:</em> categories consistently above the median may face more complex review processes; categories below the median may have streamlined approval paths. Diverging trends suggest category-specific bottlenecks.
+        </div>
         <div class="chart-content" id="processing-timeline-chart" style="height: 400px;"></div>
       </div>
     </div>
@@ -676,6 +758,7 @@ function updateDrawerContent() {
     case 'trends':
       elements.tabContent.innerHTML = generateTrendsContent();
       setTimeout(() => {
+        initChartTooltips();
         initCumulativeRetrofitsChart(
           document.getElementById('cumulative-retrofits-chart'),
           state.analytics.cumulativeSeries
@@ -689,6 +772,7 @@ function updateDrawerContent() {
     case 'processing':
       elements.tabContent.innerHTML = generateProcessingContent();
       setTimeout(() => {
+        initChartTooltips();
         initWardProcessingLeaderboardChart(
           document.getElementById('ward-processing-leaderboard-chart'),
           state.analytics.processingLeaderboard
@@ -703,6 +787,7 @@ function updateDrawerContent() {
     default:
       elements.tabContent.innerHTML = generateOverviewContent();
       setTimeout(() => {
+        initChartTooltips();
         initRetrofitPulseChart(
           document.getElementById('retrofit-pulse-chart'),
           state.analytics.retrofitPulse
@@ -862,6 +947,11 @@ function initMap(dataReady) {
         }, 500);
       }, 1000);
     }
+
+    const tooltipDelay = elements.loadingScreen ? 1700 : 300;
+    setTimeout(() => {
+      showProjectTooltip();
+    }, tooltipDelay);
   });
 
   state.map.on('mousemove', 'ward-boundaries-fill', (event) => {
@@ -1012,6 +1102,12 @@ function initEventHandlers() {
     elements.summaryClose.addEventListener('click', closeSummaryWindow);
   }
 
+  if (elements.projectTooltipCloseButtons.length > 0) {
+    elements.projectTooltipCloseButtons.forEach((button) => {
+      button.addEventListener('click', hideProjectTooltip);
+    });
+  }
+
   if (elements.openDrawerButton) {
     elements.openDrawerButton.addEventListener('click', openDrawer);
   }
@@ -1087,6 +1183,12 @@ function initEventHandlers() {
       }
     });
   }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      hideProjectTooltip();
+    }
+  });
 }
 
 async function loadData() {
