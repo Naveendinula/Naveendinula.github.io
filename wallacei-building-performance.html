@@ -15,16 +15,19 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="assets/css/building-analytics.css" />
 </head>
-<body>
-  <!-- === Vertical navigation === -->
-  <nav class="vertical-nav">
-    <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
-    <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
-    <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
-  </nav>
+<body data-page="portfolio">
+  <header class="site-header" data-include="components/header.html">
+    <!-- === Vertical navigation === -->
+    <nav class="vertical-nav">
+      <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
+      <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
+      <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
+    </nav>
+  </header>
 
-  <div class="content-box">
-    <div class="powerbi-wrapper">
+  <main class="site-main">
+    <div class="content-box">
+      <div class="powerbi-wrapper">
       <!-- Back link -->
       <div class="back-navigation"><a href="portfolio.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Portfolio</a></div>
 
@@ -870,6 +873,9 @@
       </div>
     </div>
   </div>
+  </main>
+
+  <footer class="site-footer" data-include="components/footer.html"></footer>
 
   <!-- Image Modal -->
   <div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); cursor: pointer;">
@@ -888,6 +894,7 @@
   <script src="assets/js/app.js"></script>
   <script src="assets/js/main.js"></script> -->
   <script src="assets/js/image-modal.js"></script>
+  <script src="script.js"></script>
   <script>
     // Ensure portfolio nav button stays active on this page
     document.addEventListener('DOMContentLoaded', function() {

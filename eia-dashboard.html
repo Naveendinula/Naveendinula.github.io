@@ -15,16 +15,19 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="assets/css/components/powerbi-dashboard.css" />
 </head>
-<body>
-  <!-- === Vertical navigation === -->
-  <nav class="vertical-nav">
-    <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
-    <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
-    <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
-  </nav>
+<body data-page="portfolio">
+  <header class="site-header" data-include="components/header.html">
+    <!-- === Vertical navigation === -->
+    <nav class="vertical-nav">
+      <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
+      <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
+      <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
+    </nav>
+  </header>
 
-  <div class="content-box">
-    <div class="powerbi-wrapper">
+  <main class="site-main">
+    <div class="content-box">
+      <div class="powerbi-wrapper">
       <!-- Back link -->
       <div class="back-navigation"><a href="portfolio.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Portfolio</a></div>
 
@@ -71,33 +74,11 @@
     </div>
   </div>
 
-  <!-- =============================================================
-       Script: wires events *after* DOM exists and uses proper tags
-  ============================================================= -->
-  <script>
-    document.addEventListener('DOMContentLoaded',()=>{
-      const iframe=document.getElementById('powerbi-dashboard');
-      const loader=document.getElementById('dashboardLoader');
-      const fallback=document.getElementById('dashboard-fallback');
-      const retryBtn=document.getElementById('retryButton');
+  </main>
 
-      let timeoutId;
-      function showFallback(){loader.style.display='none';iframe.style.opacity='0';fallback.style.display='block';clearTimeout(timeoutId);}
-      function hideLoader(){loader.style.display='none';iframe.style.opacity='1';clearTimeout(timeoutId);}
+  <footer class="site-footer" data-include="components/footer.html"></footer>
 
-      // give the iframe a maximum of 10 s to load
-      timeoutId=setTimeout(showFallback,10_000);
+  <script src="script.js"></script>
 
-      iframe.addEventListener('load',hideLoader);
-      iframe.addEventListener('error',showFallback);
-
-      retryBtn.addEventListener('click',()=>{
-        fallback.style.display='none';loader.style.display='flex';iframe.style.opacity='0';
-        // force reload
-        iframe.contentWindow.location.reload();
-        timeoutId=setTimeout(showFallback,10_000);
-      });
-    });
-  </script>
 </body>
 </html>

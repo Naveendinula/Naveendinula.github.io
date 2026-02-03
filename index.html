@@ -16,28 +16,31 @@
     <link rel="stylesheet" href="assets/css/components/shuttlecock-icon.css">
     <link rel="stylesheet" href="assets/css/components/tab-overrides.css">
 </head>
-<body>
-    <!-- Vertical Navigation Sidebar -->
-    <nav class="vertical-nav">
-        <a href="index.html">
-            <button class="nav-button active" data-page="about">
-                About
-            </button>
-        </a>
-        <a href="portfolio.html">
-            <button class="nav-button" data-page="portfolio">
-                Portfolio
-            </button>
-        </a>
-        <a href="contact.html">
-            <button class="nav-button" data-page="contact">
-                Contact
-            </button>
-        </a>
-    </nav>
+<body data-page="about">
+    <header class="site-header" data-include="components/header.html">
+        <!-- Vertical Navigation Sidebar -->
+        <nav class="vertical-nav">
+            <a href="index.html">
+                <button class="nav-button active" data-page="about">
+                    About
+                </button>
+            </a>
+            <a href="portfolio.html">
+                <button class="nav-button" data-page="portfolio">
+                    Portfolio
+                </button>
+            </a>
+            <a href="contact.html">
+                <button class="nav-button" data-page="contact">
+                    Contact
+                </button>
+            </a>
+        </nav>
+    </header>
 
-    <!-- Content Box -->
-    <div class="content-box">
+    <main class="site-main">
+        <!-- Content Box -->
+        <div class="content-box">
         <!-- About Page Content -->
         <section class="about-page">
             <div class="container">
@@ -52,7 +55,7 @@
                     </div>
                     <div class="horizontal-social-icons">
                         <a href="https://www.linkedin.com/in/naveen-panditharathne/" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" onclick="copyEmailToClipboard(event)" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fas fa-envelope"></i></a>
+                        <a href="#" class="social-link" data-email-copy style="background: none; color: #000; font-size: 1.5rem;"><i class="fas fa-envelope"></i></a>
                         <a href="assets/images/naveen-panditharatne-resume.pdf" target="_blank" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fas fa-external-link-alt"></i></a>
                         <a href="https://github.com/Naveendinula/" target="_blank" class="social-link" style="background: none; color: #000; font-size: 1.5rem;"><i class="fab fa-github"></i></a>
                     </div>
@@ -310,21 +313,20 @@
                 </div>
             </div>
         </section>
-    </div>
+        </div>
+    </main>
 
     <!-- Email Popup -->
     <div id="emailPopup" style="display: none; position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: rgba(255, 107, 0, 0.8); color: white; padding: 15px 25px; border-radius: 0 0 12px 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 1000; text-align: center; transition: top 0.3s ease; backdrop-filter: blur(8px) saturate(140%); -webkit-backdrop-filter: blur(8px) saturate(140%); border: 1px solid rgba(255,255,255,0.25);">
         <p style="margin: 0; font-size: 16px; font-weight: 600;">Email copied to clipboard!</p>
         <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">ngnaveen.p@gmail.com</p>
     </div>
-    <div id="popupOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;" onclick="closeEmailPopup()"></div>
+    <div id="popupOverlay" data-email-popup-close style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+
+    <footer class="site-footer" data-include="components/footer.html"></footer>
 
     <!-- === JavaScript Modules === -->
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/utils/dom-utils.js"></script>
-    <script src="assets/js/utils/animation-utils.js"></script>
     <script src="assets/js/modules/email-utils.js"></script>
-    <script src="assets/js/app.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

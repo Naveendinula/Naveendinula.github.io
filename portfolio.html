@@ -13,28 +13,31 @@
     <!-- === Modular Stylesheets === -->
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <!-- Vertical Navigation Sidebar -->
-    <nav class="vertical-nav">
-        <a href="index.html">
-            <button class="nav-button" data-page="about">
-                About
-            </button>
-        </a>
-        <a href="portfolio.html">
-            <button class="nav-button active" data-page="portfolio">
-                Portfolio
-            </button>
-        </a>
-        <a href="contact.html">
-            <button class="nav-button" data-page="contact">
-                Contact
-            </button>
-        </a>
-    </nav>
+<body data-page="portfolio">
+    <header class="site-header" data-include="components/header.html">
+        <!-- Vertical Navigation Sidebar -->
+        <nav class="vertical-nav">
+            <a href="index.html">
+                <button class="nav-button" data-page="about">
+                    About
+                </button>
+            </a>
+            <a href="portfolio.html">
+                <button class="nav-button active" data-page="portfolio">
+                    Portfolio
+                </button>
+            </a>
+            <a href="contact.html">
+                <button class="nav-button" data-page="contact">
+                    Contact
+                </button>
+            </a>
+        </nav>
+    </header>
 
-    <!-- Content Box -->
-    <div class="content-box">
+    <main class="site-main">
+        <!-- Content Box -->
+        <div class="content-box">
         <!-- Portfolio Section -->
         <section class="portfolio portfolio-page">
             <div class="container">
@@ -78,7 +81,7 @@
                         <div class="portfolio-content">
                             <h3>Chicago Building Retrofit Analysis Platform (with NLP-Powered Classification)</h3>
                             <p>Classifying and mapping energy retrofits using spaCy NLP and Mapbox GL.</p>
-                            <a href="permit_index.html" class="project-button">
+                            <a href="building-permit-map.html" class="project-button">
                                 View Project <i class="fas fa-external-link-alt"></i>
                             </a>
                         </div>
@@ -214,13 +217,12 @@
         </section>
 
      
-    </div>
+        </div>
+    </main>
+
+    <footer class="site-footer" data-include="components/footer.html"></footer>
 
     <!-- === JavaScript Modules === -->
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/utils/dom-utils.js"></script>
-    <script src="assets/js/utils/animation-utils.js"></script>
-    <script src="assets/js/app.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -16,28 +16,31 @@
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
-<body>
-    <!-- Vertical Navigation Sidebar -->
-    <nav class="vertical-nav">
-        <a href="index.html">
-            <button class="nav-button" data-page="about">
-                About
-            </button>
-        </a>
-        <a href="portfolio.html">
-            <button class="nav-button" data-page="portfolio">
-                Portfolio
-            </button>
-        </a>
-        <a href="contact.html">
-            <button class="nav-button active" data-page="contact">
-                Contact
-            </button>
-        </a>
-    </nav>
+<body data-page="contact">
+    <header class="site-header" data-include="components/header.html">
+        <!-- Vertical Navigation Sidebar -->
+        <nav class="vertical-nav">
+            <a href="index.html">
+                <button class="nav-button" data-page="about">
+                    About
+                </button>
+            </a>
+            <a href="portfolio.html">
+                <button class="nav-button" data-page="portfolio">
+                    Portfolio
+                </button>
+            </a>
+            <a href="contact.html">
+                <button class="nav-button active" data-page="contact">
+                    Contact
+                </button>
+            </a>
+        </nav>
+    </header>
 
-    <!-- Content Box -->
-    <div class="content-box">
+    <main class="site-main">
+        <!-- Content Box -->
+        <div class="content-box">
         <!-- Contact Section -->
         <section class="contact contact-page">
             <div class="container">
@@ -107,13 +110,12 @@
         </section>
 
 
-    </div>
+        </div>
+    </main>
+
+    <footer class="site-footer" data-include="components/footer.html"></footer>
 
     <!-- === JavaScript Modules === -->
-    <script src="assets/js/config.js"></script>
-    <script src="assets/js/utils/dom-utils.js"></script>
-    <script src="assets/js/utils/animation-utils.js"></script>
-    <script src="assets/js/app.js"></script>
     <script src="assets/js/contact-form.js"></script>
     <script src="script.js"></script>
 </body>

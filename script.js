@@ -1,447 +1,567 @@
-// Page Navigation and Active State
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize about page features
-    initAboutPage();
-    
-    const navButtons = document.querySelectorAll('.nav-button');
+(function () {
+  'use strict';
 
-    // Set active state based on current page
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    navButtons.forEach(button => {
-        const buttonPage = button.getAttribute('data-page');
-        const href = button.parentElement.getAttribute('href');
-        
-        if ((currentPage === 'index.html' && buttonPage === 'about') ||
-            (currentPage === 'portfolio.html' && buttonPage === 'portfolio') ||
-            (currentPage === 'building-analytics.html' && buttonPage === 'portfolio') ||
-            (currentPage === 'eia-dashboard.html' && buttonPage === 'portfolio') ||
-            (currentPage === 'contact.html' && buttonPage === 'contact')) {
-            button.classList.add('active');
-        } else {
-            button.classList.remove('active');
+  const Site = {
+    state: {
+      initialized: false,
+      isDashboardLoading: false,
+      dashboardLoadTimeout: null,
+    },
+
+    boot() {
+      this.loadIncludes()
+        .catch(() => {})
+        .finally(() => {
+          this.init();
+        });
+    },
+
+    loadIncludes() {
+      const includeElements = Array.from(document.querySelectorAll('[data-include]'));
+      if (includeElements.length === 0) {
+        return Promise.resolve();
+      }
+
+      const requests = includeElements.map((element) => {
+        const url = element.getAttribute('data-include');
+        if (!url || element.dataset.includeLoaded === 'true') {
+          return Promise.resolve();
         }
-    });
 
-    // Navigation click handlers
-    navButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            // Let the default link behavior handle navigation
-            // Remove active class from all buttons
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
-            this.classList.add('active');
+        return fetch(url, { credentials: 'same-origin' })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Include request failed');
+            }
+            return response.text();
+          })
+          .then((html) => {
+            element.innerHTML = html;
+            element.dataset.includeLoaded = 'true';
+          })
+          .catch(() => {});
+      });
+
+      return Promise.all(requests).then(() => {});
+    },
+
+    init() {
+      if (this.state.initialized) {
+        return;
+      }
+      this.state.initialized = true;
+
+      this.initNavigation();
+      this.initPortfolioFilters();
+      this.initContactForm();
+      this.initScrollAnimations();
+      this.initPageLoadAnimations();
+      this.initAboutPage();
+      this.initCollapsibles();
+      this.initPowerBIDashboard();
+      this.initPortfolioLinkNotifications();
+      this.initEmailPopup();
+    },
+
+    getPageKey() {
+      if (document.body && document.body.dataset.page) {
+        return document.body.dataset.page;
+      }
+
+      const page = window.location.pathname.split('/').pop() || 'index.html';
+      const pageMap = {
+        'index.html': 'about',
+        'portfolio.html': 'portfolio',
+        'contact.html': 'contact',
+        'building-analytics.html': 'portfolio',
+        'ckc-environmental-analysis.html': 'portfolio',
+        'urban-heat-island.html': 'portfolio',
+        'wallacei-building-performance.html': 'portfolio',
+        'eia-dashboard.html': 'portfolio',
+        'chicago-energy-retrofit.html': 'portfolio',
+        'building-permit-map.html': 'portfolio',
+      };
+
+      return pageMap[page] || '';
+    },
+
+    initNavigation() {
+      const navButtons = document.querySelectorAll('.nav-button');
+      if (!navButtons.length) {
+        return;
+      }
+
+      const pageKey = this.getPageKey();
+
+      navButtons.forEach((button) => {
+        const buttonPage = button.getAttribute('data-page');
+        if (buttonPage && buttonPage === pageKey) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+
+      navButtons.forEach((button) => {
+        if (button.dataset.navReady === 'true') {
+          return;
+        }
+
+        button.dataset.navReady = 'true';
+        button.addEventListener('click', () => {
+          navButtons.forEach((btn) => btn.classList.remove('active'));
+          button.classList.add('active');
         });
-    });
+      });
+    },
 
-    // Portfolio Filter Functionality
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    initPortfolioFilters() {
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const portfolioItems = document.querySelectorAll('.portfolio-item');
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Remove active class from all buttons
-            filterBtns.forEach(b => b.classList.remove('active'));
-            // Add active class to clicked button
-            this.classList.add('active');
+      if (filterBtns.length === 0 || portfolioItems.length === 0) {
+        return;
+      }
 
-            const filterValue = this.getAttribute('data-filter');
+      filterBtns.forEach((btn) => {
+        if (btn.dataset.filterReady === 'true') {
+          return;
+        }
 
-            portfolioItems.forEach(item => {
-                if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
-                    item.style.display = 'block';
-                    item.style.animation = 'fadeIn 0.5s ease-in-out';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+        btn.dataset.filterReady = 'true';
+        btn.addEventListener('click', () => {
+          filterBtns.forEach((button) => button.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filterValue = btn.getAttribute('data-filter');
+          portfolioItems.forEach((item) => {
+            if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+              item.style.display = 'block';
+              item.style.animation = 'fadeIn 0.5s ease-in-out';
+            } else {
+              item.style.display = 'none';
+            }
+          });
         });
-    });
+      });
+    },
 
-    // Contact Form Handling
-    const contactForm = document.getElementById('contactForm');
-    
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = new FormData(this);
+    initContactForm() {
+      const contactForm = document.getElementById('contactForm');
+      if (!contactForm || contactForm.dataset.contactReady === 'true') {
+        return;
+      }
+
+      contactForm.dataset.contactReady = 'true';
+      contactForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(contactForm);
         const name = formData.get('name');
         const email = formData.get('email');
         const subject = formData.get('subject');
         const message = formData.get('message');
 
-        // Basic validation
         if (!name || !email || !subject || !message) {
-            showNotification('Please fill in all fields.', 'error');
-            return;
+          this.showNotification('Please fill in all fields.', 'error');
+          return;
         }
 
-        if (!isValidEmail(email)) {
-            showNotification('Please enter a valid email address.', 'error');
-            return;
+        if (!this.isValidEmail(email)) {
+          this.showNotification('Please enter a valid email address.', 'error');
+          return;
         }
 
-        // Simulate form submission (replace with actual submission logic)
-        const submitBtn = this.querySelector('button[type="submit"]');
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        if (!submitBtn) {
+          return;
+        }
+
         const originalText = submitBtn.textContent;
-        
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
 
-        // Simulate API call delay
         setTimeout(() => {
-            showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
-            contactForm.reset();
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
+          this.showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
+          contactForm.reset();
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
         }, 2000);
-    });
+      });
+    },
 
-    // Scroll animations
-    const observerOptions = {
+    initScrollAnimations() {
+      if (typeof IntersectionObserver === 'undefined') {
+        return;
+      }
+
+      const observerOptions = {
         threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+        rootMargin: '0px 0px -50px 0px',
+      };
 
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('show');
-            }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+          }
         });
-    }, observerOptions);
+      }, observerOptions);
 
-    // Observe elements for animation
-    const animateElements = document.querySelectorAll('.skill-item, .portfolio-item, .contact-item, .contact-method');
-    animateElements.forEach(el => {
-        el.classList.add('fade-in');
-        observer.observe(el);
-    });
+      const animateElements = document.querySelectorAll('.skill-item, .portfolio-item, .contact-item, .contact-method');
+      animateElements.forEach((element) => {
+        if (element.dataset.animateReady === 'true') {
+          return;
+        }
 
-    // Page animations on load
-    setTimeout(() => {
+        element.dataset.animateReady = 'true';
+        element.classList.add('fade-in');
+        observer.observe(element);
+      });
+    },
+
+    initPageLoadAnimations() {
+      setTimeout(() => {
         const elements = document.querySelectorAll('.fade-in');
-        elements.forEach((el, index) => {
-            setTimeout(() => {
-                el.classList.add('show');
-            }, index * 100);
+        elements.forEach((element, index) => {
+          setTimeout(() => {
+            element.classList.add('show');
+          }, index * 100);
         });
-    }, 200);
+      }, 200);
+    },
 
-    // Typing Animation for About Page
-    function initTypingAnimation() {
-        const typingElement = document.getElementById('typingText');
-        if (!typingElement) return;
+    initAboutPage() {
+      const pageKey = this.getPageKey();
+      if (pageKey !== 'about' && !document.querySelector('.about-page')) {
+        return;
+      }
 
-        const fullText = "Hi! I'm Naveen Panditharatne";
-        let currentIndex = 0;
-        
-        function typeText() {
-            if (currentIndex < fullText.length) {
-                typingElement.innerHTML = fullText.substring(0, currentIndex + 1) + '<span class="typing-cursor"></span>';
-                currentIndex++;
-                setTimeout(typeText, 100);
-            }
+      this.initTypingAnimation();
+      this.initTimelineTabs();
+    },
+
+    initTypingAnimation() {
+      const typingElement = document.getElementById('typingText');
+      if (!typingElement) {
+        return;
+      }
+
+      const fullText = "Hi! I'm Naveen Panditharatne";
+      let currentIndex = 0;
+
+      const typeText = () => {
+        if (currentIndex < fullText.length) {
+          typingElement.innerHTML = fullText.substring(0, currentIndex + 1) + '<span class="typing-cursor"></span>';
+          currentIndex += 1;
+          setTimeout(typeText, 100);
         }
-        
-        // Start typing animation after a short delay
-        setTimeout(typeText, 500);
-    }
+      };
 
-    // Timeline Tabs Functionality
-    function initTimelineTabs() {
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabPanels = document.querySelectorAll('.tab-panel');
+      setTimeout(typeText, 500);
+    },
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const targetTab = this.getAttribute('data-tab');
-                
-                // Remove active class from all buttons and panels
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabPanels.forEach(panel => panel.classList.remove('active'));
-                
-                // Add active class to clicked button and corresponding panel
-                this.classList.add('active');
-                const targetPanel = document.getElementById(targetTab + '-tab');
-                if (targetPanel) {
-                    targetPanel.classList.add('active');
-                }
-            });
+    initTimelineTabs() {
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabPanels = document.querySelectorAll('.tab-panel');
+
+      if (tabButtons.length === 0) {
+        return;
+      }
+
+      tabButtons.forEach((button) => {
+        if (button.dataset.tabReady === 'true') {
+          return;
+        }
+
+        button.dataset.tabReady = 'true';
+        button.addEventListener('click', () => {
+          const targetTab = button.getAttribute('data-tab');
+
+          tabButtons.forEach((btn) => btn.classList.remove('active'));
+          tabPanels.forEach((panel) => panel.classList.remove('active'));
+
+          button.classList.add('active');
+          const targetPanel = document.getElementById(`${targetTab}-tab`);
+          if (targetPanel) {
+            targetPanel.classList.add('active');
+          }
         });
-    }
+      });
+    },
 
-    function initCollapsibles() {
-        const collapsibles = document.querySelectorAll('[data-collapsible]');
+    initCollapsibles() {
+      const collapsibles = document.querySelectorAll('[data-collapsible]');
+      collapsibles.forEach((collapsible) => {
+        if (collapsible.dataset.collapsibleReady === 'true') {
+          return;
+        }
 
-        collapsibles.forEach(collapsible => {
-            if (collapsible.dataset.collapsibleReady === 'true') {
-                return;
-            }
+        const toggle = collapsible.querySelector('.collapsible-toggle');
+        const content = collapsible.querySelector('.collapsible-content');
 
-            const toggle = collapsible.querySelector('.collapsible-toggle');
-            const content = collapsible.querySelector('.collapsible-content');
+        if (!toggle || !content) {
+          return;
+        }
 
-            if (!toggle || !content) {
-                return;
-            }
-
-            collapsible.dataset.collapsibleReady = 'true';
-            toggle.setAttribute('aria-expanded', 'false');
-            toggle.addEventListener('click', function() {
-                const isExpanded = collapsible.classList.toggle('expanded');
-                toggle.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
-                toggle.textContent = isExpanded ? 'Show less' : 'Show more';
-            });
+        collapsible.dataset.collapsibleReady = 'true';
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.addEventListener('click', () => {
+          const isExpanded = collapsible.classList.toggle('expanded');
+          toggle.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+          toggle.textContent = isExpanded ? 'Show less' : 'Show more';
         });
-    }
+      });
+    },
 
-    // Initialize About Page Features
-    function initAboutPage() {
-        // Only run if we're on the about page (index.html)
-        if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
-            initTypingAnimation();
-            initTimelineTabs();
-            initCollapsibles();
-        }
-    }
+    initPowerBIDashboard() {
+      const loader = document.getElementById('dashboardLoader');
+      const iframe = document.querySelector('.powerbi-iframe');
 
-    initAboutPage();
-});
+      if (!loader || !iframe || iframe.dataset.powerbiReady === 'true') {
+        return;
+      }
 
-// Power BI Dashboard Loading Logic (matching React component logic)
-let isLoading = true;
+      const fallback = document.getElementById('dashboard-fallback');
+      const retryButton = document.getElementById('retryButton');
 
-function handleIframeLoad() {
-    console.log('Power BI iframe loaded successfully');
-    isLoading = false;
-    
-    const loader = document.getElementById('dashboardLoader');
-    const iframe = document.querySelector('.powerbi-iframe');
-    
-    // Hide loader
-    if (loader) {
-        loader.style.display = 'none';
-    }
-    
-    // Show iframe with smooth transition
-    if (iframe) {
-        iframe.style.opacity = '1';
-    }
-    
-    // Clear any existing timeout
-    if (dashboardLoadTimeout) {
-        clearTimeout(dashboardLoadTimeout);
-    }
-}
+      iframe.dataset.powerbiReady = 'true';
+      this.state.isDashboardLoading = true;
 
-function handleIframeError() {
-    console.log('Power BI iframe failed to load - likely due to X-Frame-Options restrictions');
-    showFallbackDashboard();
-}
+      loader.style.display = 'flex';
+      iframe.style.opacity = '0';
 
-function showFallbackDashboard() {
-    console.log('Showing fallback dashboard');
-    const loader = document.getElementById('dashboardLoader');
-    const iframe = document.querySelector('.powerbi-iframe');
-    const fallback = document.getElementById('dashboard-fallback');
-    
-    if (loader) {
-        loader.style.display = 'none';
-    }
-    
-    if (iframe) {
-        iframe.style.display = 'none';
-    }
-    
-    if (fallback) {
-        fallback.style.display = 'flex';
-    }
-}
-
-function retryDashboardLoad() {
-    console.log('Retrying Power BI dashboard load...');
-    isLoading = true;
-    
-    const loader = document.getElementById('dashboardLoader');
-    const iframe = document.querySelector('.powerbi-iframe');
-    const fallback = document.getElementById('dashboard-fallback');
-    
-    // Hide fallback and show loader
-    if (fallback) {
-        fallback.style.display = 'none';
-    }
-    
-    if (loader) {
-        loader.style.display = 'flex';
-        const loaderText = loader.querySelector('p');
-        if (loaderText) {
-            loaderText.textContent = 'Loading dashboard...';
-        }
-    }
-    
-    if (iframe) {
-        iframe.style.display = 'block';
-        iframe.style.opacity = '0';
-        // Force reload the iframe with updated URL
-        iframe.src = "https://app.fabric.microsoft.com/view?r=eyJrIjoiMTAzY2YzMjYtZjkxYy00N2U3LTkyM2EtOTVjZGI2ZDE5NmZkIiwidCI6IjdkYTQ1YTdmLTdhYTEtNDVmZS05ZWRiLWM5OTQyMjJiYTlmOCIsImMiOjN9";
-    }
-    
-    // Restart the timeout
-    if (dashboardLoadTimeout) {
-        clearTimeout(dashboardLoadTimeout);
-    }
-    
-    dashboardLoadTimeout = setTimeout(() => {
-        if (isLoading) {
-            console.log('Power BI dashboard retry timeout - showing fallback');
-            showFallbackDashboard();
-        }
-    }, 10000); // 10 seconds timeout
-}
-
-// Initialize Power BI dashboard loading
-function initPowerBIDashboard() {
-    const loader = document.getElementById('dashboardLoader');
-    const iframe = document.querySelector('.powerbi-iframe');
-    
-    if (!loader || !iframe) return;
-    
-    console.log('Initializing Power BI dashboard...');
-    console.log('Dashboard URL:', iframe.src);
-    console.log('Current page URL:', window.location.href);
-    isLoading = true;
-    
-    // Show loader initially
-    loader.style.display = 'flex';
-    iframe.style.opacity = '0';
-    
-    // Add iframe load error detection
-    iframe.addEventListener('load', function() {
-        // Check if iframe actually loaded content or was blocked
+      iframe.addEventListener('load', () => {
         try {
-            // Try to access iframe content to detect if it was blocked
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            if (iframeDoc) {
-                console.log('Iframe loaded successfully');
-                handleIframeLoad();
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+          if (iframeDoc) {
+            this.handleIframeLoad(loader, iframe);
+          }
+        } catch (error) {
+          setTimeout(() => {
+            if (this.state.isDashboardLoading) {
+              this.handleIframeLoad(loader, iframe);
             }
-        } catch (e) {
-            // Cross-origin restriction is expected, but iframe might still be loading
-            console.log('Cross-origin iframe detected - checking if content loaded...');
-            // Give it a moment then assume it loaded (this is normal for Power BI)
-            setTimeout(() => {
-                if (isLoading) {
-                    console.log('Assuming iframe loaded (cross-origin restrictions prevent direct checking)');
-                    handleIframeLoad();
-                }
-            }, 2000);
+          }, 2000);
         }
-    });
-    
-    // Set a timeout to show fallback if loading takes too long
-    dashboardLoadTimeout = setTimeout(() => {
-        if (isLoading) {
-            console.log('Power BI dashboard loading timeout - this usually means iframe was blocked by X-Frame-Options');
-            showFallbackDashboard();
+      });
+
+      iframe.addEventListener('error', () => {
+        this.handleIframeError(loader, iframe, fallback);
+      });
+
+      if (retryButton && retryButton.dataset.retryReady !== 'true') {
+        retryButton.dataset.retryReady = 'true';
+        retryButton.addEventListener('click', () => {
+          this.retryDashboardLoad(loader, iframe, fallback);
+        });
+      }
+
+      if (this.state.dashboardLoadTimeout) {
+        clearTimeout(this.state.dashboardLoadTimeout);
+      }
+
+      this.state.dashboardLoadTimeout = setTimeout(() => {
+        if (this.state.isDashboardLoading) {
+          this.showFallbackDashboard(loader, iframe, fallback);
         }
-    }, 10000); // 10 seconds timeout
-}
+      }, 10000);
+    },
 
-// Initialize dashboard when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    // Only initialize if we're on the EIA dashboard page
-    if (window.location.pathname.includes('eia-dashboard.html')) {
-        initPowerBIDashboard();
-    }
-});
+    handleIframeLoad(loader, iframe) {
+      this.state.isDashboardLoading = false;
+      if (loader) {
+        loader.style.display = 'none';
+      }
+      if (iframe) {
+        iframe.style.opacity = '1';
+      }
+      if (this.state.dashboardLoadTimeout) {
+        clearTimeout(this.state.dashboardLoadTimeout);
+        this.state.dashboardLoadTimeout = null;
+      }
+    },
 
-// Global variable for timeout management
-let dashboardLoadTimeout;
+    handleIframeError(loader, iframe, fallback) {
+      this.showFallbackDashboard(loader, iframe, fallback);
+    },
 
-// Helper Functions
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
+    showFallbackDashboard(loader, iframe, fallback) {
+      this.state.isDashboardLoading = false;
 
-function showNotification(message, type) {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    
-    // Style the notification
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 5px;
-        color: white;
-        font-weight: 500;
-        z-index: 10000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        max-width: 300px;
-        word-wrap: break-word;
-    `;
+      if (loader) {
+        loader.style.display = 'none';
+      }
+      if (iframe) {
+        iframe.style.opacity = '0';
+      }
+      if (fallback) {
+        fallback.style.display = 'block';
+      }
 
-    if (type === 'success') {
+      if (this.state.dashboardLoadTimeout) {
+        clearTimeout(this.state.dashboardLoadTimeout);
+        this.state.dashboardLoadTimeout = null;
+      }
+    },
+
+    retryDashboardLoad(loader, iframe, fallback) {
+      this.state.isDashboardLoading = true;
+
+      if (fallback) {
+        fallback.style.display = 'none';
+      }
+      if (loader) {
+        loader.style.display = 'flex';
+      }
+      if (iframe) {
+        iframe.style.opacity = '0';
+        try {
+          iframe.contentWindow.location.reload();
+        } catch (error) {
+          iframe.src = iframe.src;
+        }
+      }
+
+      if (this.state.dashboardLoadTimeout) {
+        clearTimeout(this.state.dashboardLoadTimeout);
+      }
+      this.state.dashboardLoadTimeout = setTimeout(() => {
+        if (this.state.isDashboardLoading) {
+          this.showFallbackDashboard(loader, iframe, fallback);
+        }
+      }, 10000);
+    },
+
+    initPortfolioLinkNotifications() {
+      const portfolioLinks = document.querySelectorAll('.portfolio-link');
+      if (!portfolioLinks.length) {
+        return;
+      }
+
+      portfolioLinks.forEach((link) => {
+        if (link.dataset.linkReady === 'true') {
+          return;
+        }
+
+        link.dataset.linkReady = 'true';
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+
+          const icon = link.querySelector('i');
+          if (!icon) {
+            return;
+          }
+
+          if (icon.classList.contains('fa-eye')) {
+            this.showNotification('Live demo would open here!', 'success');
+          } else if (icon.classList.contains('fa-github')) {
+            this.showNotification('GitHub repository would open here!', 'success');
+          }
+        });
+      });
+    },
+
+    initEmailPopup() {
+      const copyLinks = document.querySelectorAll('[data-email-copy]');
+      copyLinks.forEach((link) => {
+        if (link.dataset.emailReady === 'true') {
+          return;
+        }
+
+        link.dataset.emailReady = 'true';
+        link.addEventListener('click', (event) => {
+          if (typeof window.copyEmailToClipboard === 'function') {
+            window.copyEmailToClipboard(event);
+          }
+        });
+      });
+
+      const closeTargets = document.querySelectorAll('[data-email-popup-close]');
+      closeTargets.forEach((target) => {
+        if (target.dataset.emailCloseReady === 'true') {
+          return;
+        }
+
+        target.dataset.emailCloseReady = 'true';
+        target.addEventListener('click', () => {
+          if (typeof window.closeEmailPopup === 'function') {
+            window.closeEmailPopup();
+          }
+        });
+      });
+    },
+
+    isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    },
+
+    showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+
+      notification.style.cssText = [
+        'position: fixed;',
+        'top: 20px;',
+        'right: 20px;',
+        'padding: 15px 20px;',
+        'border-radius: 5px;',
+        'color: white;',
+        'font-weight: 500;',
+        'z-index: 10000;',
+        'transform: translateX(400px);',
+        'transition: transform 0.3s ease;',
+        'max-width: 300px;',
+        'word-wrap: break-word;'
+      ].join(' ');
+
+      if (type === 'success') {
         notification.style.backgroundColor = '#27ae60';
-    } else if (type === 'error') {
+      } else if (type === 'error') {
         notification.style.backgroundColor = '#e74c3c';
-    }
+      }
 
-    // Add to page
-    document.body.appendChild(notification);
+      document.body.appendChild(notification);
 
-    // Animate in
-    setTimeout(() => {
+      setTimeout(() => {
         notification.style.transform = 'translateX(0)';
-    }, 100);
+      }, 100);
 
-    // Remove after 5 seconds
-    setTimeout(() => {
+      setTimeout(() => {
         notification.style.transform = 'translateX(400px)';
         setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
         }, 300);
-    }, 5000);
-}
+      }, 5000);
+    },
+  };
 
-// Portfolio item click handlers
-document.addEventListener('DOMContentLoaded', function() {
-    const portfolioLinks = document.querySelectorAll('.portfolio-link');
-    
-    portfolioLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const icon = this.querySelector('i');
-            if (icon.classList.contains('fa-eye')) {
-                showNotification('Live demo would open here!', 'success');
-            } else if (icon.classList.contains('fa-github')) {
-                showNotification('GitHub repository would open here!', 'success');
-            }
-        });
-    });
-});
+  window.Site = Site;
+  window.showNotification = (message, type) => Site.showNotification(message, type);
 
-// Add CSS keyframes for animations
-const style = document.createElement('style');
-style.textContent = `
+  const start = () => Site.boot();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+
+  const style = document.createElement('style');
+  style.textContent = `
     @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-`;
-document.head.appendChild(style);
+  `;
+  document.head.appendChild(style);
+})();
