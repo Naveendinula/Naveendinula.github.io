@@ -2043,6 +2043,38 @@ section {
     box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
 }
 
+/* ============================================================
+   Code Diagram (architecture ASCII diagrams)
+   ============================================================ */
+.code-diagram {
+    background: #1a1a2e;
+    color: #8892b0;
+    padding: 2rem;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin-top: 1.5rem;
+}
+
+.code-diagram .comment {
+    color: #ff6b00;
+    font-weight: 600;
+}
+
+.code-diagram .highlight-green {
+    color: #64ffda;
+}
+
+.code-diagram .highlight-gold {
+    color: #ffd700;
+}
+
+.code-diagram .highlight-purple {
+    color: #c792ea;
+}
+
 /* Global text selection color */
 ::selection {
     background: #ff6b00;

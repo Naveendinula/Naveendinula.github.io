@@ -80,6 +80,7 @@
         'eia-dashboard.html': 'portfolio',
         'chicago-energy-retrofit.html': 'portfolio',
         'building-permit-map.html': 'portfolio',
+        'fm-readiness.html': 'portfolio',
       };
 
       return pageMap[page] || '';

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FM Readiness – Revit Plugin for Facility Management · Portfolio</title>
+
+  <!-- === External Dependencies === -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- === Modular Stylesheets === -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="portfolio">
+  <header class="site-header" data-include="components/header.html">
+    <!-- === Vertical navigation === -->
+    <nav class="vertical-nav">
+      <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
+      <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
+      <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <div class="content-box">
+      <div class="powerbi-wrapper">
+      <!-- Back link -->
+      <div class="back-navigation"><a href="portfolio.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Portfolio</a></div>
+
+      <!-- Header -->
+      <header class="powerbi-header">
+        <h1 class="powerbi-title">Revit Plugin for Facility Management</h1>
+        <p class="powerbi-description"><em>A Revit add-in that audits MEP assets for COBie and FM data completeness, enables guided parameter editing, and exports FM-ready metadata — all from a dockable pane inside Revit.</em></p>
+        <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #ff6b00;">
+          <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Project Summary</h3>
+          <p style="color: #444; line-height: 1.7;">
+            <strong>Language:</strong> C# (.NET) — 58% · HTML/CSS/JS — 28%<br>
+            <strong>Platform:</strong> Autodesk Revit Add-in (2022–2026)<br>
+            <strong>Framework:</strong> Nice3point Revit Toolkit · WPF · Microsoft WebView2<br>
+            <strong>Data Format:</strong> JSON presets &amp; checklists · IFC4DTV · COBie<br>
+            <strong>Repository:</strong> <a href="https://github.com/Naveendinula/FMReadiness_v3" target="_blank" rel="noopener noreferrer" style="color: #ff6b00; text-decoration: none;">github.com/Naveendinula/FMReadiness_v3</a>
+          </p>
+        </div>
+      </header>
+
+      <!-- Main Content Container -->
+      <div style="max-width: 1200px; margin: 0 auto;">
+
+        <!-- 1. Overview -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">1. Overview</h2>
+          <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+            FM Readiness is an Autodesk Revit add-in that bridges the gap between BIM authoring and Facilities Management handover.
+            It audits MEP assets for COBie and FM data completeness, scores readiness at element, group, category, and overall levels,
+            provides a guided parameter editor for fixing missing data, supports bulk updates across flexible scopes, and exports
+            FM metadata to IFC-aligned outputs — all from a dockable pane inside Revit.
+          </p>
+          <p style="color: #666; line-height: 1.7;">
+            Facility Management teams rely on accurate, complete data to operate buildings efficiently after construction handover.
+            In practice, BIM models are often delivered with inconsistent or missing FM parameters — manufacturer names, model numbers,
+            serial IDs, warranty dates, and COBie classification fields. FM Readiness solves this by embedding a data-quality workflow
+            directly inside Revit, so teams can audit, fix, and export FM-ready data without leaving their authoring environment.
+          </p>
+        </section>
+
+        <!-- 2. Features -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">2. Features</h2>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Audit Results Dashboard</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>Summary cards — Readiness %, Ready/Missing counts, Total audited</li>
+            <li>Component &amp; Type group score badges with tooltips</li>
+            <li>Scope toggle: All fields vs. Required-only</li>
+            <li>View modes: Combined, Component, Type</li>
+            <li>Row actions: <strong>Fix</strong>, <strong>Locate</strong> (select + zoom), <strong>View</strong></li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Parameter Editor</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>Selection auto-sync with lock / unlock</li>
+            <li>Scope picker: Selection, Active view, Type instances, Category</li>
+            <li>Multi-select tray with bulk operations</li>
+            <li>Safe-apply with confirmation &amp; impact preview</li>
+            <li>Field validation — ISO dates, numeric ranges</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">COBie &amp; Legacy Modes</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>COBie Editor with preset-driven field definitions</li>
+            <li>Legacy FM Editor for FM_* parameters</li>
+            <li>"Ensure COBie Parameters" with optional cleanup</li>
+            <li>COBie validation rules (required, unique, date format)</li>
+            <li>Rooms, Spaces, Levels support for COBie context</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Export Workflows</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li><strong>FM Sidecar:</strong> .fm_params.json keyed by IFC GlobalId</li>
+            <li><strong>IFC Export:</strong> IFC4DTV with user-defined property sets</li>
+            <li>Automatic IFC pset configuration setup</li>
+            <li>Compatible with Digital Twin viewers</li>
+            <li>Configurable export scope per category</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Configurable Preset System</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>JSON preset files: cobie-core, fm-legacy, custom</li>
+            <li>Define component &amp; type fields per category</li>
+            <li>Required / unique / date validation rules</li>
+            <li>Alias parameter mapping</li>
+            <li>Group labels for organized field display</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">MEP Category Support</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+            <li>Mechanical Equipment</li>
+            <li>Duct Terminals &amp; Accessories</li>
+            <li>Pipe Accessories</li>
+            <li>Rooms, MEP Spaces, Levels (COBie context)</li>
+            <li>Extensible via preset configuration</li>
+          </ul>
+        </section>
+
+        <!-- 3. Technology Stack -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">3. Technology Stack</h2>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Core Stack</h3>
+          <div style="overflow-x: auto; margin-bottom: 2rem;">
+            <table style="width: 100%; border-collapse: collapse; background: #f8f9fa; border-radius: 8px; overflow: hidden;">
+              <thead>
+                <tr style="background: #ff6b00; color: white;">
+                  <th style="padding: 12px; text-align: left; border: 1px solid #e9ecef;">Component</th>
+                  <th style="padding: 12px; text-align: left; border: 1px solid #e9ecef;">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Language</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">C# (.NET) — 58% of codebase</td>
+                </tr>
+                <tr style="background: white;">
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Platform</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Autodesk Revit Add-in (2022–2026)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Framework</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Nice3point Revit Toolkit</td>
+                </tr>
+                <tr style="background: white;">
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">UI Host</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">WPF dockable pane with Microsoft WebView2</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Frontend</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Vanilla HTML / CSS / JavaScript (28%)</td>
+                </tr>
+                <tr style="background: white;">
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Data Format</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">JSON presets &amp; checklists</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Architecture</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 2rem;">
+            <li><strong>Commands:</strong> RunAudit, ShowPane, ExportFmSidecar, ExportIfcFm, SetupIfcPsets</li>
+            <li><strong>Services:</strong> AuditService, PresetService, CollectorService, CobieMappingService</li>
+            <li><strong>C# ↔ JS Bridge:</strong> WebView2 PostMessage for bidirectional communication</li>
+            <li><strong>External Events:</strong> Revit API thread-safe parameter writes via ExternalEvent handlers</li>
+            <li><strong>Build:</strong> Multi-target .csproj (Revit 2022–2026), .slnx solution</li>
+          </ul>
+
+          <div class="code-diagram">
+            <div class="comment">// Plugin Architecture</div>
+            ┌─────────────────────────────────────────────────────────┐<br/>
+            │  <span class="highlight-green">Revit Ribbon</span>                                              │<br/>
+            │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │<br/>
+            │  │ Run Audit│ │Show Pane │ │Export FM │ │Export IFC│  │<br/>
+            │  └────┬─────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘  │<br/>
+            ├───────┼────────────┼────────────┼────────────┼─────────┤<br/>
+            │  <span class="highlight-green">Commands Layer</span>                                            │<br/>
+            │       │            │            │            │          │<br/>
+            │       ▼            ▼            ▼            ▼          │<br/>
+            │  ┌─────────────────────────────────────────────────┐    │<br/>
+            │  │            <span class="highlight-gold">Services Layer</span>                        │    │<br/>
+            │  │  AuditService · PresetService · CollectorService│    │<br/>
+            │  │  CobieMappingService · FmSidecarExportService   │    │<br/>
+            │  └──────────────────────┬──────────────────────────┘    │<br/>
+            │                         │ C# ↔ JS Bridge (WebView2)    │<br/>
+            │  ┌──────────────────────▼──────────────────────────┐    │<br/>
+            │  │            <span class="highlight-purple">UI Layer (WebView2)</span>                   │    │<br/>
+            │  │  Audit Tab · Editor Tab · COBie Tab             │    │<br/>
+            │  │  HTML / CSS / JS  ─  Dockable WPF Pane          │    │<br/>
+            │  └─────────────────────────────────────────────────┘    │<br/>
+            └─────────────────────────────────────────────────────────┘
+          </div>
+        </section>
+
+        <!-- 4. Workflow -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">4. Workflow</h2>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Step 1 — Audit</h3>
+          <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+            Select target categories and run a readiness audit. The plugin scans every element against the active preset's checklist
+            and generates a scored report — highlighting which fields are populated, which are missing, and the overall readiness
+            percentage for each group and category.
+          </p>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Step 2 — Fix &amp; Edit</h3>
+          <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+            Click "Fix" on any failing element to jump directly into the parameter editor with missing fields highlighted.
+            Edit individually or use bulk scopes (selection, view, type, category) to apply values across hundreds of elements at once,
+            with a confirmation dialog showing exact impact before committing.
+          </p>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Step 3 — Export</h3>
+          <p style="color: #666; line-height: 1.7;">
+            Once readiness is satisfactory, export the enriched data. Choose IFC4DTV export with auto-configured user-defined property sets,
+            or generate a lightweight .fm_params.json sidecar file keyed by IFC GlobalId — ready for ingestion by Digital Twin platforms
+            and CAFM/CMMS systems.
+          </p>
+        </section>
+
+        <!-- 5. Technical Highlights -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">5. Technical Highlights</h2>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+            <li>Thread-safe external event handling for parameter writes via Revit API</li>
+            <li>C# ↔ JavaScript bridge via WebView2 PostMessage for responsive embedded web UI</li>
+            <li>Multi-target .csproj builds supporting Revit versions 2022 through 2026</li>
+            <li>Configurable JSON-driven preset architecture for extensibility</li>
+            <li>IFC export automation with programmatic property set configuration</li>
+            <li>Runs entirely inside Revit's dockable pane — no external dependencies or web services required</li>
+          </ul>
+        </section>
+
+        <!-- GitHub CTA -->
+        <div style="text-align: center; margin: 3rem 0 1rem;">
+          <a href="https://github.com/Naveendinula/FMReadiness_v3" target="_blank" rel="noopener noreferrer"
+             style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: #ff6b00; color: white; text-decoration: none; border-radius: 8px; font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1rem; font-weight: 500; transition: background 0.3s;">
+            <i class="fab fa-github"></i>
+            View Project Repository
+          </a>
+        </div>
+
+      </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" data-include="components/footer.html"></footer>
+
+  <!-- === JavaScript Modules === -->
+  <script src="script.js"></script>
+</body>
+</html>
