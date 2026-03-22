@@ -19,7 +19,7 @@ import {
   initWardProcessingLeaderboardChart
 } from './charts.js';
 
-const MAPBOX_TOKEN = 'MAPBOX_TOKEN_REMOVED';
+const MAPBOX_TOKEN = window.MAPBOX_TOKEN;
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
 

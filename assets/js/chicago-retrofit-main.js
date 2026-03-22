@@ -2,7 +2,7 @@
 // Portfolio Project - Mapbox GL JS
 
 // Configuration
-const MAPBOX_TOKEN = 'MAPBOX_TOKEN_REMOVED';
+const MAPBOX_TOKEN = window.MAPBOX_TOKEN;
 
 // Initialize map
 mapboxgl.accessToken = MAPBOX_TOKEN;
