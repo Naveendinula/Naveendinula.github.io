@@ -1,6 +1,7 @@
 import { DATA_FILES, loadPermitData } from './data.js';
 import {
   computeCumulativeRetrofitSeries,
+  computeDataQualityMetrics,
   computeOverviewStats,
   computeProcessingLeaderboard,
   computeProcessingTimeline,
@@ -8,6 +9,7 @@ import {
   computeProvenance,
   computeRetrofitPulseSeries,
   computeSummaryLeaders,
+  detectProcessingOutliers,
   runSanityChecks
 } from './analytics.js';
 import {
@@ -132,7 +134,10 @@ function initChartTooltips() {
 function renderProvenanceBlock(provenance, warnings) {
   const sources = Object.values(DATA_FILES).join(', ');
   const warningMarkup = warnings.length
-    ? `<div class="provenance-warning">Analytics checks: ${warnings.join(' ')}</div>`
+    ? `<div class="provenance-warning">
+        <strong>⚠ Analytics checks (${warnings.length}):</strong>
+        <ul style="margin: 4px 0 0 16px; padding: 0; list-style: disc;">${warnings.map((w) => `<li style="margin-bottom: 2px;">${w}</li>`).join('')}</ul>
+       </div>`
     : '';
 
   return `
@@ -376,7 +381,8 @@ function createPopupContent(feature, boundaryType) {
     { label: 'Permits', value: formatNumber(data.permits) },
     { label: 'Retrofit Likely', value: formatNumber(data.retrofitLikely) },
     { label: 'Retrofit Rate', value: `${retrofitRate}%` },
-    { label: 'Score Sum', value: formatNumber(data.scoreSum) }
+    { label: 'Score Sum', value: formatNumber(data.scoreSum) },
+    { label: 'Per-Permit Score', value: data.permits > 0 ? (data.scoreSum / data.permits).toFixed(1) : '0' }
   ].forEach((metric) => {
     content += `<div class="stat-card"><div class="stat-label">${metric.label}</div><div class="stat-value">${metric.value}</div></div>`;
   });
@@ -740,6 +746,131 @@ function generateProcessingContent() {
   `;
 }
 
+function generateMethodologyContent() {
+  const { dataQuality: dq, processingOutliers, provenance, warnings } = state.analytics;
+
+  const outlierRows = processingOutliers.length
+    ? processingOutliers.map((o) =>
+      `<tr><td>${o.month}</td><td>${o.category}</td><td>${o.value} days</td></tr>`
+    ).join('')
+    : '<tr><td colspan="3">No outliers detected.</td></tr>';
+
+  const warningList = warnings.length
+    ? warnings.map((w) => `<li>${w}</li>`).join('')
+    : '<li>No warnings.</li>';
+
+  return `
+    <div class="methodology-section">
+      <h3 class="methodology-heading">Methodology &amp; Limitations</h3>
+      <p class="methodology-text">
+        This dashboard analyzes Chicago building permit records to identify energy retrofit activity.
+        Permits are classified using a keyword-matching taxonomy applied to the <code>WORK_DESCRIPTION</code>
+        field of each permit record. The analysis surfaces patterns in retrofit adoption, geographic
+        distribution, and municipal processing efficiency.
+      </p>
+
+      <h4 class="methodology-subheading">Classification Approach</h4>
+      <p class="methodology-text">
+        Each permit's work description is matched against a curated taxonomy of
+        <strong>13 retrofit categories</strong> containing 100+ industry-specific phrases (e.g., "mini-split",
+        "aeroseal", "blower door", "VRF"). A permit is flagged <code>RETROFIT_LIKELY = True</code> if it
+        matches any energy efficiency keyword.
+      </p>
+      <p class="methodology-text methodology-caveat">
+        <strong>⚠ Negation limitation:</strong> The keyword classifier does not perform negation detection.
+        Permit descriptions containing phrases like "NO HVAC WORK" may still be flagged as HVAC_GENERAL.
+        This introduces false positives. A validation sample has not yet been conducted, so precision and
+        recall metrics are unavailable. Interpret category counts as upper-bound estimates.
+      </p>
+      <p class="methodology-text methodology-caveat">
+        <strong>⚠ New construction included:</strong> The permit dataset includes all permit types, including
+        <code>PERMIT - NEW CONSTRUCTION</code>. These may inflate retrofit counts where new buildings include
+        energy efficiency features. A future iteration should filter or segment by permit type.
+      </p>
+
+      <h4 class="methodology-subheading">Category Weights</h4>
+      <p class="methodology-text">
+        Each category is assigned a weight used to compute aggregate <code>score_sum</code> values per ward.
+        Weights reflect the estimated energy-savings significance of each category based on typical
+        building science impact:
+      </p>
+      <table class="methodology-table">
+        <thead><tr><th>Category</th><th>Weight</th><th>Rationale</th></tr></thead>
+        <tbody>
+          <tr><td>Heat Pump</td><td>6</td><td>Highest decarbonization potential; full electrification of heating</td></tr>
+          <tr><td>HP Water Heater</td><td>6</td><td>Major end-use electrification; high savings vs electric resistance</td></tr>
+          <tr><td>Insulation</td><td>5</td><td>Envelope improvement directly reduces heating/cooling load</td></tr>
+          <tr><td>Envelope</td><td>4</td><td>Windows, doors, weatherization reduce infiltration and conduction</td></tr>
+          <tr><td>Blower Door</td><td>4</td><td>Diagnostic testing indicates comprehensive retrofit scope</td></tr>
+          <tr><td>Controls/VFD</td><td>4</td><td>BAS and variable speed drives optimize existing systems</td></tr>
+          <tr><td>HVAC General</td><td>3</td><td>Broad category; includes routine replacements alongside upgrades</td></tr>
+          <tr><td>Ductwork</td><td>3</td><td>Duct sealing reduces distribution losses</td></tr>
+          <tr><td>Duct Testing</td><td>3</td><td>Diagnostic testing, indicates performance verification</td></tr>
+          <tr><td>Electrical Upgrade</td><td>3</td><td>Panel upgrades often prerequisite for electrification</td></tr>
+          <tr><td>Lighting Retrofit</td><td>3</td><td>LED conversions; common but lower per-unit impact</td></tr>
+        </tbody>
+      </table>
+
+      <h4 class="methodology-subheading">Electrification Analysis — November 2022 Cutoff</h4>
+      <p class="methodology-text">
+        The Electrification tab uses <strong>November 2022</strong> as a before/after comparison date.
+        This aligns with the initial availability of <strong>Inflation Reduction Act (IRA)</strong> tax credits
+        (signed August 2022, guidance issued late 2022) and Chicago's expanded energy efficiency incentive
+        programs. This is an observational comparison, not a causal analysis — the increase may reflect
+        multiple concurrent factors including market trends, supply chain recovery, and seasonal patterns.
+        No statistical significance test is applied.
+      </p>
+
+      <h4 class="methodology-subheading">Processing Time Outliers</h4>
+      <p class="methodology-text">
+        Category-specific median processing times exceeding <strong>${formatNumber(180)} days</strong> are
+        capped in timeline charts to prevent visual distortion from small-sample extremes.
+        These outliers typically occur when a category has very few permits in a given month (1–2 records),
+        making the "median" unreliable.
+      </p>
+      ${processingOutliers.length > 0 ? `
+      <table class="methodology-table">
+        <thead><tr><th>Month</th><th>Category</th><th>Raw Median</th></tr></thead>
+        <tbody>${outlierRows}</tbody>
+      </table>` : ''}
+
+      <h4 class="methodology-subheading">Ward Normalization</h4>
+      <p class="methodology-text">
+        ${dq ? `Ward ${dq.maxWardKey} contains <strong>${formatNumber(dq.maxWardPermits)}</strong> permits — 
+        <strong>${dq.dominanceRatio}x</strong> the ward average of ${formatNumber(dq.avgWardPermits)}.
+        ` : ''}
+        Raw permit counts should not be compared across wards without normalization.
+        The <strong>retrofit rate</strong> (retrofit_likely / total permits) provides a volume-adjusted
+        comparison. Leader rankings use a minimum threshold of 50 permits to avoid small-sample bias.
+      </p>
+
+      <h4 class="methodology-subheading">Data Quality Checks</h4>
+      <ul class="methodology-list">
+        ${warningList}
+      </ul>
+
+      <h4 class="methodology-subheading">Data Sources</h4>
+      <p class="methodology-text">
+        Permit records sourced from the <strong>City of Chicago Data Portal</strong> building permits dataset.
+        Weekly and monthly aggregations are pre-computed from individual permit records.
+        Geographic boundaries use official City of Chicago ward and community area shapefiles.
+        ${provenance ? `Coverage: ${formatRange(provenance.weeklyRange)} (weekly), ${formatRange(provenance.monthlyRange)} (monthly).` : ''}
+      </p>
+
+      <h4 class="methodology-subheading">Known Limitations</h4>
+      <ul class="methodology-list">
+        <li>No negation handling in keyword classifier — false positive rate unknown</li>
+        <li>New construction permits are not excluded from retrofit analysis</li>
+        <li>Category weights are expert-estimated, not empirically validated</li>
+        <li>No linkage to building-level energy outcomes (EUI, GHG intensity)</li>
+        <li>Co-occurrence analysis does not control for project scope/size</li>
+        <li>Processing time analysis covers Feb 2024–present; earlier data unavailable</li>
+        <li>No per-capita or per-building normalization across wards</li>
+      </ul>
+    </div>
+  `;
+}
+
 function updateDrawerContent() {
   if (!elements.tabContent) {
     return;
@@ -782,6 +913,9 @@ function updateDrawerContent() {
           state.analytics.processingTimeline
         );
       }, 200);
+      break;
+    case 'methodology':
+      elements.tabContent.innerHTML = generateMethodologyContent();
       break;
     case 'overview':
     default:
@@ -1196,9 +1330,13 @@ async function loadData() {
   const overview = computeOverviewStats(data.wardSummary, data.communitySummary);
   const wardLeaders = computeSummaryLeaders(data.wardSummary);
   const communityLeaders = computeSummaryLeaders(data.communitySummary);
+  const dataQuality = computeDataQualityMetrics(data.wardSummary, data.communitySummary);
+  const processingOutliers = detectProcessingOutliers(data.processingMonthly);
 
   const analytics = {
     overview,
+    dataQuality,
+    processingOutliers,
     retrofitPulse: computeRetrofitPulseSeries(data.retrofitWeekly),
     cumulativeSeries: computeCumulativeRetrofitSeries(data.retrofitWeekly),
     processingLeaderboard: computeProcessingLeaderboard(data.processingByWard, data.wardSummary),
@@ -1207,7 +1345,7 @@ async function loadData() {
     provenance: computeProvenance(data, overview)
   };
 
-  analytics.warnings = runSanityChecks(data, { ...analytics });
+  analytics.warnings = runSanityChecks(data, analytics);
 
   state.data = data;
   state.analytics = analytics;

@@ -125,6 +125,31 @@
           </ul>
         </section>
 
+        <!-- Screenshots -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Screenshots</h2>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+
+            <!-- Audit Results Dashboard -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/fm-audit.png" alt="Audit Results Dashboard" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Audit Results Dashboard.</strong> Readiness scoring at element, group, and category levels — summary cards, component/type badges, scope toggles, and row actions (Fix, Locate, View).</p>
+              </div>
+            </div>
+
+            <!-- Parameter Editor -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/fm-editor.png" alt="Parameter Editor with COBie Fields" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Parameter Editor.</strong> COBie-driven field editor with selection sync, bulk scope picker, safe-apply confirmation, and field-level validation inside Revit's dockable pane.</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
         <!-- 3. Technology Stack -->
         <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
           <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">3. Technology Stack</h2>
@@ -257,7 +282,17 @@
 
   <footer class="site-footer" data-include="components/footer.html"></footer>
 
+  <!-- Image Modal -->
+  <div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); cursor: pointer;">
+    <div class="modal-content" style="position: relative; margin: auto; display: block; width: 90%; max-width: 1200px; max-height: 90%; top: 50%; transform: translateY(-50%);">
+      <img id="modalImage" style="width: 100%; height: auto; border-radius: 8px;">
+      <div id="modalCaption" style="color: #fff; text-align: center; padding: 20px; font-size: 1rem; line-height: 1.5;"></div>
+      <span class="close" style="position: absolute; top: 15px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s;">&times;</span>
+    </div>
+  </div>
+
   <!-- === JavaScript Modules === -->
+  <script src="assets/js/image-modal.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

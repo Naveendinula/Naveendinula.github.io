@@ -274,6 +274,15 @@ export function computeProcessingTrend(monthlyRows) {
   return months;
 }
 
+const OUTLIER_THRESHOLD_DAYS = 180;
+
+function capOutlier(value) {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  return value > OUTLIER_THRESHOLD_DAYS ? null : value;
+}
+
 export function computeProcessingTimeline(monthlyRows) {
   const months = monthlyRows
     .map((row) => {
@@ -282,12 +291,18 @@ export function computeProcessingTimeline(monthlyRows) {
         date,
         monthLabel: formatMonthLabel(date),
         cityMedian: toNumberOrNull(row.city_median_days),
-        heat_pump: toNumberOrNull(row.HEAT_PUMP_median_days),
-        insulation: toNumberOrNull(row.INSULATION_median_days),
-        elec_upg: toNumberOrNull(row.ELECTRICAL_UPGRADE_median_days),
-        envelope: toNumberOrNull(row.ENVELOPE_median_days),
-        hvac: toNumberOrNull(row.HVAC_GENERAL_median_days),
-        lighting: toNumberOrNull(row.LIGHTING_RETROFIT_median_days)
+        heat_pump: capOutlier(toNumberOrNull(row.HEAT_PUMP_median_days)),
+        insulation: capOutlier(toNumberOrNull(row.INSULATION_median_days)),
+        elec_upg: capOutlier(toNumberOrNull(row.ELECTRICAL_UPGRADE_median_days)),
+        envelope: capOutlier(toNumberOrNull(row.ENVELOPE_median_days)),
+        hvac: capOutlier(toNumberOrNull(row.HVAC_GENERAL_median_days)),
+        lighting: capOutlier(toNumberOrNull(row.LIGHTING_RETROFIT_median_days)),
+        heat_pump_raw: toNumberOrNull(row.HEAT_PUMP_median_days),
+        insulation_raw: toNumberOrNull(row.INSULATION_median_days),
+        elec_upg_raw: toNumberOrNull(row.ELECTRICAL_UPGRADE_median_days),
+        envelope_raw: toNumberOrNull(row.ENVELOPE_median_days),
+        hvac_raw: toNumberOrNull(row.HVAC_GENERAL_median_days),
+        lighting_raw: toNumberOrNull(row.LIGHTING_RETROFIT_median_days)
       };
     })
     .filter((row) => row.date)
@@ -315,6 +330,62 @@ export function computeProvenance(data, overviewStats) {
     monthlyCount: data.processingMonthly.length,
     weeklyRange,
     monthlyRange
+  };
+}
+
+export function detectProcessingOutliers(monthlyRows) {
+  const outliers = [];
+  const categoryKeys = ['HEAT_PUMP_median_days', 'INSULATION_median_days', 'ELECTRICAL_UPGRADE_median_days',
+    'ENVELOPE_median_days', 'HVAC_GENERAL_median_days', 'LIGHTING_RETROFIT_median_days'];
+  const categoryLabels = {
+    HEAT_PUMP_median_days: 'Heat Pump',
+    INSULATION_median_days: 'Insulation',
+    ELECTRICAL_UPGRADE_median_days: 'Electrical Upgrade',
+    ENVELOPE_median_days: 'Envelope',
+    HVAC_GENERAL_median_days: 'HVAC General',
+    LIGHTING_RETROFIT_median_days: 'Lighting Retrofit'
+  };
+
+  monthlyRows.forEach((row) => {
+    const month = row.month || 'Unknown';
+    categoryKeys.forEach((key) => {
+      const value = toNumberOrNull(row[key]);
+      if (value !== null && value > OUTLIER_THRESHOLD_DAYS) {
+        outliers.push({
+          month,
+          category: categoryLabels[key] || key,
+          value: Math.round(value),
+          threshold: OUTLIER_THRESHOLD_DAYS
+        });
+      }
+    });
+  });
+
+  return outliers;
+}
+
+export function computeDataQualityMetrics(wardSummary, communitySummary) {
+  const wardEntries = Array.from(wardSummary.entries());
+  const emptyWards = wardEntries.filter(([key]) => !getValidKey(key));
+  const emptyWardPermits = emptyWards.reduce((sum, [, row]) => sum + toNumber(row.permits), 0);
+
+  const totalPermits = wardEntries.reduce((sum, [, row]) => sum + toNumber(row.permits), 0);
+  const validWards = wardEntries.filter(([key]) => getValidKey(key));
+  const maxWardPermits = validWards.reduce((max, [, row]) => Math.max(max, toNumber(row.permits)), 0);
+  const maxWardKey = validWards.find(([, row]) => toNumber(row.permits) === maxWardPermits)?.[0] || 'N/A';
+  const avgWardPermits = validWards.length > 0
+    ? Math.round(validWards.reduce((sum, [, row]) => sum + toNumber(row.permits), 0) / validWards.length)
+    : 0;
+  const dominanceRatio = avgWardPermits > 0 ? (maxWardPermits / avgWardPermits).toFixed(1) : 'N/A';
+
+  return {
+    emptyWardCount: emptyWards.length,
+    emptyWardPermits,
+    totalPermits,
+    maxWardKey,
+    maxWardPermits,
+    avgWardPermits,
+    dominanceRatio
   };
 }
 
@@ -358,6 +429,19 @@ export function runSanityChecks(data, analytics) {
         warnings.push('City median falls outside the ward median range.');
       }
     }
+  }
+
+  const outliers = detectProcessingOutliers(data.processingMonthly);
+  if (outliers.length > 0) {
+    warnings.push(`${outliers.length} category-month processing time outlier(s) exceed ${OUTLIER_THRESHOLD_DAYS} days and were capped in timeline charts.`);
+  }
+
+  const dq = analytics.dataQuality;
+  if (dq && dq.emptyWardPermits > 0) {
+    warnings.push(`${dq.emptyWardPermits} permits have no ward assignment.`);
+  }
+  if (dq && dq.dominanceRatio !== 'N/A' && parseFloat(dq.dominanceRatio) > 3) {
+    warnings.push(`Ward ${dq.maxWardKey} has ${dq.dominanceRatio}x the average ward volume (${dq.maxWardPermits.toLocaleString()} vs ${dq.avgWardPermits.toLocaleString()} avg). Cross-ward comparisons should use rates, not counts.`);
   }
 
   return warnings;

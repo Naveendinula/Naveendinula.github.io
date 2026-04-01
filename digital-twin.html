@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Twin Platform – BIM + FM · Portfolio</title>
+
+  <!-- === External Dependencies === -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- === Modular Stylesheets === -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="portfolio">
+  <header class="site-header" data-include="components/header.html">
+    <!-- === Vertical navigation === -->
+    <nav class="vertical-nav">
+      <a href="index.html"><button class="nav-button" data-page="about">About</button></a>
+      <a href="portfolio.html"><button class="nav-button active" data-page="portfolio">Portfolio</button></a>
+      <a href="contact.html"><button class="nav-button" data-page="contact">Contact</button></a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <div class="content-box">
+      <div class="powerbi-wrapper">
+      <!-- Back link -->
+      <div class="back-navigation"><a href="portfolio.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Portfolio</a></div>
+
+      <!-- Header -->
+      <header class="powerbi-header">
+        <h1 class="powerbi-title">Digital Twin Platform (BIM + FM)</h1>
+        <p class="powerbi-description"><em>Web-based Digital Twin platform for BIM visualization, graph-powered relationship querying, HVAC/FM operational analysis, embodied carbon workflows, and LLM-powered natural language interface.</em></p>
+        <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #ff6b00;">
+          <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Project Summary</h3>
+          <p style="color: #444; line-height: 1.7;">
+            <strong>Languages:</strong> JavaScript — 57% · Python — 43%<br>
+            <strong>Backend:</strong> FastAPI · IfcOpenShell · Neo4j · NetworkX · SQLite<br>
+            <strong>Frontend:</strong> React · Vite · Three.js · React Three Fiber<br>
+            <strong>AI/ML:</strong> LLM RAG pipeline · Neo4j Knowledge Graph<br>
+            <strong>Repository:</strong> <a href="https://github.com/Naveendinula/DigitalTwin" target="_blank" rel="noopener noreferrer" style="color: #ff6b00; text-decoration: none;">github.com/Naveendinula/DigitalTwin</a>
+          </p>
+        </div>
+      </header>
+
+      <!-- Main Content Container -->
+      <div style="max-width: 1200px; margin: 0 auto;">
+
+        <!-- 1. Overview -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">1. Overview</h2>
+          <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
+            Most BIM tools are either authoring-heavy or disconnected from day-to-day facilities operations. This platform bridges that gap by combining IFC processing, interactive 3D navigation, graph-powered BIM querying, HVAC/FM operational analysis, work-order management with CMMS sync, embodied carbon and occupancy workflows — all within an authenticated, job-scoped multi-user web application.
+          </p>
+          <p style="color: #666; line-height: 1.7;">
+            <strong>For FM teams:</strong> convert model data into actionable work-order and service-impact workflows.
+            <strong>For Digital Twin teams:</strong> query building relationships as a graph (systems, spaces, equipment, materials).
+            <strong>For sustainability teams:</strong> quantify embodied carbon at element level with override controls.
+          </p>
+        </section>
+
+        <!-- 2. Screenshots -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">2. Screenshots</h2>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+
+            <!-- Structure + Properties -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/dt-structure.png" alt="Structure Panel and Properties Inspector" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Structure &amp; Properties.</strong> Spatial hierarchy tree with element properties inspector — HRU metadata, IFC type, and location details.</p>
+              </div>
+            </div>
+
+            <!-- HVAC/FM Analysis -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/dt-hvac.png" alt="HVAC/FM Operational Analysis" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>HVAC/FM Analysis.</strong> Equipment-to-terminal-to-space service chains — 37 equipment items, color-coded service zone mapping.</p>
+              </div>
+            </div>
+
+            <!-- Graph Explorer -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/dt-graph.png" alt="Graph Explorer with FEEDS Query" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Graph Explorer.</strong> Neo4j-powered relationship query — FEEDS traversal across 8,171 nodes with network visualization.</p>
+              </div>
+            </div>
+
+            <!-- Embodied Carbon -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/dt-carbon.png" alt="Embodied Carbon Analysis" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Embodied Carbon.</strong> Element-level carbon quantification with material/type overrides — 99,495 kgCO₂e total.</p>
+              </div>
+            </div>
+
+            <!-- LLM Space Query -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/dt-llm-space.png" alt="LLM Natural Language Query — Space" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>LLM Query — Space.</strong> "What space does HRU-408 serve?" — RAG + Neo4j knowledge graph natural language interface.</p>
+              </div>
+            </div>
+
+            <!-- LLM Serial Query -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/dt-llm-serial.png" alt="LLM Natural Language Query — Serial Number" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>LLM Query — Serial.</strong> "Which equipment have serial numbers?" — structured data retrieval via natural language.</p>
+              </div>
+            </div>
+
+            <!-- Spaces Overlay -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/dt-spaces.png" alt="Spaces Overlay Visualization" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Spaces Overlay.</strong> 67 transparent space volumes rendered over the 3D model for spatial context analysis.</p>
+              </div>
+            </div>
+
+            <!-- Occupancy Heatmap -->
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <img src="assets/images/dt-occupancy.png" alt="Occupancy Heatmap Simulation" style="width: 100%; height: auto; display: block;" />
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;"><strong>Occupancy Heatmap.</strong> Real-time occupancy simulation — 261/351 occupied (74%), color-coded space utilization.</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 3. Feature Highlights -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">3. Feature Highlights</h2>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">BIM Ingestion &amp; 3D Viewing</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>Upload IFC, convert to GLB, extract metadata and spatial hierarchy</li>
+            <li>Navigate with orbit/pan/zoom, isolate regions, section-cut, and inspect element properties</li>
+            <li>File-hash dedupe for identical IFC uploads and model reopen without re-upload</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Graph-Powered BIM Query</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>Traverse relationships: <code>FEEDS</code>, <code>SERVES</code>, <code>IN_SYSTEM</code>, <code>CONTAINED_IN</code>, <code>HAS_MATERIAL</code></li>
+            <li>Query by IFC type, storey, material, name, related node, relationship type, and hop depth</li>
+            <li>Optional graph view for visual network exploration (reagraph)</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">HVAC/FM Operational Intelligence</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>Analyze equipment-to-terminal-to-space service chains</li>
+            <li>Inspect physically connected vs. inferred system-associated terminals</li>
+            <li>Link selected results directly back to 3D model highlighting</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">LLM Natural Language Interface</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>RAG + Neo4j knowledge graph for natural language BIM queries</li>
+            <li>Ask questions like "What space does HRU-408 serve?" or "Which equipment have serial numbers?"</li>
+            <li>Structured data retrieval with context-aware responses</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Work Orders &amp; CMMS Integration</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>Create, update, prioritize, assign, and close work orders tied to model elements</li>
+            <li>Export in CSV/JSON using COBie-compatible column naming</li>
+            <li>Push/pull work-order sync with CMMS adapters and webhook ingestion</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Embodied Carbon &amp; Occupancy</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
+            <li>Calculate embodied carbon from BIM-derived quantities and material mappings</li>
+            <li>Apply material/type/element-level overrides for calibration</li>
+            <li>Visualize occupancy snapshots and space heatmaps for operational scenario analysis</li>
+          </ul>
+        </section>
+
+        <!-- 4. Architecture -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">4. Architecture</h2>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Backend (FastAPI, Python)</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>IFC conversion and extraction pipeline (IfcOpenShell, IfcConvert)</li>
+            <li>Graph build artifact (NetworkX) + graph query backend (Neo4j default, NetworkX optional)</li>
+            <li>HVAC/FM, embodied carbon, validation, occupancy, work orders, CMMS sync</li>
+            <li>SQLite for auth/session audit + FM operation records</li>
+            <li>Cookie-based JWT auth with refresh-token rotation and CSRF protection</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Frontend (React, Vite, Three.js, R3F)</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
+            <li>3D viewer and interaction tools (orbit, section cut, isolation, X-ray)</li>
+            <li>Floating operational panels (EC, HVAC/FM, Graph, Work Orders, IDS, Occupancy)</li>
+            <li>Auth-aware API usage and selection-linked workflows</li>
+          </ul>
+
+          <div class="code-diagram">
+            <div class="comment">// System Architecture</div>
+            ┌─────────────────────────────────────────────────────────────┐<br/>
+            │  <span class="highlight-green">Frontend (React + Vite + Three.js + R3F)</span>                    │<br/>
+            │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌─────────────┐  │<br/>
+            │  │3D Viewer │ │Graph Qry │ │HVAC/FM   │ │Work Orders  │  │<br/>
+            │  └────┬─────┘ └────┬─────┘ └────┬─────┘ └─────┬───────┘  │<br/>
+            │  ┌────┴─────┐ ┌────┴─────┐ ┌────┴─────┐ ┌─────┴───────┐  │<br/>
+            │  │EC Panel  │ │Occupancy │ │LLM Chat  │ │IDS Valid.   │  │<br/>
+            │  └────┬─────┘ └────┬─────┘ └────┬─────┘ └─────┬───────┘  │<br/>
+            ├───────┼────────────┼────────────┼──────────────┼──────────┤<br/>
+            │       └────────────┴─────┬──────┴──────────────┘          │<br/>
+            │                    REST API │ JWT Auth                     │<br/>
+            ├──────────────────────────┼────────────────────────────────┤<br/>
+            │  <span class="highlight-gold">Backend (FastAPI + Python)</span>  │                                │<br/>
+            │  ┌───────────────────────▼─────────────────────────────┐  │<br/>
+            │  │ IFC Pipeline · Graph API · HVAC · EC · Work Orders  │  │<br/>
+            │  │ Occupancy · CMMS Sync · LLM/RAG · Auth              │  │<br/>
+            │  └──────────┬──────────────┬──────────────┬────────────┘  │<br/>
+            │             │              │              │                │<br/>
+            │  ┌──────────▼───┐ ┌────────▼─────┐ ┌─────▼────────────┐  │<br/>
+            │  │ <span class="highlight-purple">Neo4j Graph</span>  │ │ <span class="highlight-purple">SQLite Auth</span>  │ │ <span class="highlight-purple">Job Artifacts</span>    │  │<br/>
+            │  │ 8171 nodes   │ │ JWT + CSRF   │ │ GLB, JSON, graph │  │<br/>
+            │  └──────────────┘ └──────────────┘ └──────────────────┘  │<br/>
+            └─────────────────────────────────────────────────────────────┘
+          </div>
+        </section>
+
+        <!-- 5. Technology Stack -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">5. Technology Stack</h2>
+
+          <div style="overflow-x: auto; margin-bottom: 2rem;">
+            <table style="width: 100%; border-collapse: collapse; background: #f8f9fa; border-radius: 8px; overflow: hidden;">
+              <thead>
+                <tr style="background: #ff6b00; color: white;">
+                  <th style="padding: 12px; text-align: left; border: 1px solid #e9ecef;">Component</th>
+                  <th style="padding: 12px; text-align: left; border: 1px solid #e9ecef;">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Backend</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">FastAPI · Python 3.10+</td>
+                </tr>
+                <tr style="background: white;">
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">IFC Processing</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">IfcOpenShell · IfcConvert</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Graph Database</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Neo4j (default) · NetworkX (fallback)</td>
+                </tr>
+                <tr style="background: white;">
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Frontend</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">React · Vite · Three.js · React Three Fiber</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">3D Visualization</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">GLB rendering · Section cut · X-ray · Isolation modes</td>
+                </tr>
+                <tr style="background: white;">
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Graph Visualization</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">reagraph (network graph rendering)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">AI / LLM</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">RAG pipeline · Neo4j Knowledge Graph · Natural language BIM queries</td>
+                </tr>
+                <tr style="background: white;">
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Auth</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">Cookie-based JWT · Refresh-token rotation · CSRF protection</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #333;">Storage</td>
+                  <td style="padding: 12px; border: 1px solid #e9ecef; color: #666;">SQLite (auth/session) · Job artifact filesystem</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 6. Demo Videos -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">6. Demo Videos</h2>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <video controls style="width: 100%; display: block; background: #000;">
+                <source src="https://github.com/user-attachments/assets/5caacdaf-e5f5-4609-9d76-c7590edba9b3" type="video/mp4" />
+              </video>
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;">Upload + Structure + Properties</p>
+              </div>
+            </div>
+
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <video controls style="width: 100%; display: block; background: #000;">
+                <source src="https://github.com/user-attachments/assets/9c3861dc-4bb2-4867-a476-722d60ca3815" type="video/mp4" />
+              </video>
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;">Views + Section Tools</p>
+              </div>
+            </div>
+
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <video controls style="width: 100%; display: block; background: #000;">
+                <source src="https://github.com/user-attachments/assets/e25e34d2-4185-449d-afad-c4aa15fcf472" type="video/mp4" />
+              </video>
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;">Embodied Carbon</p>
+              </div>
+            </div>
+
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <video controls style="width: 100%; display: block; background: #000;">
+                <source src="https://github.com/user-attachments/assets/04fcfb27-0578-4980-8f95-00eed78bf4fb" type="video/mp4" />
+              </video>
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;">Spaces Overlay</p>
+              </div>
+            </div>
+
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <video controls style="width: 100%; display: block; background: #000;">
+                <source src="https://github.com/user-attachments/assets/3f89bbb1-c049-4563-ae02-9d0836781753" type="video/mp4" />
+              </video>
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;">HVAC/FM Analysis</p>
+              </div>
+            </div>
+
+            <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+              <video controls style="width: 100%; display: block; background: #000;">
+                <source src="https://github.com/user-attachments/assets/0e63b918-75be-4829-ab4d-d15c80d37fd1" type="video/mp4" />
+              </video>
+              <div style="background: rgba(0,0,0,0.8); color: white; padding: 0.8rem; text-align: center;">
+                <p style="margin: 0; font-size: 0.85rem; font-style: italic;">Occupancy Simulation</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 7. API Snapshot -->
+        <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
+          <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">7. API Snapshot</h2>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Core Job/Model</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">
+            <li>POST /upload</li>
+            <li>GET /job/{job_id} · GET /jobs · GET /models</li>
+            <li>POST /models/{job_id}/open · DELETE /job/{job_id}</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Graph</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">
+            <li>GET /api/graph/{job_id}/stats · /neighbors/{global_id}</li>
+            <li>GET /api/graph/{job_id}/path/{source}/{target}</li>
+            <li>POST /api/graph/{job_id}/query · GET /subgraph</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">HVAC/FM + Occupancy</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">
+            <li>POST /api/fm/hvac/analyze/{job_id} · GET /api/fm/hvac/{job_id}</li>
+            <li>GET /api/spaces/bboxes/{job_id}</li>
+            <li>GET /api/occupancy/{job_id} · POST /tick · /reset</li>
+          </ul>
+
+          <h3 style="color: #000; margin: 1.5rem 0 1rem; font-size: 1.3rem;">Work Orders + CMMS</h3>
+          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;">
+            <li>GET /api/work-orders/{job_id} · /summary · POST (create)</li>
+            <li>PATCH /{wo_id} · DELETE /{wo_id} · GET /export?format=csv|json</li>
+            <li>POST /sync/push · /sync/pull · /api/cmms/webhooks/{system}</li>
+          </ul>
+        </section>
+
+        <!-- GitHub CTA -->
+        <div style="text-align: center; margin: 3rem 0 1rem;">
+          <a href="https://github.com/Naveendinula/DigitalTwin" target="_blank" rel="noopener noreferrer"
+             style="display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; background: #ff6b00; color: white; text-decoration: none; border-radius: 8px; font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1rem; font-weight: 500; transition: background 0.3s;">
+            <i class="fab fa-github"></i>
+            View Project Repository
+          </a>
+        </div>
+
+      </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" data-include="components/footer.html"></footer>
+
+  <!-- Image Modal -->
+  <div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); cursor: pointer;">
+    <div class="modal-content" style="position: relative; margin: auto; display: block; width: 90%; max-width: 1200px; max-height: 90%; top: 50%; transform: translateY(-50%);">
+      <img id="modalImage" style="width: 100%; height: auto; border-radius: 8px;">
+      <div id="modalCaption" style="color: #fff; text-align: center; padding: 20px; font-size: 1rem; line-height: 1.5;"></div>
+      <span class="close" style="position: absolute; top: 15px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s;">&times;</span>
+    </div>
+  </div>
+
+  <!-- === JavaScript Modules === -->
+  <script src="assets/js/image-modal.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

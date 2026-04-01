@@ -513,6 +513,82 @@
             font-size: 12px;
             color: #94a3b8;
         }
+
+        /* Methodology Section Styles */
+        .methodology-section {
+            max-width: 900px;
+        }
+        .methodology-heading {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .methodology-subheading {
+            font-size: 14px;
+            font-weight: 700;
+            color: #93c5fd;
+            margin: 20px 0 8px 0;
+            letter-spacing: 0.3px;
+        }
+        .methodology-text {
+            font-size: 12px;
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+        .methodology-text code {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+            padding: 1px 5px;
+            font-size: 11px;
+            color: #93c5fd;
+        }
+        .methodology-caveat {
+            background: rgba(251, 191, 36, 0.08);
+            border-left: 3px solid rgba(251, 191, 36, 0.6);
+            padding: 10px 12px;
+            border-radius: 0 6px 6px 0;
+            margin: 8px 0;
+        }
+        .methodology-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 8px 0 16px 0;
+        }
+        .methodology-table th {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            text-align: left;
+            padding: 8px 10px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .methodology-table td {
+            padding: 6px 10px;
+            color: #cbd5e1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .methodology-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .methodology-list {
+            font-size: 12px;
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin: 4px 0 12px 20px;
+            padding: 0;
+        }
+        .methodology-list li {
+            margin-bottom: 4px;
+        }
         
         /* Enhanced Loading States */
         .loading {
@@ -1037,6 +1113,13 @@
                            whitespace-nowrap" 
                     data-tab="processing">
                 <span>Processing Time</span>
+            </button>
+            <button class="tab-button group flex items-center gap-2 px-6 py-4 text-sm font-medium transition-all duration-300 
+                           border-b-2 border-transparent hover:bg-white/5 hover:border-blue-400/50 
+                           data-[active]:border-blue-400 data-[active]:bg-blue-500/10 data-[active]:text-blue-300
+                           whitespace-nowrap" 
+                    data-tab="methodology">
+                <span>Methodology</span>
             </button>
         </div>
 
