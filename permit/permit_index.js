@@ -21,14 +21,13 @@ import {
   initWardProcessingLeaderboardChart
 } from './charts.js';
 
-const MAPBOX_TOKEN = window.MAPBOX_TOKEN;
-
-mapboxgl.accessToken = MAPBOX_TOKEN;
-
 const GEOJSON_FILES = {
   ward: './assets/data/retrofit-v2/ward_boundaries.geojson',
   community: './assets/data/retrofit-v2/community_boundaries.geojson'
 };
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const LOCAL_MAP_SIZE = 1000;
 
 const state = {
   data: null,
@@ -47,6 +46,13 @@ const state = {
   startY: 0,
   startHeight: 0,
   map: null,
+  boundaryMode: 'ward',
+  boundaryData: {
+    ward: null,
+    community: null
+  },
+  localPopup: null,
+  localTooltip: null,
   hoveredWardId: null,
   hoveredCommunityId: null,
   hoverTooltip: null,
@@ -448,88 +454,314 @@ function createPopupContent(feature, boundaryType) {
 
   return content;
 }
-function updateHighlightLayer(type) {
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function createSvgElement(tag, attributes = {}) {
+  const element = document.createElementNS(SVG_NS, tag);
+  Object.entries(attributes).forEach(([key, value]) => {
+    element.setAttribute(key, value);
+  });
+  return element;
+}
+
+function collectGeometryCoordinates(geometry, coordinates = []) {
+  if (!geometry || !geometry.coordinates) {
+    return coordinates;
+  }
+
+  const walk = (node) => {
+    if (!Array.isArray(node)) {
+      return;
+    }
+    if (typeof node[0] === 'number' && typeof node[1] === 'number') {
+      coordinates.push(node);
+      return;
+    }
+    node.forEach(walk);
+  };
+
+  walk(geometry.coordinates);
+  return coordinates;
+}
+
+function calculateGeoBounds(collections) {
+  let minLng = Infinity;
+  let maxLng = -Infinity;
+  let minLat = Infinity;
+  let maxLat = -Infinity;
+
+  collections.forEach((collection) => {
+    (collection?.features || []).forEach((feature) => {
+      collectGeometryCoordinates(feature.geometry).forEach(([lng, lat]) => {
+        minLng = Math.min(minLng, lng);
+        maxLng = Math.max(maxLng, lng);
+        minLat = Math.min(minLat, lat);
+        maxLat = Math.max(maxLat, lat);
+      });
+    });
+  });
+
+  if (!Number.isFinite(minLng) || !Number.isFinite(minLat)) {
+    return null;
+  }
+
+  const lngPadding = Math.max((maxLng - minLng) * 0.04, 0.01);
+  const latPadding = Math.max((maxLat - minLat) * 0.04, 0.01);
+
+  return {
+    minLng: minLng - lngPadding,
+    maxLng: maxLng + lngPadding,
+    minLat: minLat - latPadding,
+    maxLat: maxLat + latPadding
+  };
+}
+
+function createProjection(bounds) {
+  const padding = 40;
+  const width = LOCAL_MAP_SIZE - padding * 2;
+  const height = LOCAL_MAP_SIZE - padding * 2;
+  const lngSpan = Math.max(bounds.maxLng - bounds.minLng, 0.0001);
+  const latSpan = Math.max(bounds.maxLat - bounds.minLat, 0.0001);
+  const scale = Math.min(width / lngSpan, height / latSpan);
+  const offsetX = (LOCAL_MAP_SIZE - lngSpan * scale) / 2;
+  const offsetY = (LOCAL_MAP_SIZE - latSpan * scale) / 2;
+
+  return ([lng, lat]) => ({
+    x: offsetX + (lng - bounds.minLng) * scale,
+    y: offsetY + (bounds.maxLat - lat) * scale
+  });
+}
+
+function buildPathData(geometry, project) {
+  if (!geometry || !geometry.coordinates) {
+    return '';
+  }
+
+  const ringToPath = (ring) => {
+    if (!Array.isArray(ring) || ring.length === 0) {
+      return '';
+    }
+    return ring.map((coord, index) => {
+      const point = project(coord);
+      return `${index === 0 ? 'M' : 'L'}${point.x.toFixed(2)},${point.y.toFixed(2)}`;
+    }).join(' ') + ' Z';
+  };
+
+  if (geometry.type === 'Polygon') {
+    return geometry.coordinates.map(ringToPath).join(' ');
+  }
+
+  if (geometry.type === 'MultiPolygon') {
+    return geometry.coordinates
+      .map((polygon) => polygon.map(ringToPath).join(' '))
+      .join(' ');
+  }
+
+  return '';
+}
+
+function getBoundaryFeatureKey(feature, type) {
+  const props = feature.properties || {};
+  const key = type === 'ward'
+    ? props.WARD || props.ward_num || props.ward || props.WARD_NUM || props.name || props.AREA_SHORT
+    : props.area_numbe || props.area_num_1 || props.AREA_SHORT || props.AREA_S_CD ||
+      props.community || props.COMMUNITY_AREA || props.name || props.OBJECTID;
+  return String(key ?? '');
+}
+
+function getBoundaryLabel(feature, type) {
+  const props = feature.properties || {};
+  if (type === 'ward') {
+    return `Ward ${getBoundaryFeatureKey(feature, type) || 'Unknown'}`;
+  }
+  return props.community || props.name || props.AREA_NAME || `Community ${getBoundaryFeatureKey(feature, type) || 'Unknown'}`;
+}
+
+function positionLocalOverlay(element, event) {
+  const rect = state.map.container.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  const width = element.offsetWidth || 320;
+  const height = element.offsetHeight || 360;
+  const left = Math.min(Math.max(x + 14, 12), rect.width - width - 12);
+  const top = Math.min(Math.max(y + 14, 12), rect.height - height - 12);
+
+  element.style.left = `${left}px`;
+  element.style.top = `${top}px`;
+}
+
+function removeLocalPopup() {
+  if (state.localPopup && state.localPopup.parentNode) {
+    state.localPopup.parentNode.removeChild(state.localPopup);
+  }
+  state.localPopup = null;
+}
+
+function showLocalPopup(feature, type, event) {
+  removeLocalPopup();
+
+  const popup = document.createElement('div');
+  popup.className = 'local-map-popup';
+  popup.innerHTML = `
+    <button type="button" class="local-popup-close" aria-label="Close">x</button>
+    ${createPopupContent(feature, type === 'ward' ? 'Ward' : 'Community')}
+  `;
+  popup.addEventListener('click', (popupEvent) => popupEvent.stopPropagation());
+  popup.querySelector('.local-popup-close').addEventListener('click', removeLocalPopup);
+  state.map.container.appendChild(popup);
+  positionLocalOverlay(popup, event);
+  state.localPopup = popup;
+}
+
+function ensureLocalTooltip() {
+  if (!state.localTooltip) {
+    state.localTooltip = document.createElement('div');
+    state.localTooltip.className = 'local-map-tooltip';
+    state.map.container.appendChild(state.localTooltip);
+  }
+  return state.localTooltip;
+}
+
+function showLocalTooltip(label, event) {
+  const tooltip = ensureLocalTooltip();
+  tooltip.textContent = label;
+  tooltip.style.display = 'block';
+  moveLocalTooltip(event);
+}
+
+function moveLocalTooltip(event) {
+  if (!state.localTooltip) {
+    return;
+  }
+  const rect = state.map.container.getBoundingClientRect();
+  state.localTooltip.style.left = `${event.clientX - rect.left}px`;
+  state.localTooltip.style.top = `${event.clientY - rect.top}px`;
+}
+
+function hideLocalTooltip() {
+  if (state.localTooltip) {
+    state.localTooltip.style.display = 'none';
+  }
+}
+
+function renderBoundaryLayer(type, geojson, project) {
+  const color = type === 'ward' ? '#22d3ee' : '#f97316';
+  const group = createSvgElement('g', {
+    class: `local-boundary-layer local-boundary-layer--${type}`,
+    'data-layer-type': type
+  });
+
+  (geojson.features || []).forEach((feature) => {
+    const pathData = buildPathData(feature.geometry, project);
+    if (!pathData) {
+      return;
+    }
+
+    const key = getBoundaryFeatureKey(feature, type);
+    const path = createSvgElement('path', {
+      d: pathData,
+      class: `local-boundary local-boundary--${type}`,
+      'data-key': key,
+      fill: color,
+      stroke: color,
+      'fill-opacity': type === 'ward' ? '0.24' : '0.2',
+      'stroke-opacity': '0.76',
+      'stroke-width': '1.5',
+      'fill-rule': 'evenodd'
+    });
+
+    path.addEventListener('mouseenter', (event) => {
+      showLocalTooltip(getBoundaryLabel(feature, type), event);
+    });
+    path.addEventListener('mousemove', moveLocalTooltip);
+    path.addEventListener('mouseleave', hideLocalTooltip);
+    path.addEventListener('click', (event) => {
+      event.stopPropagation();
+      showLocalPopup(feature, type, event);
+    });
+
+    group.appendChild(path);
+  });
+
+  return group;
+}
+
+function updateBoundaryVisibility() {
   if (!state.map) {
     return;
   }
 
-  const layerId = type === 'ward' ? 'highlighted-wards-line' : 'highlighted-communities-line';
-  const property = type === 'ward' ? 'ward' : 'area_num_1';
-  const keys = state.highlightKeys[type] || [];
+  Object.entries(state.map.layers).forEach(([type, layer]) => {
+    layer.style.display = state.boundaryMode === type ? '' : 'none';
+  });
+}
 
-  if (!state.map.getLayer(layerId)) {
+function showBoundaryType(type) {
+  state.boundaryMode = type;
+  if (elements.wardToggle) {
+    elements.wardToggle.classList.toggle('active', type === 'ward');
+  }
+  if (elements.communityToggle) {
+    elements.communityToggle.classList.toggle('active', type === 'community');
+  }
+  stopPulsingAnimation(type === 'ward' ? 'community' : 'ward');
+  updateBoundaryVisibility();
+  showSummaryWindow(type);
+  startPulsingAnimation(type);
+}
+
+function hideBoundaryType(type) {
+  if (state.boundaryMode === type) {
+    state.boundaryMode = null;
+  }
+  if (type === 'ward' && elements.wardToggle) {
+    elements.wardToggle.classList.remove('active');
+  }
+  if (type === 'community' && elements.communityToggle) {
+    elements.communityToggle.classList.remove('active');
+  }
+  updateBoundaryVisibility();
+  closeSummaryWindow();
+  stopPulsingAnimation(type);
+}
+
+function updateHighlightLayer(type) {
+  if (!state.map || !state.map.layers[type]) {
     return;
   }
 
-  state.map.setPaintProperty(layerId, 'line-opacity', [
-    'case',
-    ['in', ['get', property], ['literal', keys]],
-    0.8,
-    0
-  ]);
-  state.map.setPaintProperty(layerId, 'line-width', [
-    'case',
-    ['in', ['get', property], ['literal', keys]],
-    4,
-    0
-  ]);
+  const keys = new Set((state.highlightKeys[type] || []).map(String));
+  state.map.layers[type].querySelectorAll('.local-boundary').forEach((path) => {
+    path.classList.toggle('is-highlighted', keys.has(path.dataset.key));
+  });
 }
 
 function startPulsingAnimation(type) {
-  if (!state.map) {
+  if (!state.map || !state.map.layers[type]) {
     return;
   }
 
-  const layerId = type === 'ward' ? 'highlighted-wards-line' : 'highlighted-communities-line';
-  const property = type === 'ward' ? 'ward' : 'area_num_1';
-  const highlightKeys = state.highlightKeys[type];
-
-  if (!highlightKeys.length) {
-    return;
-  }
-
-  let pulseDirection = 1;
-  let opacity = 0.8;
-  let width = 4;
-
-  const animate = () => {
-    opacity += pulseDirection * 0.03;
-    if (opacity >= 1.0) {
-      opacity = 1.0;
-      pulseDirection = -1;
-    } else if (opacity <= 0.3) {
-      opacity = 0.3;
-      pulseDirection = 1;
-    }
-
-    width = 3 + ((opacity - 0.3) * (6 - 3)) / (1.0 - 0.3);
-
-    if (state.map.getLayer(layerId)) {
-      state.map.setPaintProperty(layerId, 'line-opacity', [
-        'case',
-        ['in', ['get', property], ['literal', highlightKeys]],
-        opacity,
-        0
-      ]);
-      state.map.setPaintProperty(layerId, 'line-width', [
-        'case',
-        ['in', ['get', property], ['literal', highlightKeys]],
-        width,
-        0
-      ]);
-    }
-
-    state.pulsingAnimations[type] = requestAnimationFrame(animate);
-  };
-
-  animate();
+  stopPulsingAnimation(type);
+  state.map.layers[type].querySelectorAll('.local-boundary.is-highlighted').forEach((path) => {
+    path.classList.add('is-pulsing');
+  });
+  state.pulsingAnimations[type] = true;
 }
 
 function stopPulsingAnimation(type) {
-  if (state.pulsingAnimations[type]) {
-    cancelAnimationFrame(state.pulsingAnimations[type]);
-    state.pulsingAnimations[type] = null;
+  if (state.map && state.map.layers[type]) {
+    state.map.layers[type].querySelectorAll('.local-boundary.is-pulsing').forEach((path) => {
+      path.classList.remove('is-pulsing');
+    });
   }
+  state.pulsingAnimations[type] = null;
 }
 
 function initDrawerResize() {
@@ -935,142 +1167,72 @@ function updateDrawerContent() {
   }
 }
 
-function initMap(dataReady) {
-  state.map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/dark-v11',
-    center: [-87.6298, 41.8781],
-    zoom: 10,
-    pitch: 0,
-    bearing: 0
+async function initMap(dataReady) {
+  const container = document.getElementById('map');
+  if (!container) {
+    return;
+  }
+
+  container.classList.add('local-boundary-map');
+
+  const svg = createSvgElement('svg', {
+    class: 'local-boundary-svg',
+    viewBox: `0 0 ${LOCAL_MAP_SIZE} ${LOCAL_MAP_SIZE}`,
+    preserveAspectRatio: 'xMidYMid meet',
+    role: 'img',
+    'aria-label': 'Chicago ward and community boundary map'
   });
 
-  state.map.addControl(new mapboxgl.NavigationControl());
-  state.map.addControl(new mapboxgl.FullscreenControl());
+  container.appendChild(svg);
+  container.addEventListener('click', removeLocalPopup);
 
-  state.map.on('load', async () => {
+  try {
     await dataReady;
 
-    try {
-      const testResponse = await fetch(GEOJSON_FILES.ward);
-      if (!testResponse.ok) {
-        console.error('Ward boundaries GeoJSON file not found or inaccessible:', testResponse.status);
-      }
-    } catch (error) {
-      console.error('Error testing ward boundaries GeoJSON accessibility:', error);
+    const [wardResponse, communityResponse] = await Promise.all([
+      fetch(GEOJSON_FILES.ward),
+      fetch(GEOJSON_FILES.community)
+    ]);
+
+    if (!wardResponse.ok || !communityResponse.ok) {
+      throw new Error('Boundary GeoJSON file not found or inaccessible.');
     }
 
-    state.map.addSource('ward-boundaries', {
-      type: 'geojson',
-      data: GEOJSON_FILES.ward,
-      generateId: true
-    });
+    const [wardGeojson, communityGeojson] = await Promise.all([
+      wardResponse.json(),
+      communityResponse.json()
+    ]);
 
-    state.map.addLayer({
-      id: 'ward-boundaries-fill',
-      type: 'fill',
-      source: 'ward-boundaries',
-      layout: { visibility: 'visible' },
-      paint: {
-        'fill-color': '#088',
-        'fill-opacity': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          0.8,
-          0.3
-        ]
+    state.boundaryData.ward = wardGeojson;
+    state.boundaryData.community = communityGeojson;
+
+    const bounds = calculateGeoBounds([wardGeojson, communityGeojson]);
+    if (!bounds) {
+      throw new Error('Boundary GeoJSON did not contain usable coordinates.');
+    }
+
+    const project = createProjection(bounds);
+    const wardLayer = renderBoundaryLayer('ward', wardGeojson, project);
+    const communityLayer = renderBoundaryLayer('community', communityGeojson, project);
+
+    svg.appendChild(wardLayer);
+    svg.appendChild(communityLayer);
+
+    state.map = {
+      container,
+      svg,
+      layers: {
+        ward: wardLayer,
+        community: communityLayer
       }
-    });
-
-    state.map.addLayer({
-      id: 'ward-boundaries-line',
-      type: 'line',
-      source: 'ward-boundaries',
-      layout: { visibility: 'visible' },
-      paint: {
-        'line-color': '#088',
-        'line-width': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          3,
-          2
-        ],
-        'line-opacity': 0.8
-      }
-    });
-
-    state.map.addLayer({
-      id: 'highlighted-wards-line',
-      type: 'line',
-      source: 'ward-boundaries',
-      layout: { visibility: 'visible' },
-      paint: {
-        'line-color': '#ff6b35',
-        'line-width': 4,
-        'line-opacity': 0
-      }
-    });
-
-    state.map.addSource('community-boundaries', {
-      type: 'geojson',
-      data: GEOJSON_FILES.community
-    });
-
-    state.map.addLayer({
-      id: 'community-boundaries-fill',
-      type: 'fill',
-      source: 'community-boundaries',
-      layout: { visibility: 'none' },
-      paint: {
-        'fill-color': '#800',
-        'fill-opacity': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          0.8,
-          0.3
-        ]
-      }
-    });
-
-    state.map.addLayer({
-      id: 'community-boundaries-line',
-      type: 'line',
-      source: 'community-boundaries',
-      layout: { visibility: 'none' },
-      paint: {
-        'line-color': '#800',
-        'line-width': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          3,
-          2
-        ],
-        'line-opacity': 0.8
-      }
-    });
-
-    state.map.addLayer({
-      id: 'highlighted-communities-line',
-      type: 'line',
-      source: 'community-boundaries',
-      layout: { visibility: 'none' },
-      paint: {
-        'line-color': '#e74c3c',
-        'line-width': 4,
-        'line-opacity': 0
-      }
-    });
+    };
 
     updateHighlightLayer('ward');
     updateHighlightLayer('community');
-
-    if (elements.wardToggle) {
-      elements.wardToggle.classList.add('active');
-    }
+    updateBoundaryVisibility();
 
     setTimeout(() => {
-      showSummaryWindow('ward');
-      startPulsingAnimation('ward');
+      showBoundaryType('ward');
     }, 500);
 
     if (elements.loadingScreen) {
@@ -1086,149 +1248,20 @@ function initMap(dataReady) {
     setTimeout(() => {
       showProjectTooltip();
     }, tooltipDelay);
-  });
-
-  state.map.on('mousemove', 'ward-boundaries-fill', (event) => {
-    if (event.features.length > 0) {
-      if (state.hoveredWardId !== null) {
-        state.map.setFeatureState({ source: 'ward-boundaries', id: state.hoveredWardId }, { hover: false });
-      }
-      state.hoveredWardId = event.features[0].id;
-      state.map.setFeatureState({ source: 'ward-boundaries', id: state.hoveredWardId }, { hover: true });
-
-      const feature = event.features[0];
-      const wardNumber = feature.properties.WARD || feature.properties.ward_num ||
-        feature.properties.ward || feature.properties.WARD_NUM ||
-        feature.properties.name || feature.properties.AREA_SHORT || 'Unknown';
-
-      if (state.hoverTooltip) {
-        state.hoverTooltip.remove();
-      }
-
-      state.hoverTooltip = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-        className: 'hover-tooltip'
-      })
-        .setLngLat(event.lngLat)
-        .setHTML(`<div style="padding: 4px 8px; font-size: 12px; font-weight: bold;">Ward ${wardNumber}</div>`)
-        .addTo(state.map);
+  } catch (error) {
+    console.error('Local boundary map error:', error);
+    container.innerHTML = `
+      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#e2e8f0; text-align:center; padding:24px;">
+        <div>
+          <h2 style="font-size:20px; margin-bottom:8px;">Boundary Map Unavailable</h2>
+          <p style="color:#94a3b8;">The local boundary files could not be loaded. Analytics are still available in the panel.</p>
+        </div>
+      </div>
+    `;
+    if (elements.loadingScreen) {
+      elements.loadingScreen.style.display = 'none';
     }
-    state.map.getCanvas().style.cursor = 'pointer';
-  });
-
-  state.map.on('mouseleave', 'ward-boundaries-fill', () => {
-    if (state.hoveredWardId !== null) {
-      state.map.setFeatureState({ source: 'ward-boundaries', id: state.hoveredWardId }, { hover: false });
-    }
-    state.hoveredWardId = null;
-    state.map.getCanvas().style.cursor = '';
-    if (state.hoverTooltip) {
-      state.hoverTooltip.remove();
-      state.hoverTooltip = null;
-    }
-  });
-
-  state.map.on('mousemove', 'community-boundaries-fill', (event) => {
-    if (event.features.length > 0) {
-      if (state.hoveredCommunityId !== null) {
-        state.map.setFeatureState({ source: 'community-boundaries', id: state.hoveredCommunityId }, { hover: false });
-      }
-      state.hoveredCommunityId = event.features[0].id;
-      state.map.setFeatureState({ source: 'community-boundaries', id: state.hoveredCommunityId }, { hover: true });
-
-      const feature = event.features[0];
-      const communityName = feature.properties.community || feature.properties.name || 'Community';
-
-      if (state.hoverTooltip) {
-        state.hoverTooltip.remove();
-      }
-
-      state.hoverTooltip = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-        className: 'hover-tooltip'
-      })
-        .setLngLat(event.lngLat)
-        .setHTML(`<div style="padding: 4px 8px; font-size: 12px; font-weight: bold;">${communityName}</div>`)
-        .addTo(state.map);
-    }
-    state.map.getCanvas().style.cursor = 'pointer';
-  });
-
-  state.map.on('mouseleave', 'community-boundaries-fill', () => {
-    if (state.hoveredCommunityId !== null) {
-      state.map.setFeatureState({ source: 'community-boundaries', id: state.hoveredCommunityId }, { hover: false });
-    }
-    state.hoveredCommunityId = null;
-    state.map.getCanvas().style.cursor = '';
-    if (state.hoverTooltip) {
-      state.hoverTooltip.remove();
-      state.hoverTooltip = null;
-    }
-  });
-
-  state.map.on('click', 'ward-boundaries-fill', (event) => {
-    const feature = event.features[0];
-    const content = createPopupContent(feature, 'Ward');
-
-    const coordinates = feature.geometry.coordinates;
-    const bounds = new mapboxgl.LngLatBounds();
-
-    if (feature.geometry.type === 'Polygon') {
-      coordinates[0].forEach((coord) => bounds.extend(coord));
-    } else if (feature.geometry.type === 'MultiPolygon') {
-      coordinates.forEach((polygon) => {
-        polygon[0].forEach((coord) => bounds.extend(coord));
-      });
-    }
-
-    state.map.fitBounds(bounds, {
-      padding: 50,
-      maxZoom: 14,
-      duration: 1000
-    });
-
-    setTimeout(() => {
-      new mapboxgl.Popup()
-        .setLngLat(event.lngLat)
-        .setHTML(content)
-        .addTo(state.map);
-    }, 200);
-  });
-
-  state.map.on('click', 'community-boundaries-fill', (event) => {
-    const feature = event.features[0];
-    const content = createPopupContent(feature, 'Community');
-
-    const coordinates = feature.geometry.coordinates;
-    const bounds = new mapboxgl.LngLatBounds();
-
-    if (feature.geometry.type === 'Polygon') {
-      coordinates[0].forEach((coord) => bounds.extend(coord));
-    } else if (feature.geometry.type === 'MultiPolygon') {
-      coordinates.forEach((polygon) => {
-        polygon[0].forEach((coord) => bounds.extend(coord));
-      });
-    }
-
-    state.map.fitBounds(bounds, {
-      padding: 50,
-      maxZoom: 14,
-      duration: 1000
-    });
-
-    setTimeout(() => {
-      new mapboxgl.Popup()
-        .setLngLat(event.lngLat)
-        .setHTML(content)
-        .addTo(state.map);
-    }, 200);
-  });
-
-  state.map.on('error', (event) => {
-    console.error('Map error:', event);
-  });
+  }
 }
 
 function initEventHandlers() {
@@ -1258,62 +1291,22 @@ function initEventHandlers() {
 
   if (elements.wardToggle) {
     elements.wardToggle.addEventListener('click', () => {
-      if (!state.map) {
-        return;
-      }
       const isActive = elements.wardToggle.classList.contains('active');
       if (isActive) {
-        state.map.setLayoutProperty('ward-boundaries-fill', 'visibility', 'none');
-        state.map.setLayoutProperty('ward-boundaries-line', 'visibility', 'none');
-        state.map.setLayoutProperty('highlighted-wards-line', 'visibility', 'none');
-        elements.wardToggle.classList.remove('active');
-        closeSummaryWindow();
-        stopPulsingAnimation('ward');
+        hideBoundaryType('ward');
       } else {
-        state.map.setLayoutProperty('community-boundaries-fill', 'visibility', 'none');
-        state.map.setLayoutProperty('community-boundaries-line', 'visibility', 'none');
-        state.map.setLayoutProperty('highlighted-communities-line', 'visibility', 'none');
-        elements.communityToggle.classList.remove('active');
-        stopPulsingAnimation('community');
-
-        state.map.setLayoutProperty('ward-boundaries-fill', 'visibility', 'visible');
-        state.map.setLayoutProperty('ward-boundaries-line', 'visibility', 'visible');
-        state.map.setLayoutProperty('highlighted-wards-line', 'visibility', 'visible');
-        elements.wardToggle.classList.add('active');
-
-        showSummaryWindow('ward');
-        startPulsingAnimation('ward');
+        showBoundaryType('ward');
       }
     });
   }
 
   if (elements.communityToggle) {
     elements.communityToggle.addEventListener('click', () => {
-      if (!state.map) {
-        return;
-      }
       const isActive = elements.communityToggle.classList.contains('active');
       if (isActive) {
-        state.map.setLayoutProperty('community-boundaries-fill', 'visibility', 'none');
-        state.map.setLayoutProperty('community-boundaries-line', 'visibility', 'none');
-        state.map.setLayoutProperty('highlighted-communities-line', 'visibility', 'none');
-        elements.communityToggle.classList.remove('active');
-        closeSummaryWindow();
-        stopPulsingAnimation('community');
+        hideBoundaryType('community');
       } else {
-        state.map.setLayoutProperty('ward-boundaries-fill', 'visibility', 'none');
-        state.map.setLayoutProperty('ward-boundaries-line', 'visibility', 'none');
-        state.map.setLayoutProperty('highlighted-wards-line', 'visibility', 'none');
-        elements.wardToggle.classList.remove('active');
-        stopPulsingAnimation('ward');
-
-        state.map.setLayoutProperty('community-boundaries-fill', 'visibility', 'visible');
-        state.map.setLayoutProperty('community-boundaries-line', 'visibility', 'visible');
-        state.map.setLayoutProperty('highlighted-communities-line', 'visibility', 'visible');
-        elements.communityToggle.classList.add('active');
-
-        showSummaryWindow('community');
-        startPulsingAnimation('community');
+        showBoundaryType('community');
       }
     });
   }

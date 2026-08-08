@@ -33,8 +33,17 @@
       <!-- Header -->
       <header class="powerbi-header">
         <h1 class="powerbi-title">Digital Twin Platform (BIM + FM)</h1>
-        <p class="powerbi-description"><em>Web-based Digital Twin platform for BIM visualization, graph-powered relationship querying, HVAC/FM operational analysis, embodied carbon workflows, and LLM-powered natural language interface.</em></p>
-        <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #ff6b00;">
+        <p class="powerbi-description">FM teams inherit BIM models they can't query without opening Revit. Sustainability teams spend days on manual carbon take-offs. HVAC technicians trace service chains in 2D PDFs. This platform turns an uploaded IFC file into a queryable, operational digital twin — in a browser, in minutes.</p>
+        <div style="margin-top: 16px; padding: 18px 22px; background: #fff3e8; border-left: 4px solid #ff6b00; border-radius: 6px; margin-bottom: 20px;">
+          <p style="margin: 0 0 10px 0; color: #333; font-weight: 600;">What this enables:</p>
+          <ul style="margin: 0; padding-left: 1.2rem; color: #444; line-height: 1.8;">
+            <li><em>"What space does HRU-408 serve?"</em> — answered directly from the knowledge graph, no Revit navigation required.</li>
+            <li>Service-impact questions like <em>"which terminals does an air handler feed?"</em> are a single graph traversal across <code style="background: #ffe5cc; padding: 1px 5px; border-radius: 3px; font-size: 0.85em;">FEEDS</code> relationships — no manual duct tracing.</li>
+            <li>Graph queries across 8,171 nodes return in milliseconds. The LLM interface lets you ask those queries in plain English instead of Cypher.</li>
+            <li>Building systems questions that previously required a Revit license and MEP expertise are now answerable by anyone on the facilities team — in a browser, from an uploaded IFC file.</li>
+          </ul>
+        </div>
+        <div style="margin-top: 0; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #ff6b00;">
           <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Project Summary</h3>
           <p style="color: #444; line-height: 1.7;">
             <strong>Languages:</strong> JavaScript — 57% · Python — 43%<br>
@@ -49,6 +58,41 @@
       <!-- Main Content Container -->
       <div style="max-width: 1200px; margin: 0 auto;">
 
+        <!-- Impact at a Glance -->
+        <section style="margin: 2rem 0;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 3px solid #ff6b00; display: flex; flex-direction: column; gap: 0.5rem;">
+              <div style="font-size: 2rem; color: #ff6b00;"><i class="fas fa-project-diagram"></i></div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #000; font-family: 'JetBrains Mono', monospace;">8,171</div>
+              <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #ff6b00;">Relationships Mapped</div>
+              <div style="font-size: 0.85rem; color: #666; line-height: 1.5;">Every element, space, system &amp; material link queryable — no manual Revit navigation required.</div>
+            </div>
+
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 3px solid #ff6b00; display: flex; flex-direction: column; gap: 0.5rem;">
+              <div style="font-size: 2rem; color: #ff6b00;"><i class="fas fa-leaf"></i></div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #000; font-family: 'JetBrains Mono', monospace;">99,495 kgCO₂e</div>
+              <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #ff6b00;">Embodied Carbon Quantified</div>
+              <div style="font-size: 0.85rem; color: #666; line-height: 1.5;">Element-level carbon quantities extracted in minutes — not days of manual spreadsheet take-offs.</div>
+            </div>
+
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 3px solid #ff6b00; display: flex; flex-direction: column; gap: 0.5rem;">
+              <div style="font-size: 2rem; color: #ff6b00;"><i class="fas fa-building"></i></div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #000; font-family: 'JetBrains Mono', monospace;">74%</div>
+              <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #ff6b00;">Space Utilization Visible</div>
+              <div style="font-size: 0.85rem; color: #666; line-height: 1.5;">Occupancy heatmap surfaces underused spaces for consolidation, leasing, or energy-reduction decisions.</div>
+            </div>
+
+            <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 3px solid #ff6b00; display: flex; flex-direction: column; gap: 0.5rem;">
+              <div style="font-size: 2rem; color: #ff6b00;"><i class="fas fa-wind"></i></div>
+              <div style="font-size: 1.4rem; font-weight: 700; color: #000; font-family: 'JetBrains Mono', monospace;">37 Assets</div>
+              <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #ff6b00;">HVAC Service Chains Traced</div>
+              <div style="font-size: 0.85rem; color: #666; line-height: 1.5;">Full equipment → terminal → space chains resolved automatically from IFC geometry — no manual mapping.</div>
+            </div>
+
+          </div>
+        </section>
+
         <!-- 1. Overview -->
         <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
           <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">1. Overview</h2>
@@ -59,6 +103,11 @@
             <strong>For FM teams:</strong> convert model data into actionable work-order and service-impact workflows.
             <strong>For Digital Twin teams:</strong> query building relationships as a graph (systems, spaces, equipment, materials).
             <strong>For sustainability teams:</strong> quantify embodied carbon at element level with override controls.
+          </p>
+
+          <h3 style="color: #000; margin: 1.5rem 0 0.75rem; font-size: 1.3rem;">Why I Built This</h3>
+          <p style="color: #666; line-height: 1.7;">
+            Most web-based tools in this space are locked to proprietary file formats, cloud-only deployments, or require expensive vendor subscriptions just to query basic building data. I wanted a self-hostable, open-source alternative that treats the BIM model as a graph — not a static document — so that operational questions about systems, spaces, and assets are answerable without a Revit license, a vendor contract, or a specialist to run the query.
           </p>
         </section>
 
@@ -228,6 +277,14 @@
             │  └──────────────┘ └──────────────┘ └──────────────────┘  │<br/>
             └─────────────────────────────────────────────────────────────┘
           </div>
+
+          <h3 style="color: #000; margin: 2rem 0 0.75rem; font-size: 1.3rem;">Tested On</h3>
+          <p style="color: #666; line-height: 1.7; margin-bottom: 0.5rem;">
+            Validated against multiple IFC files across building types including MEP-heavy commercial buildings and residential models. Tested with both public open BIM datasets and custom Revit 2024 exports. Supports <strong>IFC2x3</strong> and <strong>IFC4</strong> schemas. Confirmed working on Revit export from versions 2022–2026.
+          </p>
+          <p style="color: #666; line-height: 1.7;">
+            <strong>Setup:</strong> clone the repository, run <code style="background:#f0f0f0; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">docker-compose up</code>, and upload any IFC file to get started.
+          </p>
         </section>
 
         <!-- 5. Technology Stack -->
