@@ -2,6 +2,16 @@
 
 A modern, responsive portfolio website built with HTML, CSS, and JavaScript.
 
+## Chicago map demos
+
+`building-permit-map.html` and `chicago-energy-retrofit.html` use MapLibre GL JS 6.11.2 with OpenFreeMap's dark basemap. They require no API key, account, paid service, or backend. GitHub Pages publishes the repository root from `redesign-prodbuild`.
+
+Map settings and outage handling live in `assets/js/map-runtime.mjs`; data validation and filtered statistics live in `assets/js/map-data.mjs`. The original source datasets and scoring/permit calculations are preserved. Building extrusions supply geographic context; the separate markers carry retrofit priority.
+
+Run locally using `python tests/serve_maps.py`, then open `http://127.0.0.1:4173/`. Run the regression suite using `node --test tests/*.test.mjs` (Node 18+). The QA server also supports `__offline/`, `__missing-data/`, `__no-webgl/`, and `__stalled/` URL prefixes for the two demo pages. These scenarios change only local HTTP responses.
+
+Local analytics load independently of tiles. Unavailable tiles leave local overlays on a plain background; unavailable data shows an explicit error with Retry. WebGL failure keeps filtering, statistics, and permit analytics accessible. No synthetic fallback data is generated.
+
 ## Features
 
 - **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices

@@ -1,468 +1,195 @@
-// Chicago Buildings Retrofit Map
-// Local canvas renderer with no external map or tile API calls.
+import { toNumber, escapeHtml, normalizeBuildings, filterBuildings, buildingStats, buildFeatureCollection, geometryBounds } from './map-data.mjs';
+import { createMapEnvironment, addContextBuildings, fetchJson, showNotice, hideNotice, setupPanelToggle, mapPadding } from './map-runtime.mjs';
 
 const mapContainer = document.getElementById('map');
-const canvas = document.createElement('canvas');
-canvas.className = 'local-geo-canvas';
-mapContainer.appendChild(canvas);
-
-const ctx = canvas.getContext('2d');
-
+const panel = document.querySelector('.control-panel');
+const COLORS = { Critical: '#dc2626', High: '#ea580c', Medium: '#d97706', Low: '#65a30d', Minimal: '#059669', default: '#9ca3af' };
 let buildingsData = [];
 let visibleBuildings = [];
+let buildingsById = new Map();
 let boundaryData = null;
-let currentBounds = null;
+let environment = null;
 let currentPopup = null;
-let lastMarkers = [];
 let clusteringEnabled = true;
+let threeDEnabled = true;
+let candidatesOnly = false;
+let loadingData = false;
 
-const COLORS = {
-    Critical: '#dc2626',
-    High: '#ea580c',
-    Medium: '#d97706',
-    Low: '#65a30d',
-    Minimal: '#059669',
-    default: '#9ca3af'
-};
+const colorExpression = ['match', ['get', 'retrofit_priority'], ...Object.entries(COLORS).filter(([key]) => key !== 'default').flat(), COLORS.default];
 
-function escapeHtml(value) {
-    return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-function toNumber(value) {
-    const number = Number(value);
-    return Number.isFinite(number) ? number : null;
-}
-
-function getValidBuildings(data) {
-    return data.filter((building) => (
-        toNumber(building.longitude) !== null &&
-        toNumber(building.latitude) !== null
-    ));
-}
-
-function calculateDataBounds(data) {
-    const valid = getValidBuildings(data);
-    if (!valid.length) return null;
-
-    let minLng = Infinity;
-    let maxLng = -Infinity;
-    let minLat = Infinity;
-    let maxLat = -Infinity;
-
-    valid.forEach((building) => {
-        const lng = toNumber(building.longitude);
-        const lat = toNumber(building.latitude);
-        minLng = Math.min(minLng, lng);
-        maxLng = Math.max(maxLng, lng);
-        minLat = Math.min(minLat, lat);
-        maxLat = Math.max(maxLat, lat);
-    });
-
-    const lngPadding = Math.max((maxLng - minLng) * 0.08, 0.01);
-    const latPadding = Math.max((maxLat - minLat) * 0.08, 0.01);
-
-    return {
-        minLng: minLng - lngPadding,
-        maxLng: maxLng + lngPadding,
-        minLat: minLat - latPadding,
-        maxLat: maxLat + latPadding
-    };
-}
-
-function collectCoordinates(geometry, coordinates = []) {
-    if (!geometry || !geometry.coordinates) return coordinates;
-
-    const walk = (node) => {
-        if (!Array.isArray(node)) return;
-        if (typeof node[0] === 'number' && typeof node[1] === 'number') {
-            coordinates.push(node);
-            return;
-        }
-        node.forEach(walk);
-    };
-
-    walk(geometry.coordinates);
-    return coordinates;
-}
-
-function projectCoordinate(lng, lat, bounds, width, height, padding = 56) {
-    const plotWidth = Math.max(width - padding * 2, 1);
-    const plotHeight = Math.max(height - padding * 2, 1);
-    const lngSpan = Math.max(bounds.maxLng - bounds.minLng, 0.0001);
-    const latSpan = Math.max(bounds.maxLat - bounds.minLat, 0.0001);
-    const scale = Math.min(plotWidth / lngSpan, plotHeight / latSpan);
-    const offsetX = (width - lngSpan * scale) / 2;
-    const offsetY = (height - latSpan * scale) / 2;
-
-    return {
-        x: offsetX + (lng - bounds.minLng) * scale,
-        y: offsetY + (bounds.maxLat - lat) * scale
-    };
-}
-
-function resizeCanvas() {
-    const rect = mapContainer.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.max(Math.floor(rect.width * dpr), 1);
-    canvas.height = Math.max(Math.floor(rect.height * dpr), 1);
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawMap();
-}
-
-function drawBackground(width, height) {
-    ctx.clearRect(0, 0, width, height);
-
-    ctx.save();
-    ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < width; x += 44) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
+function restoreLayers(map) {
+  if (boundaryData && !map.getSource('community-context')) {
+    map.addSource('community-context', { type: 'geojson', data: boundaryData });
+    map.addLayer({ id: 'community-outline', type: 'line', source: 'community-context', paint: { 'line-color': '#64748b', 'line-width': 0.8, 'line-opacity': 0.35 } });
+  }
+  addContextBuildings(map, threeDEnabled);
+  const features = buildFeatureCollection(visibleBuildings);
+  if (!map.getSource('buildings-clustered')) {
+    map.addSource('buildings-clustered', { type: 'geojson', data: features, cluster: true, clusterMaxZoom: 14, clusterRadius: 50 });
+    map.addSource('buildings-unclustered', { type: 'geojson', data: features });
+    map.addLayer({ id: 'clusters', type: 'circle', source: 'buildings-clustered', filter: ['has', 'point_count'], paint: { 'circle-color': '#2563eb', 'circle-radius': ['step', ['get', 'point_count'], 17, 50, 23, 200, 30], 'circle-opacity': 0.85, 'circle-stroke-color': '#93c5fd', 'circle-stroke-width': 1.5 } });
+    if (map.getStyle().glyphs) map.addLayer({ id: 'cluster-count', type: 'symbol', source: 'buildings-clustered', filter: ['has', 'point_count'], layout: { 'text-field': ['get', 'point_count_abbreviated'], 'text-font': ['Noto Sans Regular'], 'text-size': 12 }, paint: { 'text-color': '#fff' } });
+    for (const [id, source, filter] of [['building-points', 'buildings-clustered', ['!', ['has', 'point_count']]], ['all-building-points', 'buildings-unclustered', null]]) {
+      map.addLayer({ id, type: 'circle', source, ...(filter ? { filter } : {}), paint: { 'circle-color': colorExpression, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 4, 16, 8], 'circle-stroke-color': '#f8fafc', 'circle-stroke-width': 1, 'circle-opacity': 0.9 } });
     }
-    for (let y = 0; y < height; y += 44) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-    }
-    ctx.restore();
-
-    ctx.save();
-    ctx.fillStyle = 'rgba(226, 232, 240, 0.7)';
-    ctx.font = '12px JetBrains Mono, Consolas, monospace';
-    ctx.fillText('Chicago local coordinate view - no external map tiles', 24, height - 28);
-    ctx.restore();
+  }
+  updateClusteringVisibility(map);
 }
 
-function drawBoundaryGeometry(geometry, bounds, width, height) {
-    if (!geometry || !geometry.coordinates) return;
-
-    const drawRing = (ring) => {
-        if (!Array.isArray(ring) || !ring.length) return;
-        ctx.beginPath();
-        ring.forEach((coord, index) => {
-            const point = projectCoordinate(coord[0], coord[1], bounds, width, height);
-            if (index === 0) {
-                ctx.moveTo(point.x, point.y);
-            } else {
-                ctx.lineTo(point.x, point.y);
-            }
-        });
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-    };
-
-    if (geometry.type === 'Polygon') {
-        geometry.coordinates.forEach(drawRing);
-    } else if (geometry.type === 'MultiPolygon') {
-        geometry.coordinates.forEach((polygon) => polygon.forEach(drawRing));
-    }
-}
-
-function drawBoundaries(bounds, width, height) {
-    if (!boundaryData || !boundaryData.features) return;
-
-    ctx.save();
-    ctx.fillStyle = 'rgba(30, 64, 175, 0.08)';
-    ctx.strokeStyle = 'rgba(147, 197, 253, 0.32)';
-    ctx.lineWidth = 1;
-    boundaryData.features.forEach((feature) => {
-        drawBoundaryGeometry(feature.geometry, bounds, width, height);
-    });
-    ctx.restore();
-}
-
-function buildMarkers(buildings, bounds, width, height) {
-    const valid = getValidBuildings(buildings);
-
-    if (!clusteringEnabled) {
-        return valid.map((building) => {
-            const point = projectCoordinate(
-                toNumber(building.longitude),
-                toNumber(building.latitude),
-                bounds,
-                width,
-                height
-            );
-            return {
-                type: 'building',
-                x: point.x,
-                y: point.y,
-                radius: 5,
-                buildings: [building]
-            };
-        });
-    }
-
-    const cellSize = 38;
-    const clusters = new Map();
-
-    valid.forEach((building) => {
-        const point = projectCoordinate(
-            toNumber(building.longitude),
-            toNumber(building.latitude),
-            bounds,
-            width,
-            height
-        );
-        const key = `${Math.floor(point.x / cellSize)}:${Math.floor(point.y / cellSize)}`;
-        const cluster = clusters.get(key) || { x: 0, y: 0, buildings: [] };
-        cluster.x += point.x;
-        cluster.y += point.y;
-        cluster.buildings.push(building);
-        clusters.set(key, cluster);
-    });
-
-    return Array.from(clusters.values()).map((cluster) => {
-        const count = cluster.buildings.length;
-        return {
-            type: count > 1 ? 'cluster' : 'building',
-            x: cluster.x / count,
-            y: cluster.y / count,
-            radius: count > 1 ? Math.min(28, 12 + Math.log(count) * 4) : 5,
-            buildings: cluster.buildings
-        };
-    });
-}
-
-function getPriorityColor(buildings) {
-    const priorityOrder = ['Critical', 'High', 'Medium', 'Low', 'Minimal'];
-    const counts = priorityOrder.map((priority) => ({
-        priority,
-        count: buildings.filter((building) => building.retrofit_priority === priority).length
-    }));
-    counts.sort((a, b) => b.count - a.count);
-    return COLORS[counts[0]?.priority] || COLORS.default;
-}
-
-function drawMarkers(bounds, width, height) {
-    lastMarkers = buildMarkers(visibleBuildings, bounds, width, height);
-
-    lastMarkers
-        .filter((marker) => marker.type === 'cluster')
-        .forEach((marker) => {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(marker.x, marker.y, marker.radius, 0, Math.PI * 2);
-            ctx.fillStyle = getPriorityColor(marker.buildings);
-            ctx.globalAlpha = 0.78;
-            ctx.fill();
-            ctx.globalAlpha = 1;
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.lineWidth = 1.4;
-            ctx.stroke();
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '700 11px JetBrains Mono, Consolas, monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(marker.buildings.length > 999 ? '999+' : String(marker.buildings.length), marker.x, marker.y);
-            ctx.restore();
-        });
-
-    lastMarkers
-        .filter((marker) => marker.type === 'building')
-        .forEach((marker) => {
-            const building = marker.buildings[0];
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(marker.x, marker.y, marker.radius, 0, Math.PI * 2);
-            ctx.fillStyle = COLORS[building.retrofit_priority] || COLORS.default;
-            ctx.globalAlpha = 0.9;
-            ctx.fill();
-            ctx.globalAlpha = 1;
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            ctx.restore();
-        });
-}
-
-function drawMap() {
-    const rect = mapContainer.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    if (!width || !height) return;
-
-    const bounds = currentBounds || calculateDataBounds(visibleBuildings) || calculateDataBounds(buildingsData);
-    drawBackground(width, height);
-
-    if (!bounds) {
-        return;
-    }
-
-    drawBoundaries(bounds, width, height);
-    drawMarkers(bounds, width, height);
-}
-
-async function loadData() {
-    try {
-        const response = await fetch('assets/data/buildings.json');
-        if (!response.ok) throw new Error('Failed to load buildings data');
-        buildingsData = await response.json();
-    } catch (error) {
-        console.log('Using sample data');
-        buildingsData = generateSampleData();
-    }
-    visibleBuildings = buildingsData;
-    currentBounds = calculateDataBounds(buildingsData);
-}
-
-async function loadBoundaryData() {
-    try {
-        const response = await fetch('assets/data/retrofit-v2/community_boundaries.geojson');
-        if (response.ok) {
-            boundaryData = await response.json();
-        }
-    } catch (error) {
-        boundaryData = null;
-    }
-}
-
-function generateSampleData() {
-    const data = [];
-    const types = ['Office', 'Residential', 'School', 'Hospital', 'Retail'];
-    const priorities = ['Critical', 'High', 'Medium', 'Low', 'Minimal'];
-
-    for (let i = 0; i < 300; i += 1) {
-        data.push({
-            id: i,
-            property_name: `Building ${i + 1}`,
-            address: `${100 + i} Sample St`,
-            primary_property_type: types[Math.floor(Math.random() * types.length)],
-            retrofit_priority: priorities[Math.floor(Math.random() * priorities.length)],
-            energy_star_score: Math.floor(Math.random() * 100) + 1,
-            year_built: 1950 + Math.floor(Math.random() * 70),
-            latitude: 41.8781 + (Math.random() - 0.5) * 0.4,
-            longitude: -87.6298 + (Math.random() - 0.5) * 0.4,
-            site_eui_kbtu_sq_ft: Math.floor(Math.random() * 200) + 50
-        });
-    }
-    return data;
-}
-
-function setupControls() {
-    document.getElementById('all-buildings').addEventListener('click', () => {
-        setActiveView('all-buildings');
-        showAllBuildings();
-    });
-
-    document.getElementById('retrofit-candidates').addEventListener('click', () => {
-        setActiveView('retrofit-candidates');
-        showRetrofitCandidates();
-    });
-
-    document.getElementById('apply-filters').addEventListener('click', applyFilters);
-    document.getElementById('clear-filters').addEventListener('click', clearFilters);
-    document.getElementById('fit-to-data').addEventListener('click', fitToData);
-    document.getElementById('show-clusters').addEventListener('change', (event) => {
-        toggleClustering(event.target.checked);
-    });
-
-    canvas.addEventListener('click', handleCanvasClick);
-    canvas.addEventListener('mousemove', handleCanvasMove);
-    canvas.addEventListener('mouseleave', () => {
-        canvas.style.cursor = 'default';
-    });
-    window.addEventListener('resize', resizeCanvas);
-}
-
-function setActiveView(activeId) {
-    document.querySelectorAll('.view-button').forEach((button) => {
-        button.classList.remove('active');
-        if (button.id === activeId) {
-            button.style.background = '#2563eb';
-            button.style.color = 'white';
-            button.classList.add('active');
-        } else {
-            button.style.background = 'transparent';
-            button.style.color = '#60a5fa';
-        }
-    });
-}
-
-function showAllBuildings() {
-    clearFilters();
-}
-
-function showRetrofitCandidates() {
-    document.getElementById('priority-filter').value = '';
-    document.getElementById('property-type').value = '';
-    document.getElementById('energy-min').value = '';
-    document.getElementById('energy-max').value = '';
-
-    const retrofitCandidates = buildingsData.filter((building) => (
-        building.retrofit_priority === 'Critical' || building.retrofit_priority === 'High'
-    ));
-
-    updateMapData(retrofitCandidates);
-    showFilterInsights(retrofitCandidates, { view: 'Retrofit Candidates' });
-}
-
-function applyFilters() {
-    const priorityFilter = document.getElementById('priority-filter').value;
-    const propertyTypeFilter = document.getElementById('property-type').value;
-    const energyMin = parseInt(document.getElementById('energy-min').value, 10) || 0;
-    const energyMax = parseInt(document.getElementById('energy-max').value, 10) || 100;
-
-    let filteredData = buildingsData;
-
-    if (priorityFilter) {
-        filteredData = filteredData.filter((building) => building.retrofit_priority === priorityFilter);
-    }
-
-    if (propertyTypeFilter) {
-        filteredData = filteredData.filter((building) => building.primary_property_type === propertyTypeFilter);
-    }
-
-    if (energyMin > 0 || energyMax < 100) {
-        filteredData = filteredData.filter((building) => {
-            const score = toNumber(building.energy_star_score) || 0;
-            return score >= energyMin && score <= energyMax;
-        });
-    }
-
-    updateMapData(filteredData);
-    showFilterInsights(filteredData, {
-        priorityFilter,
-        propertyTypeFilter,
-        energyMin,
-        energyMax
-    });
-}
-
-function updateMapData(filteredBuildings) {
-    visibleBuildings = filteredBuildings;
-    currentBounds = calculateDataBounds(filteredBuildings) || calculateDataBounds(buildingsData);
-    drawMap();
+function updateClusteringVisibility(map = environment?.map) {
+  if (!map) return;
+  for (const id of ['clusters', 'cluster-count', 'building-points']) {
+    if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', clusteringEnabled ? 'visible' : 'none');
+  }
+  if (map.getLayer('all-building-points')) map.setLayoutProperty('all-building-points', 'visibility', clusteringEnabled ? 'none' : 'visible');
 }
 
 function removeCurrentPopup() {
-    if (currentPopup && currentPopup.parentNode) {
-        currentPopup.parentNode.removeChild(currentPopup);
-    }
-    currentPopup = null;
+  currentPopup?.remove();
+  currentPopup = null;
 }
 
-function positionPopup(popup, x, y) {
-    const rect = mapContainer.getBoundingClientRect();
-    const popupWidth = 300;
-    const popupHeight = 400;
-    const left = Math.min(Math.max(x + 12, 12), rect.width - popupWidth - 12);
-    const top = Math.min(Math.max(y + 12, 12), rect.height - popupHeight - 12);
-    popup.style.left = `${left}px`;
-    popup.style.top = `${top}px`;
+function setActiveView() {
+  for (const id of ['all-buildings', 'retrofit-candidates']) {
+    const active = (id === 'retrofit-candidates') === candidatesOnly;
+    const button = document.getElementById(id);
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+    button.style.background = active ? '#2563eb' : 'transparent';
+    button.style.color = active ? 'white' : '#60a5fa';
+  }
 }
+
+function updateMapData(rows) {
+  visibleBuildings = rows;
+  removeCurrentPopup();
+  const features = buildFeatureCollection(rows);
+  for (const id of ['buildings-clustered', 'buildings-unclustered']) environment?.map.getSource(id)?.setData(features);
+  updateStats();
+}
+
+function applyFilters() {
+  const filters = {
+    candidates: candidatesOnly,
+    priority: document.getElementById('priority-filter').value,
+    propertyType: document.getElementById('property-type').value,
+    energyMin: toNumber(document.getElementById('energy-min').value),
+    energyMax: toNumber(document.getElementById('energy-max').value)
+  };
+  if ((filters.energyMin !== null && (filters.energyMin < 1 || filters.energyMin > 100)) || (filters.energyMax !== null && (filters.energyMax < 1 || filters.energyMax > 100)) || (filters.energyMin !== null && filters.energyMax !== null && filters.energyMin > filters.energyMax)) {
+    showNotice('filter-notice', 'Use an Energy Star range from 1 to 100, with minimum ≤ maximum.');
+    return;
+  }
+  hideNotice('filter-notice');
+  const filtered = filterBuildings(buildingsData, filters);
+  updateMapData(filtered);
+  showFilterInsights(filtered, { priorityFilter: filters.priority, propertyTypeFilter: filters.propertyType, energyMin: filters.energyMin ?? 0, energyMax: filters.energyMax ?? 100, view: candidatesOnly ? 'Retrofit Candidates' : '' });
+}
+
+function clearFilters() {
+  for (const id of ['priority-filter', 'property-type', 'energy-min', 'energy-max']) document.getElementById(id).value = '';
+  candidatesOnly = false;
+  hideNotice('filter-notice');
+  closeInsightsPopup();
+  setActiveView();
+  updateMapData(buildingsData);
+}
+
+function fitToData(duration = 600, camera = {}) {
+  const bounds = geometryBounds(buildFeatureCollection(visibleBuildings));
+  if (bounds && environment) environment.map.fitBounds(bounds, { padding: mapPadding(panel), maxZoom: 16, duration, ...camera });
+}
+
+function updateStats() {
+  const statistics = buildingStats(visibleBuildings);
+  document.getElementById('total-buildings').textContent = `${statistics.total.toLocaleString()} / ${buildingsData.length.toLocaleString()}`;
+  document.getElementById('critical-count').textContent = `${statistics.critical.toLocaleString()} Critical + ${statistics.high.toLocaleString()} High`;
+  document.getElementById('avg-energy-score').textContent = statistics.averageEnergy === null ? 'N/A' : statistics.averageEnergy.toFixed(1);
+  document.getElementById('data-message').textContent = !statistics.total ? 'No buildings match the current filters.' : `${statistics.mapped.toLocaleString()} mapped · ${(statistics.total - statistics.mapped).toLocaleString()} without valid coordinates · ${statistics.needsRetrofit.toLocaleString()} flagged for retrofit`;
+}
+
+async function loadData() {
+  if (loadingData) return;
+  loadingData = true;
+  document.getElementById('loading').style.display = 'flex';
+  try {
+    buildingsData = normalizeBuildings(await fetchJson('assets/data/buildings.json'));
+    buildingsById = new Map(buildingsData.map(row => [String(row.id), row]));
+    const select = document.getElementById('property-type');
+    select.replaceChildren(new Option('All Types', ''));
+    [...new Set(buildingsData.map(row => row.primary_property_type).filter(Boolean))].sort().forEach(type => select.add(new Option(type, type)));
+    clearFilters();
+    hideNotice('data-notice');
+    fitToData(0);
+  } catch (error) {
+    showNotice('data-notice', `${error.message} No sample data has been substituted.`, loadData);
+    updateStats();
+  } finally {
+    loadingData = false;
+    document.getElementById('loading').style.display = 'none';
+  }
+}
+
+async function initializeMap() {
+  if (environment) return;
+  try {
+    environment = await createMapEnvironment({ pitch: threeDEnabled ? 30 : 0, restoreLayers });
+    const { map } = environment;
+    map.on('click', 'clusters', async event => {
+      const feature = event.features?.[0];
+      if (!feature) return;
+      try {
+        const zoom = await map.getSource('buildings-clustered').getClusterExpansionZoom(feature.properties.cluster_id);
+        map.easeTo({ center: feature.geometry.coordinates, zoom, padding: mapPadding(panel) });
+      } catch { showNotice('filter-notice', 'That cluster has changed. Select it again.'); }
+    });
+    for (const id of ['building-points', 'all-building-points']) {
+      map.on('click', id, event => {
+        const building = buildingsById.get(event.features?.[0]?.properties.id);
+        if (building) showBuildingPopup(building);
+      });
+    }
+    for (const id of ['clusters', 'building-points', 'all-building-points']) {
+      map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; });
+    }
+    map.once('load', () => fitToData(0));
+    hideNotice('map-initialization-notice');
+  } catch (error) {
+    showNotice('map-initialization-notice', `${error.message} Building statistics and filters remain available.`, initializeMap);
+  }
+}
+
+function setupControls() {
+  setupPanelToggle(panel, document.getElementById('controls-toggle'));
+  document.getElementById('all-buildings').addEventListener('click', clearFilters);
+  document.getElementById('retrofit-candidates').addEventListener('click', () => {
+    clearFilters(); candidatesOnly = true; setActiveView(); applyFilters();
+  });
+  document.getElementById('apply-filters').addEventListener('click', applyFilters);
+  document.getElementById('clear-filters').addEventListener('click', clearFilters);
+  document.getElementById('fit-to-data').addEventListener('click', () => fitToData());
+  document.getElementById('show-clusters').addEventListener('change', event => { clusteringEnabled = event.target.checked; removeCurrentPopup(); updateClusteringVisibility(); });
+  document.getElementById('toggle-3d').addEventListener('click', event => {
+    threeDEnabled = !threeDEnabled;
+    event.currentTarget.textContent = threeDEnabled ? 'Switch to 2D' : 'Switch to 3D';
+    event.currentTarget.setAttribute('aria-pressed', String(threeDEnabled));
+    const map = environment?.map;
+    map?.easeTo({ pitch: threeDEnabled ? 45 : 0, bearing: 0 });
+    if (map?.getLayer('context-buildings')) map.setLayoutProperty('context-buildings', 'visibility', threeDEnabled ? 'visible' : 'none');
+  });
+  document.getElementById('reset-view').addEventListener('click', () => {
+    fitToData(600, { pitch: threeDEnabled ? 30 : 0, bearing: 0 });
+  });
+}
+
+setupControls();
+void loadData();
+void initializeMap();
+fetchJson('assets/data/retrofit-v2/community_boundaries.geojson').then(data => {
+  boundaryData = data;
+  environment?.refreshLayers();
+}).catch(() => { /* Optional context; the energy dataset remains usable. */ });
 
 function formatMetric(value, fallback = 'N/A', digits = 0) {
     const number = toNumber(value);
@@ -470,7 +197,7 @@ function formatMetric(value, fallback = 'N/A', digits = 0) {
     return digits > 0 ? number.toFixed(digits) : Math.round(number).toLocaleString();
 }
 
-function showBuildingPopup(building, x, y) {
+function showBuildingPopup(building) {
     removeCurrentPopup();
 
     const currentYear = new Date().getFullYear();
@@ -538,93 +265,10 @@ function showBuildingPopup(building, x, y) {
     `;
 
     popup.querySelector('[data-popup-close]').addEventListener('click', removeCurrentPopup);
-    mapContainer.appendChild(popup);
-    positionPopup(popup, x, y);
-    currentPopup = popup;
+    currentPopup = new environment.lib.Popup({ offset: 12, maxWidth: '320px', closeButton: false })
+        .setLngLat([building.longitude, building.latitude]).setDOMContent(popup).addTo(environment.map);
 }
 
-function showClusterPopup(marker, x, y) {
-    removeCurrentPopup();
-
-    const counts = {};
-    marker.buildings.forEach((building) => {
-        const priority = building.retrofit_priority || 'Unknown';
-        counts[priority] = (counts[priority] || 0) + 1;
-    });
-
-    const rows = Object.entries(counts)
-        .sort(([, a], [, b]) => b - a)
-        .map(([priority, count]) => `
-            <div style="display:flex; justify-content:space-between; gap:16px; padding:4px 0;">
-                <span style="color:${COLORS[priority] || COLORS.default};">${escapeHtml(priority)}</span>
-                <strong>${count.toLocaleString()}</strong>
-            </div>
-        `)
-        .join('');
-
-    const popup = document.createElement('div');
-    popup.className = 'local-map-popup';
-    popup.innerHTML = `
-        <div style="width: 260px; color: white; background: rgba(8, 8, 12, 0.96); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); overflow: hidden;">
-            <div style="padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.1); position: relative;">
-                <button type="button" data-popup-close style="position:absolute; top:10px; right:10px; background:transparent; color:#94a3b8; border:0; cursor:pointer;">x</button>
-                <div style="font-weight: 700; color: #f8fafc;">Cluster Summary</div>
-                <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">${marker.buildings.length.toLocaleString()} buildings in this area</div>
-            </div>
-            <div style="padding: 14px; font-size: 12px;">${rows}</div>
-        </div>
-    `;
-
-    popup.querySelector('[data-popup-close]').addEventListener('click', removeCurrentPopup);
-    mapContainer.appendChild(popup);
-    positionPopup(popup, x, y);
-    currentPopup = popup;
-}
-
-function findMarkerAtPoint(x, y) {
-    let bestMarker = null;
-    let bestDistance = Infinity;
-
-    lastMarkers.forEach((marker) => {
-        const distance = Math.hypot(marker.x - x, marker.y - y);
-        const hitRadius = Math.max(marker.radius + 4, 9);
-        if (distance <= hitRadius && distance < bestDistance) {
-            bestMarker = marker;
-            bestDistance = distance;
-        }
-    });
-
-    return bestMarker;
-}
-
-function getPointerPosition(event) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top
-    };
-}
-
-function handleCanvasClick(event) {
-    const point = getPointerPosition(event);
-    const marker = findMarkerAtPoint(point.x, point.y);
-
-    if (!marker) {
-        removeCurrentPopup();
-        return;
-    }
-
-    if (marker.type === 'cluster') {
-        showClusterPopup(marker, point.x, point.y);
-    } else {
-        showBuildingPopup(marker.buildings[0], point.x, point.y);
-    }
-}
-
-function handleCanvasMove(event) {
-    const point = getPointerPosition(event);
-    canvas.style.cursor = findMarkerAtPoint(point.x, point.y) ? 'pointer' : 'default';
-}
 
 function showFilterInsights(filteredData, filters) {
     const totalOriginal = buildingsData.length;
@@ -633,9 +277,7 @@ function showFilterInsights(filteredData, filters) {
     const priorities = ['Critical', 'High', 'Medium', 'Low', 'Minimal'];
     const priorityCount = Object.fromEntries(priorities.map((priority) => [priority, 0]));
     const typeCount = {};
-    const energyScores = [];
-    let totalRetrofitScore = 0;
-    let retrofitCount = 0;
+    const stats = buildingStats(filteredData);
 
     filteredData.forEach((building) => {
         if (building.retrofit_priority && priorityCount[building.retrofit_priority] !== undefined) {
@@ -645,22 +287,10 @@ function showFilterInsights(filteredData, filters) {
         const type = building.primary_property_type || 'Unknown';
         typeCount[type] = (typeCount[type] || 0) + 1;
 
-        const energyScore = toNumber(building.energy_star_score);
-        if (energyScore !== null && energyScore > 0) {
-            energyScores.push(energyScore);
-        }
-
-        const retrofitScore = toNumber(building.retrofit_score);
-        if (retrofitScore !== null && retrofitScore > 0) {
-            totalRetrofitScore += retrofitScore;
-            retrofitCount += 1;
-        }
     });
 
-    const avgEnergy = energyScores.length > 0
-        ? (energyScores.reduce((a, b) => a + b, 0) / energyScores.length).toFixed(1)
-        : 'N/A';
-    const avgRetrofit = retrofitCount > 0 ? (totalRetrofitScore / retrofitCount).toFixed(1) : 'N/A';
+    const avgEnergy = stats.averageEnergy?.toFixed(1) ?? 'N/A';
+    const avgRetrofit = stats.averageRetrofit?.toFixed(1) ?? 'N/A';
     const topTypes = Object.entries(typeCount).sort(([, a], [, b]) => b - a).slice(0, 3);
     const appliedFilters = [];
 
@@ -736,10 +366,11 @@ function showFilterInsights(filteredData, filters) {
     overlay.innerHTML = insightsHTML;
     overlay.style.position = 'absolute';
     overlay.style.top = '50%';
-    overlay.style.left = '30%';
+    overlay.style.left = window.innerWidth <= 768 ? '50%' : '35%';
     overlay.style.transform = 'translate(-50%, -50%)';
     overlay.style.zIndex = '1000';
     overlay.style.pointerEvents = 'auto';
+    overlay.style.maxWidth = 'calc(100vw - 24px)';
 
     mapContainer.appendChild(overlay);
 
@@ -823,84 +454,3 @@ function makePopupDraggable() {
         event.preventDefault();
     });
 }
-
-function clearFilters() {
-    document.getElementById('priority-filter').value = '';
-    document.getElementById('property-type').value = '';
-    document.getElementById('energy-min').value = '';
-    document.getElementById('energy-max').value = '';
-    updateMapData(buildingsData);
-    setActiveView('all-buildings');
-}
-
-function fitToData() {
-    currentBounds = calculateDataBounds(visibleBuildings) || calculateDataBounds(buildingsData);
-    drawMap();
-}
-
-function toggleClustering(enabled) {
-    clusteringEnabled = enabled;
-    drawMap();
-}
-
-function updateStats() {
-    const total = buildingsData.length;
-    const critical = buildingsData.filter((building) => building.retrofit_priority === 'Critical').length;
-    const high = buildingsData.filter((building) => building.retrofit_priority === 'High').length;
-    const needsRetrofit = buildingsData.filter((building) => building.needs_retrofit === true || building.needs_retrofit === 'true').length;
-    const energyScores = buildingsData.map((building) => toNumber(building.energy_star_score)).filter((score) => score !== null && score > 0);
-    const retrofitScores = buildingsData.map((building) => toNumber(building.retrofit_score)).filter((score) => score !== null && score > 0);
-    const avgEnergy = energyScores.length
-        ? Math.round(energyScores.reduce((sum, score) => sum + score, 0) / energyScores.length)
-        : 0;
-    const avgRetrofitScore = retrofitScores.length
-        ? Math.round(retrofitScores.reduce((sum, score) => sum + score, 0) / retrofitScores.length)
-        : 0;
-
-    document.getElementById('total-buildings').textContent = total.toLocaleString();
-    document.getElementById('critical-count').textContent = `${critical.toLocaleString()} Critical + ${high.toLocaleString()} High`;
-    document.getElementById('avg-energy-score').textContent = `${avgEnergy} (Retrofit: ${avgRetrofitScore}, Needs: ${needsRetrofit.toLocaleString()})`;
-}
-
-function showLoading(message) {
-    document.getElementById('loading').style.display = 'flex';
-    document.getElementById('loading').innerHTML = `
-        <div style="text-align: center; color: white;">
-            <div style="border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
-            <p>${escapeHtml(message)}</p>
-        </div>
-    `;
-}
-
-function hideLoading() {
-    document.getElementById('loading').style.display = 'none';
-}
-
-function showError(message) {
-    document.getElementById('loading').innerHTML = `
-        <div style="color: #ff3e3e; text-align: center;">
-            <h3>Error</h3>
-            <p>${escapeHtml(message)}</p>
-            <button onclick="location.reload()" style="padding: 10px 20px; background: #ff3e3e; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                Reload
-            </button>
-        </div>
-    `;
-}
-
-async function init() {
-    try {
-        showLoading('Loading building data...');
-        await Promise.all([loadData(), loadBoundaryData()]);
-        setupControls();
-        updateStats();
-        resizeCanvas();
-        hideLoading();
-        console.log('App ready with', buildingsData.length, 'buildings');
-    } catch (error) {
-        console.error('Error:', error);
-        showError('Failed to load data');
-    }
-}
-
-init();

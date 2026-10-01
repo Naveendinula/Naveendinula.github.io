@@ -1,4 +1,5 @@
 const DATA_ROOT = './assets/data/retrofit-v2';
+import { withTimeout } from '../assets/js/map-runtime.mjs';
 
 export const DATA_FILES = {
   wardSummary: 'ward_summary.csv',
@@ -96,12 +97,14 @@ export function buildMap(rows, keyField) {
 }
 
 async function fetchText(path) {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(`Failed to load ${path}: ${response.status}`);
-  }
-
-  return response.text();
+  const controller = new AbortController();
+  try {
+    return await withTimeout((async () => {
+      const response = await fetch(path, { signal: controller.signal });
+      if (!response.ok) throw new Error(`Failed to load ${path}: ${response.status}`);
+      return response.text();
+    })());
+  } finally { controller.abort(); }
 }
 
 async function loadCSV(filename) {

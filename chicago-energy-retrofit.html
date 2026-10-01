@@ -30,7 +30,6 @@
             content: "";
             position: absolute;
             inset: 0;
-            z-index: 0;
             background:
                 radial-gradient(circle at 20% 18%, rgba(96, 165, 250, 0.16), transparent 26%),
                 radial-gradient(circle at 72% 76%, rgba(16, 185, 129, 0.12), transparent 30%),
@@ -40,7 +39,6 @@
             content: "";
             position: absolute;
             inset: 0;
-            z-index: 0;
             background-image:
                 linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
@@ -254,6 +252,8 @@
             margin-right: 8px;
         }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.11.2/dist/maplibre-gl.css">
+    <link rel="stylesheet" href="assets/css/map-ui.css">
 </head>
 <body>
     <!-- Back to Portfolio Button -->
@@ -265,7 +265,10 @@
     <div id="map"></div>
     
     <div class="control-panel">
+        <button id="controls-toggle" class="panel-toggle" type="button" aria-controls="energy-panel-body">Hide controls</button>
+        <div class="panel-body" id="energy-panel-body">
         <h2>Chicago Buildings</h2>
+        <div class="map-view-buttons"><button id="toggle-3d" type="button" aria-pressed="true">Switch to 2D</button><button id="reset-view" type="button">Reset view</button></div>
         
         <!-- Building View Section -->
         <div class="control-group">
@@ -298,16 +301,6 @@
             <label for="property-type">Property Type:</label>
             <select id="property-type">
                 <option value="">All Types</option>
-                <option value="Office">Office</option>
-                <option value="Mixed Use Property">Mixed Use Property</option>
-                <option value="K-12 School">K-12 School</option>
-                <option value="Residential">Residential</option>
-                <option value="Commercial">Commercial</option>
-                <option value="College/University">College/University</option>
-                <option value="Hospital">Hospital</option>
-                <option value="Other - Mall">Other - Mall</option>
-                <option value="Bank Branch">Bank Branch</option>
-                <option value="Automobile Dealership">Automobile Dealership</option>
             </select>
         </div>
         
@@ -347,7 +340,7 @@
         <div class="stats-section">
             <h3 style="margin-bottom: 15px; font-size: 16px;">Statistics</h3>
             <div class="stat-item">
-                <span>Total Buildings:</span>
+                <span>Showing Buildings:</span>
                 <span id="total-buildings" class="stat-value">-</span>
             </div>
             <div class="stat-item">
@@ -398,15 +391,17 @@
                 <span style="font-size: 11px;">Minimal (0-19)</span>
             </div>
         </div>
+        <p id="data-message" class="map-data-message" aria-live="polite"></p>
+        </div>
     </div>
     
-    <div id="loading">
+    <div id="loading" role="status">
         <div style="text-align: center;">
             <div style="border: 3px solid #333; border-top: 3px solid #60a5fa; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
             <p>Loading...</p>
         </div>
     </div>
     
-    <script src="assets/js/chicago-retrofit-main.js"></script>
+    <script type="module" src="assets/js/chicago-retrofit-main.js"></script>
 </body>
 </html>
