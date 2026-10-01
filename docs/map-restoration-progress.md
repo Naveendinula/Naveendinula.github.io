@@ -14,3 +14,4 @@ Approved plan: Restore both portfolio maps at zero cost (2026-10-01).
 - Resource inventory audit: both rendered demos contain no Mapbox requests or access-token parameters. Source audit of the two demos and their map/permit modules likewise found none.
 - Publishing target verified: `redesign-prodbuild`, repository root, existing GitHub Pages site. Publishing and live verification follow local validation.
 - Final visual QA: set a readable responsive width for permit popups and fit already-loaded local datasets immediately after map initialization, without waiting for tile readiness. Phone popup verified at 390×844 with two-column metrics and visible attribution.
+- Public verification: both Pages deployments succeeded; live datasets, filtering, cluster expansion, boundaries, and 3D buildings work. A subsequent load exposed stale controller/CSS caches, so the two HTML entry points now version those asset URLs for immediate updates.
