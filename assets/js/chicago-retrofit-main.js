@@ -135,6 +135,7 @@ async function initializeMap() {
   try {
     environment = await createMapEnvironment({ pitch: threeDEnabled ? 30 : 0, restoreLayers });
     const { map } = environment;
+    fitToData(0);
     map.on('click', 'clusters', async event => {
       const feature = event.features?.[0];
       if (!feature) return;

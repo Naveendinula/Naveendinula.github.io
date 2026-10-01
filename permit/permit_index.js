@@ -556,6 +556,7 @@ async function initMap() {
     state.map = environment.map;
     state.lib = environment.lib;
     const map = state.map;
+    fitBoundaryData();
     const clearHover = () => {
       if (state.hoveredBoundary && map.getSource(`${state.hoveredBoundary.type}-boundaries`)) map.setFeatureState({ source: `${state.hoveredBoundary.type}-boundaries`, id: state.hoveredBoundary.id }, { hover: false });
       state.hoveredBoundary = null;
@@ -586,7 +587,7 @@ async function initMap() {
         const bounds = geometryBounds(feature);
         if (bounds) map.fitBounds(bounds, { padding: mapPadding(document.querySelector('.map-layer-panel'), elements.drawer), maxZoom: 14, duration: 600 });
         state.localPopup?.remove();
-        state.localPopup = new state.lib.Popup({ offset: 12, maxWidth: '360px' }).setLngLat(event.lngLat).setHTML(createPopupContent(feature, type === 'ward' ? 'Ward' : 'Community')).addTo(map);
+        state.localPopup = new state.lib.Popup({ offset: 12, maxWidth: '360px', className: 'region-popup' }).setLngLat(event.lngLat).setHTML(createPopupContent(feature, type === 'ward' ? 'Ward' : 'Community')).addTo(map);
       });
     }
     map.once('load', () => fitBoundaryData());

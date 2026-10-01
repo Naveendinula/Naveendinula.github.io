@@ -13,3 +13,4 @@ Approved plan: Restore both portfolio maps at zero cost (2026-10-01).
 - Failure QA: blocked basemap retains markers/boundaries; HTTP 503 data fails explicitly and Retry settles; WebGL failure retains filters/statistics/analytics; stalled TileJSON reaches the 15-second fallback with overlays restored.
 - Resource inventory audit: both rendered demos contain no Mapbox requests or access-token parameters. Source audit of the two demos and their map/permit modules likewise found none.
 - Publishing target verified: `redesign-prodbuild`, repository root, existing GitHub Pages site. Publishing and live verification follow local validation.
+- Final visual QA: set a readable responsive width for permit popups and fit already-loaded local datasets immediately after map initialization, without waiting for tile readiness. Phone popup verified at 390×844 with two-column metrics and visible attribution.

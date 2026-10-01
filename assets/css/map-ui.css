@@ -13,6 +13,8 @@
 .maplibregl-popup-close-button { color: white; background: #1e293b; font-size: 22px; width: 28px; height: 28px; right: 3px; top: 3px; z-index: 1; border-radius: 5px; }
 .maplibregl-popup-tip { border-top-color: #080c16; border-bottom-color: #080c16; }
 .map-hover-label .maplibregl-popup-content { padding: 7px 10px; font-size: 12px; pointer-events: none; }
+.region-popup .maplibregl-popup-content { width: min(340px, calc(100vw - 50px)); }
+.region-popup h3 { margin: 0 28px 12px 0; padding-bottom: 8px; color: #60a5fa; border-bottom: 1px solid #334155; font-size: 16px; font-weight: 700; }
 .maplibregl-ctrl-attrib { max-width: calc(100vw - 100px); }
 .maplibregl-ctrl-bottom-right, .maplibregl-ctrl-bottom-left { bottom: var(--analytics-height, 0px); }
 .map-view-buttons { display: flex; gap: 8px; margin-bottom: 12px; }
