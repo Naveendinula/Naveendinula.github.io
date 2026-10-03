@@ -1,6 +1,6 @@
 import { WEEKLY_CATEGORIES } from './analytics.js';
 
-const CHART_THEME = 'dark';
+const CHART_THEME = null;
 
 function getChartInstance(element) {
   if (!element) {
@@ -68,8 +68,8 @@ export function initRetrofitPulseChart(element, pulseData) {
       name: '4-Week Rolling Avg',
       type: 'line',
       data: pulseData.map((item) => item.rollingAverage),
-      lineStyle: { color: '#ffffff', width: 2, type: 'solid' },
-      itemStyle: { color: '#ffffff' },
+      lineStyle: { color: '#243238', width: 2, type: 'solid' },
+      itemStyle: { color: '#243238' },
       symbol: 'circle',
       symbolSize: 3,
       z: 10
@@ -80,14 +80,15 @@ export function initRetrofitPulseChart(element, pulseData) {
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+      backgroundColor: '#ffffff',
+      borderColor: '#dce4e1',
+      textStyle: { color: '#243238', fontFamily: 'Segoe UI' },
       axisPointer: { type: 'cross' }
     },
     legend: {
+      type: 'scroll',
       data: [...WEEKLY_CATEGORIES.map((cat) => cat.label), '4-Week Rolling Avg'],
-      textStyle: { color: '#cbd5e1', fontSize: 10, fontFamily: 'JetBrains Mono' },
+      textStyle: { color: '#52676f', fontSize: 10, fontFamily: 'Segoe UI' },
       top: 5
     },
     dataZoom: [
@@ -97,16 +98,16 @@ export function initRetrofitPulseChart(element, pulseData) {
         end: 100,
         height: 20,
         bottom: 5,
-        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+        backgroundColor: '#edf2f0',
         fillerColor: 'rgba(59, 130, 246, 0.3)',
         borderColor: 'rgba(59, 130, 246, 0.5)',
         handleStyle: {
           color: '#3b82f6',
-          borderColor: '#60a5fa'
+          borderColor: '#2c6096'
         },
         textStyle: {
-          color: '#94a3b8',
-          fontFamily: 'JetBrains Mono',
+          color: '#62757e',
+          fontFamily: 'Segoe UI',
           fontSize: 10
         }
       },
@@ -117,29 +118,30 @@ export function initRetrofitPulseChart(element, pulseData) {
       }
     ],
     grid: {
-      left: '8%',
-      right: '4%',
+      left: 8,
+      right: 14,
+      containLabel: true,
       bottom: '15%',
-      top: '18%'
+      top: 64
     },
     xAxis: {
       type: 'category',
       data: pulseData.map((item) => item.week),
-      axisLine: { lineStyle: { color: '#374151' } },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
       axisLabel: {
-        color: '#9ca3af',
+        color: '#62757e',
         fontSize: 9,
-        fontFamily: 'JetBrains Mono',
+        fontFamily: 'Segoe UI',
         interval: Math.max(1, Math.floor(pulseData.length / 8))
       }
     },
     yAxis: {
       type: 'value',
       name: 'Count',
-      nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
-      axisLine: { lineStyle: { color: '#374151' } },
-      axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
-      splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+      nameTextStyle: { color: '#62757e', fontSize: 11, fontFamily: 'Segoe UI', align: 'left' },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
+      axisLabel: { color: '#62757e', fontSize: 10, fontFamily: 'Segoe UI' },
+      splitLine: { lineStyle: { color: '#dce4e1', opacity: 0.5 } }
     },
     series
   };
@@ -168,9 +170,9 @@ export function initProcessingLeaderboardChart(element, leaderboardData) {
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+      backgroundColor: '#ffffff',
+      borderColor: '#dce4e1',
+      textStyle: { color: '#243238', fontFamily: 'Segoe UI' },
       axisPointer: { type: 'shadow' },
       formatter: (params) => {
         const dataPoint = params[0];
@@ -180,8 +182,8 @@ export function initProcessingLeaderboardChart(element, leaderboardData) {
         const rateLabel = retrofitRate === null ? 'N/A' : `${(retrofitRate * 100).toFixed(1)}%`;
 
         return `
-          <div style="font-family: JetBrains Mono;">
-            <div style="font-weight: bold; color: #60a5fa;">Ward ${dataPoint.name}</div>
+          <div style="font-family: Segoe UI;">
+            <div style="font-weight: bold; color: #2c6096;">Ward ${dataPoint.name}</div>
             <div>Volume: ${wardInfo.volume.toLocaleString()} permits</div>
             <div>Retrofit Likely: ${formatValue(retrofitValue)}</div>
             <div>Retrofit Rate: ${rateLabel}</div>
@@ -201,16 +203,16 @@ export function initProcessingLeaderboardChart(element, leaderboardData) {
         end: zoomEnd,
         height: 20,
         bottom: 5,
-        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+        backgroundColor: '#edf2f0',
         fillerColor: 'rgba(59, 130, 246, 0.3)',
         borderColor: 'rgba(59, 130, 246, 0.5)',
         handleStyle: {
           color: '#3b82f6',
-          borderColor: '#60a5fa'
+          borderColor: '#2c6096'
         },
         textStyle: {
-          color: '#94a3b8',
-          fontFamily: 'JetBrains Mono',
+          color: '#62757e',
+          fontFamily: 'Segoe UI',
           fontSize: 10
         }
       },
@@ -221,33 +223,34 @@ export function initProcessingLeaderboardChart(element, leaderboardData) {
       }
     ],
     grid: {
-      left: '8%',
-      right: '4%',
+      left: 8,
+      right: 14,
+      containLabel: true,
       bottom: '15%',
       top: '10%'
     },
     xAxis: {
       type: 'category',
       data: wardData.map((ward) => `Ward ${ward.ward}`),
-      axisLine: { lineStyle: { color: '#374151' } },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
       axisLabel: {
-        color: '#9ca3af',
+        color: '#62757e',
         fontSize: 10,
-        fontFamily: 'JetBrains Mono',
+        fontFamily: 'Segoe UI',
         rotate: 45
       }
     },
     yAxis: {
       type: 'value',
       name: 'Median Processing Time (days)',
-      nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
-      axisLine: { lineStyle: { color: '#374151' } },
+      nameTextStyle: { color: '#62757e', fontSize: 11, fontFamily: 'Segoe UI', align: 'left' },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
       axisLabel: {
-        color: '#9ca3af',
+        color: '#62757e',
         fontSize: 10,
-        fontFamily: 'JetBrains Mono'
+        fontFamily: 'Segoe UI'
       },
-      splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+      splitLine: { lineStyle: { color: '#dce4e1', opacity: 0.5 } }
     },
     series: [
       {
@@ -261,7 +264,7 @@ export function initProcessingLeaderboardChart(element, leaderboardData) {
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
+            shadowColor: 'rgba(0, 0, 0, 0.08)'
           }
         }
       },
@@ -277,12 +280,12 @@ export function initProcessingLeaderboardChart(element, leaderboardData) {
           return minSize + ((data[2] / maxVolume) * (maxSize - minSize));
         },
         itemStyle: {
-          color: '#ffffff',
+          color: '#243238',
           opacity: 0.8
         },
         emphasis: {
           itemStyle: {
-            color: '#60a5fa',
+            color: '#2c6096',
             opacity: 1
           }
         }
@@ -309,12 +312,12 @@ export function initCumulativeRetrofitsChart(element, cumulativeData) {
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+      backgroundColor: '#ffffff',
+      borderColor: '#dce4e1',
+      textStyle: { color: '#243238', fontFamily: 'Segoe UI' },
       axisPointer: { type: 'cross' },
       formatter: (params) => {
-        let result = `<div style="font-family: JetBrains Mono;"><strong>${params[0].name}</strong><br/>`;
+        let result = `<div style="font-family: Segoe UI;"><strong>${params[0].name}</strong><br/>`;
         params.forEach((param) => {
           result += `<span style="color: ${param.color};">- ${param.seriesName}: ${param.value.toLocaleString()}</span><br/>`;
         });
@@ -322,8 +325,9 @@ export function initCumulativeRetrofitsChart(element, cumulativeData) {
       }
     },
     legend: {
+      type: 'scroll',
       data: WEEKLY_CATEGORIES.map((cat) => cat.label),
-      textStyle: { color: '#cbd5e1', fontSize: 10, fontFamily: 'JetBrains Mono' },
+      textStyle: { color: '#52676f', fontSize: 10, fontFamily: 'Segoe UI' },
       top: 5
     },
     dataZoom: [
@@ -333,16 +337,16 @@ export function initCumulativeRetrofitsChart(element, cumulativeData) {
         end: 100,
         height: 20,
         bottom: 5,
-        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+        backgroundColor: '#edf2f0',
         fillerColor: 'rgba(59, 130, 246, 0.3)',
         borderColor: 'rgba(59, 130, 246, 0.5)',
         handleStyle: {
           color: '#3b82f6',
-          borderColor: '#60a5fa'
+          borderColor: '#2c6096'
         },
         textStyle: {
-          color: '#94a3b8',
-          fontFamily: 'JetBrains Mono',
+          color: '#62757e',
+          fontFamily: 'Segoe UI',
           fontSize: 10
         }
       },
@@ -353,29 +357,30 @@ export function initCumulativeRetrofitsChart(element, cumulativeData) {
       }
     ],
     grid: {
-      left: '8%',
-      right: '4%',
+      left: 8,
+      right: 14,
+      containLabel: true,
       bottom: '15%',
-      top: '18%'
+      top: 64
     },
     xAxis: {
       type: 'category',
       data: cumulativeData.map((item) => item.week),
-      axisLine: { lineStyle: { color: '#374151' } },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
       axisLabel: {
-        color: '#9ca3af',
+        color: '#62757e',
         fontSize: 9,
-        fontFamily: 'JetBrains Mono',
+        fontFamily: 'Segoe UI',
         interval: Math.max(1, Math.floor(cumulativeData.length / 8))
       }
     },
     yAxis: {
       type: 'value',
       name: 'Cumulative Count',
-      nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
-      axisLine: { lineStyle: { color: '#374151' } },
-      axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
-      splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+      nameTextStyle: { color: '#62757e', fontSize: 11, fontFamily: 'Segoe UI', align: 'left' },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
+      axisLabel: { color: '#62757e', fontSize: 10, fontFamily: 'Segoe UI' },
+      splitLine: { lineStyle: { color: '#dce4e1', opacity: 0.5 } }
     },
     series: WEEKLY_CATEGORIES.map((category) => ({
       name: category.label,
@@ -410,12 +415,12 @@ export function initProcessingTimeTrendChart(element, trendData) {
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+      backgroundColor: '#ffffff',
+      borderColor: '#dce4e1',
+      textStyle: { color: '#243238', fontFamily: 'Segoe UI' },
       axisPointer: { type: 'cross' },
       formatter: (params) => {
-        let result = `<div style="font-family: JetBrains Mono;"><strong>${params[0].name}</strong><br/>`;
+        let result = `<div style="font-family: Segoe UI;"><strong>${params[0].name}</strong><br/>`;
         params.forEach((param) => {
           result += `<span style="color: ${param.color};">- ${param.seriesName}: ${formatValue(param.value, ' days')}</span><br/>`;
         });
@@ -423,8 +428,9 @@ export function initProcessingTimeTrendChart(element, trendData) {
       }
     },
     legend: {
+      type: 'scroll',
       data: ['City Median', 'Fastest Wards', 'Slowest Wards'],
-      textStyle: { color: '#cbd5e1', fontSize: 10, fontFamily: 'JetBrains Mono' },
+      textStyle: { color: '#52676f', fontSize: 10, fontFamily: 'Segoe UI' },
       top: 5
     },
     dataZoom: [
@@ -434,16 +440,16 @@ export function initProcessingTimeTrendChart(element, trendData) {
         end: 100,
         height: 20,
         bottom: 5,
-        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+        backgroundColor: '#edf2f0',
         fillerColor: 'rgba(59, 130, 246, 0.3)',
         borderColor: 'rgba(59, 130, 246, 0.5)',
         handleStyle: {
           color: '#3b82f6',
-          borderColor: '#60a5fa'
+          borderColor: '#2c6096'
         },
         textStyle: {
-          color: '#94a3b8',
-          fontFamily: 'JetBrains Mono',
+          color: '#62757e',
+          fontFamily: 'Segoe UI',
           fontSize: 10
         }
       },
@@ -454,37 +460,38 @@ export function initProcessingTimeTrendChart(element, trendData) {
       }
     ],
     grid: {
-      left: '8%',
-      right: '4%',
+      left: 8,
+      right: 14,
+      containLabel: true,
       bottom: '15%',
-      top: '18%'
+      top: 64
     },
     xAxis: {
       type: 'category',
       data: trendData.map((item) => item.monthLabel),
-      axisLine: { lineStyle: { color: '#374151' } },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
       axisLabel: {
-        color: '#9ca3af',
+        color: '#62757e',
         fontSize: 9,
-        fontFamily: 'JetBrains Mono',
+        fontFamily: 'Segoe UI',
         rotate: 45
       }
     },
     yAxis: {
       type: 'value',
       name: 'Processing Time (days)',
-      nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
-      axisLine: { lineStyle: { color: '#374151' } },
-      axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
-      splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+      nameTextStyle: { color: '#62757e', fontSize: 11, fontFamily: 'Segoe UI', align: 'left' },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
+      axisLabel: { color: '#62757e', fontSize: 10, fontFamily: 'Segoe UI' },
+      splitLine: { lineStyle: { color: '#dce4e1', opacity: 0.5 } }
     },
     series: [
       {
         name: 'City Median',
         type: 'line',
         data: trendData.map((item) => item.cityMedian),
-        lineStyle: { color: '#60a5fa', width: 3 },
-        itemStyle: { color: '#60a5fa' },
+        lineStyle: { color: '#2c6096', width: 3 },
+        itemStyle: { color: '#2c6096' },
         symbol: 'circle',
         symbolSize: 6,
         smooth: true
@@ -534,9 +541,9 @@ export function initWardProcessingLeaderboardChart(element, leaderboardData) {
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+      backgroundColor: '#ffffff',
+      borderColor: '#dce4e1',
+      textStyle: { color: '#243238', fontFamily: 'Segoe UI' },
       axisPointer: { type: 'shadow' },
       formatter: (params) => {
         const dataPoint = params[0];
@@ -545,8 +552,8 @@ export function initWardProcessingLeaderboardChart(element, leaderboardData) {
         const rateLabel = wardInfo.retrofitRate === null ? 'N/A' : `${(wardInfo.retrofitRate * 100).toFixed(1)}%`;
 
         return `
-          <div style="font-family: JetBrains Mono;">
-            <div style="font-weight: bold; color: #60a5fa;">Ward ${wardInfo.ward}</div>
+          <div style="font-family: Segoe UI;">
+            <div style="font-weight: bold; color: #2c6096;">Ward ${wardInfo.ward}</div>
             <div>Median: ${formatValue(wardInfo.median, ' days')}</div>
             <div>Range: ${formatValue(wardInfo.p25, ' days')} - ${formatValue(wardInfo.p75, ' days')}</div>
             <div>Volume: ${wardInfo.volume.toLocaleString()} permits</div>
@@ -566,16 +573,16 @@ export function initWardProcessingLeaderboardChart(element, leaderboardData) {
         end: zoomEnd,
         width: 15,
         right: 5,
-        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+        backgroundColor: '#edf2f0',
         fillerColor: 'rgba(59, 130, 246, 0.3)',
         borderColor: 'rgba(59, 130, 246, 0.5)',
         handleStyle: {
           color: '#3b82f6',
-          borderColor: '#60a5fa'
+          borderColor: '#2c6096'
         },
         textStyle: {
-          color: '#94a3b8',
-          fontFamily: 'JetBrains Mono',
+          color: '#62757e',
+          fontFamily: 'Segoe UI',
           fontSize: 10
         }
       },
@@ -595,19 +602,21 @@ export function initWardProcessingLeaderboardChart(element, leaderboardData) {
     xAxis: {
       type: 'value',
       name: 'Median Processing Time (days)',
-      nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
-      axisLine: { lineStyle: { color: '#374151' } },
-      axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
-      splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+      nameLocation: 'middle',
+      nameGap: 28,
+      nameTextStyle: { color: '#62757e', fontSize: 11, fontFamily: 'Segoe UI', align: 'center' },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
+      axisLabel: { color: '#62757e', fontSize: 10, fontFamily: 'Segoe UI' },
+      splitLine: { lineStyle: { color: '#dce4e1', opacity: 0.5 } }
     },
     yAxis: {
       type: 'category',
       data: wardData.map((ward) => `W${ward.ward}`),
-      axisLine: { lineStyle: { color: '#374151' } },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
       axisLabel: {
-        color: '#9ca3af',
+        color: '#62757e',
         fontSize: 9,
-        fontFamily: 'JetBrains Mono'
+        fontFamily: 'Segoe UI'
       },
       inverse: true
     },
@@ -628,18 +637,18 @@ export function initWardProcessingLeaderboardChart(element, leaderboardData) {
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
+            shadowColor: 'rgba(0, 0, 0, 0.08)'
           }
         },
         markLine: leaderboardData.cityMedian !== null ? {
           data: [
             {
               xAxis: leaderboardData.cityMedian,
-              lineStyle: { color: '#60a5fa', width: 2, type: 'dashed' },
+              lineStyle: { color: '#2c6096', width: 2, type: 'dashed' },
               label: {
                 formatter: 'City Median: {c} days',
-                color: '#60a5fa',
-                fontFamily: 'JetBrains Mono',
+                color: '#2c6096',
+                fontFamily: 'Segoe UI',
                 fontSize: 10
               }
             }
@@ -666,7 +675,7 @@ export function initProcessingTimelineChart(element, timelineData) {
 
   const zoomStart = Math.max(0, 100 - (18 / timelineData.length) * 100);
   const categoryColors = {
-    cityMedian: '#60a5fa',
+    cityMedian: '#2c6096',
     heat_pump: '#dc2626',
     insulation: '#ea580c',
     elec_upg: '#d97706',
@@ -679,12 +688,12 @@ export function initProcessingTimelineChart(element, timelineData) {
     backgroundColor: 'transparent',
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(0, 0, 0, 0.9)',
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      textStyle: { color: '#ffffff', fontFamily: 'JetBrains Mono' },
+      backgroundColor: '#ffffff',
+      borderColor: '#dce4e1',
+      textStyle: { color: '#243238', fontFamily: 'Segoe UI' },
       axisPointer: { type: 'cross' },
       formatter: (params) => {
-        let result = `<div style="font-family: JetBrains Mono;"><strong>${params[0].name}</strong><br/>`;
+        let result = `<div style="font-family: Segoe UI;"><strong>${params[0].name}</strong><br/>`;
         params.forEach((param) => {
           const label = param.seriesName === 'cityMedian'
             ? 'City Median'
@@ -695,8 +704,9 @@ export function initProcessingTimelineChart(element, timelineData) {
       }
     },
     legend: {
+      type: 'scroll',
       data: ['City Median', 'Heat Pump', 'Insulation', 'Electrical Upgrade', 'Envelope', 'HVAC', 'Lighting'],
-      textStyle: { color: '#cbd5e1', fontSize: 9, fontFamily: 'JetBrains Mono' },
+      textStyle: { color: '#52676f', fontSize: 9, fontFamily: 'Segoe UI' },
       top: 5
     },
     dataZoom: [
@@ -706,16 +716,16 @@ export function initProcessingTimelineChart(element, timelineData) {
         end: 100,
         height: 20,
         bottom: 5,
-        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+        backgroundColor: '#edf2f0',
         fillerColor: 'rgba(59, 130, 246, 0.3)',
         borderColor: 'rgba(59, 130, 246, 0.5)',
         handleStyle: {
           color: '#3b82f6',
-          borderColor: '#60a5fa'
+          borderColor: '#2c6096'
         },
         textStyle: {
-          color: '#94a3b8',
-          fontFamily: 'JetBrains Mono',
+          color: '#62757e',
+          fontFamily: 'Segoe UI',
           fontSize: 10
         }
       },
@@ -726,29 +736,30 @@ export function initProcessingTimelineChart(element, timelineData) {
       }
     ],
     grid: {
-      left: '8%',
-      right: '4%',
+      left: 8,
+      right: 14,
+      containLabel: true,
       bottom: '20%',
-      top: '22%'
+      top: 64
     },
     xAxis: {
       type: 'category',
       data: timelineData.map((item) => item.monthLabel),
-      axisLine: { lineStyle: { color: '#374151' } },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
       axisLabel: {
-        color: '#9ca3af',
+        color: '#62757e',
         fontSize: 9,
-        fontFamily: 'JetBrains Mono',
+        fontFamily: 'Segoe UI',
         rotate: 45
       }
     },
     yAxis: {
       type: 'value',
       name: 'Processing Time (days)',
-      nameTextStyle: { color: '#9ca3af', fontSize: 11, fontFamily: 'JetBrains Mono' },
-      axisLine: { lineStyle: { color: '#374151' } },
-      axisLabel: { color: '#9ca3af', fontSize: 10, fontFamily: 'JetBrains Mono' },
-      splitLine: { lineStyle: { color: '#374151', opacity: 0.5 } }
+      nameTextStyle: { color: '#62757e', fontSize: 11, fontFamily: 'Segoe UI', align: 'left' },
+      axisLine: { lineStyle: { color: '#dce4e1' } },
+      axisLabel: { color: '#62757e', fontSize: 10, fontFamily: 'Segoe UI' },
+      splitLine: { lineStyle: { color: '#dce4e1', opacity: 0.5 } }
     },
     series: [
       {

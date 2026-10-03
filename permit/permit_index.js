@@ -1,5 +1,5 @@
 import { escapeHtml, geometryBounds, prepareBoundaries } from '../assets/js/map-data.mjs';
-import { createMapEnvironment, addContextBuildings, fetchJson, showNotice, hideNotice, setupPanelToggle, mapPadding } from '../assets/js/map-runtime.mjs';
+import { createMapEnvironment, addContextBuildings, fetchJson, showNotice, hideNotice, setupPanelToggle, mapPadding } from '../assets/js/map-runtime.mjs?v=20261003-ui3';
 import { DATA_FILES, loadPermitData } from './data.js';
 import {
   computeCumulativeRetrofitSeries,
@@ -21,7 +21,7 @@ import {
   initProcessingTimelineChart,
   initRetrofitPulseChart,
   initWardProcessingLeaderboardChart
-} from './charts.js';
+} from './charts.js?v=20261003-ui3';
 
 const GEOJSON_FILES = {
   ward: './assets/data/retrofit-v2/ward_boundaries.geojson',
@@ -55,6 +55,7 @@ const state = {
   },
   localPopup: null,
   selectedBoundary: null,
+  selectedRegionKey: '42',
   hoveredBoundary: null,
   lib: null,
   dataError: null,
@@ -150,8 +151,8 @@ function renderProvenanceBlock(provenance, warnings) {
     : '';
 
   return `
-    <div class="provenance-card">
-      <div class="provenance-title">Data provenance</div>
+    <details class="provenance-card">
+      <summary class="provenance-title">Data sources &amp; quality checks</summary>
       <div class="provenance-grid">
         <div class="provenance-item"><span>Sources</span><span>${sources}</span></div>
         <div class="provenance-item"><span>Records loaded</span><span>Wards: ${provenance.wardCount} | Communities: ${provenance.communityCount} | Weeks: ${provenance.weeklyCount} | Months: ${provenance.monthlyCount}</span></div>
@@ -159,7 +160,7 @@ function renderProvenanceBlock(provenance, warnings) {
         <div class="provenance-item"><span>Monthly range</span><span>${formatRange(provenance.monthlyRange)}</span></div>
       </div>
       ${warningMarkup}
-    </div>
+    </details>
   `;
 }
 
@@ -478,7 +479,9 @@ function showBoundaryType(type) {
   stopPulsingAnimation(type === 'ward' ? 'community' : 'ward');
   updateBoundaryVisibility();
   showSummaryWindow(type);
-  startPulsingAnimation(type);
+  state.selectedRegionKey = type === 'ward' ? '42' : '32';
+  selectRegion(state.selectedRegionKey, false);
+  fitBoundaryData();
 }
 
 function hideBoundaryType(type) {
@@ -498,13 +501,8 @@ function updateHighlightLayer(type) {
 }
 
 function startPulsingAnimation(type) {
+  // Keep geographic highlights steady in Civic Atlas.
   stopPulsingAnimation(type);
-  if (!state.map?.getLayer(`${type}-leaders`) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const tick = time => {
-    if (state.map?.getLayer(`${type}-leaders`)) state.map.setPaintProperty(`${type}-leaders`, 'line-opacity', 0.55 + 0.45 * (1 + Math.sin(time / 450)) / 2);
-    state.pulsingAnimations[type] = requestAnimationFrame(tick);
-  };
-  state.pulsingAnimations[type] = requestAnimationFrame(tick);
 }
 
 function stopPulsingAnimation(type) {
@@ -517,15 +515,59 @@ function restoreBoundaryLayers(map) {
   for (const type of ['ward', 'community']) {
     const data = state.boundaryData[type];
     if (!data || map.getSource(`${type}-boundaries`)) continue;
-    const color = type === 'ward' ? '#22d3ee' : '#f97316';
+    const color = '#2c6096';
+    const before = map.getStyle().layers.find(layer => layer.type === 'symbol')?.id;
     map.addSource(`${type}-boundaries`, { type: 'geojson', data });
-    map.addLayer({ id: `${type}-fill`, type: 'fill', source: `${type}-boundaries`, paint: { 'fill-color': color, 'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.45, 0.2] } });
-    map.addLayer({ id: `${type}-outline`, type: 'line', source: `${type}-boundaries`, paint: { 'line-color': color, 'line-opacity': 0.85, 'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 5, ['boolean', ['feature-state', 'hover'], false], 3, 1.2] } });
-    map.addLayer({ id: `${type}-leaders`, type: 'line', source: `${type}-boundaries`, filter: ['in', ['get', '_key'], ['literal', (state.highlightKeys[type] || []).map(String)]], paint: { 'line-color': color, 'line-width': 3, 'line-opacity': 0.9 } });
+    map.addLayer({ id: `${type}-fill`, type: 'fill', source: `${type}-boundaries`, paint: { 'fill-color': ['interpolate', ['linear'], ['get', '_retrofit'], 0, '#dde8f2', 350, '#a2bed6', 1400, color], 'fill-opacity': ['case', ['boolean', ['feature-state', 'selected'], false], 0.8, ['boolean', ['feature-state', 'hover'], false], 0.65, 0.45] } }, before);
+    map.addLayer({ id: `${type}-outline`, type: 'line', source: `${type}-boundaries`, paint: { 'line-color': ['case', ['boolean', ['feature-state', 'selected'], false], color, '#8ba7bf'], 'line-opacity': 0.85, 'line-width': ['case', ['boolean', ['feature-state', 'selected'], false], 2.5, ['boolean', ['feature-state', 'hover'], false], 2, 0.7] } }, before);
+    map.addLayer({ id: `${type}-leaders`, type: 'line', source: `${type}-boundaries`, filter: ['in', ['get', '_key'], ['literal', (state.highlightKeys[type] || []).map(String)]], paint: { 'line-color': color, 'line-width': 1.1, 'line-opacity': 0.5 } });
   }
   if (state.selectedBoundary && map.getSource(`${state.selectedBoundary.type}-boundaries`)) map.setFeatureState({ source: `${state.selectedBoundary.type}-boundaries`, id: state.selectedBoundary.id }, { selected: true });
   updateBoundaryVisibility();
   if (state.boundaryMode) startPulsingAnimation(state.boundaryMode);
+}
+
+function updateRegionInspector() {
+  const type = state.boundaryMode || 'ward';
+  const summary = type === 'ward' ? state.data?.wardSummary : state.data?.communitySummary;
+  const features = state.boundaryData[type]?.features || [];
+  const labels = new Map(features.map(feature => [feature.properties._key, feature.properties._label]));
+  const select = document.getElementById('region-select');
+  const keys = summary ? [...summary.keys()].filter(key => Number(key) > 0) : [...labels.keys()];
+  keys.sort((a, b) => type === 'ward' ? Number(a) - Number(b) : (labels.get(a) || a).localeCompare(labels.get(b) || b));
+  select.replaceChildren(new Option('Citywide overview', ''));
+  keys.forEach(key => select.add(new Option(labels.get(key) || `${type === 'ward' ? 'Ward' : 'Community'} ${key}`, key)));
+  select.value = state.selectedRegionKey;
+  const selected = summary?.get(state.selectedRegionKey);
+  const values = summary && !state.selectedRegionKey ? [...summary.values()] : selected ? [selected] : null;
+  const permits = values?.reduce((sum, row) => sum + row.permits, 0);
+  const retrofits = values?.reduce((sum, row) => sum + row.retrofit_likely, 0);
+  const name = state.selectedRegionKey ? labels.get(state.selectedRegionKey) || `${type === 'ward' ? 'Ward' : 'Community'} ${state.selectedRegionKey}` : 'Chicago';
+  document.getElementById('region-label').textContent = `${name} · permits`;
+  document.getElementById('region-permits').textContent = values ? formatNumber(permits) : '—';
+  document.getElementById('region-retrofits').textContent = values ? formatNumber(retrofits) : '—';
+  document.getElementById('region-rate').textContent = values ? formatPercent(permits ? retrofits / permits : 0) : '—';
+  document.getElementById('permit-total').textContent = state.analytics ? formatNumber(state.analytics.overview.totalPermits) : '—';
+  const leaders = summary ? computeSummaryLeaders(summary).activityLeaders.slice(0, 3) : [];
+  const max = Math.max(1, ...leaders.map(row => row.retrofitLikely));
+  document.getElementById('region-leaders').innerHTML = leaders.map(row => `<div class="leader-row"><button type="button" data-select-region="${escapeHtml(row.key)}">${escapeHtml(labels.get(String(row.key)) || `${type === 'ward' ? 'Ward' : 'Community'} ${row.key}`)}</button><div class="leader-track"><i style="width:${row.retrofitLikely / max * 100}%"></i></div><span class="leader-count">${formatNumber(row.retrofitLikely)}</span></div>`).join('');
+}
+
+function selectRegion(key, fit = true, popupCoordinate) {
+  const type = state.boundaryMode || 'ward';
+  state.selectedRegionKey = String(key);
+  state.localPopup?.remove();
+  const previous = state.selectedBoundary;
+  if (previous && state.map?.getSource(`${previous.type}-boundaries`)) state.map.setFeatureState({ source: `${previous.type}-boundaries`, id: previous.id }, { selected: false });
+  const feature = state.boundaryData[type]?.features.find(item => item.properties._key === state.selectedRegionKey);
+  state.selectedBoundary = feature ? { type, id: feature.id } : null;
+  if (feature && state.map?.getSource(`${type}-boundaries`)) state.map.setFeatureState({ source: `${type}-boundaries`, id: feature.id }, { selected: true });
+  updateRegionInspector();
+  if (!fit || !state.map) return;
+  if (!feature) { fitBoundaryData(); return; }
+  const bounds = geometryBounds(feature);
+  if (bounds) state.map.fitBounds(bounds, { padding: mapPadding(document.querySelector('.map-layer-panel'), elements.drawer), maxZoom: 14, duration: 600 });
+  if (popupCoordinate) state.localPopup = new state.lib.Popup({ offset: 12, maxWidth: '340px', className: 'region-popup' }).setLngLat(popupCoordinate).setHTML(createPopupContent(feature, type === 'ward' ? 'Ward' : 'Community')).addTo(state.map);
 }
 
 function fitBoundaryData(camera = {}) {
@@ -540,6 +582,7 @@ async function loadBoundaryData() {
     if (!geometryBounds(ward) || !geometryBounds(community)) throw new Error('Boundary data contains no usable coordinates.');
     state.boundaryData.ward = prepareBoundaries(ward, 'ward', state.data?.wardSummary);
     state.boundaryData.community = prepareBoundaries(community, 'community', state.data?.communitySummary);
+    selectRegion(state.selectedRegionKey, false);
     state.environment?.refreshLayers();
     if (state.map) fitBoundaryData();
     hideNotice('boundary-notice');
@@ -581,13 +624,7 @@ async function initMap() {
         const feature = event.features?.[0];
         if (!feature) return;
         clearHover();
-        if (state.selectedBoundary) map.setFeatureState({ source: `${state.selectedBoundary.type}-boundaries`, id: state.selectedBoundary.id }, { selected: false });
-        state.selectedBoundary = { type, id: feature.id };
-        map.setFeatureState({ source: `${type}-boundaries`, id: feature.id }, { selected: true });
-        const bounds = geometryBounds(feature);
-        if (bounds) map.fitBounds(bounds, { padding: mapPadding(document.querySelector('.map-layer-panel'), elements.drawer), maxZoom: 14, duration: 600 });
-        state.localPopup?.remove();
-        state.localPopup = new state.lib.Popup({ offset: 12, maxWidth: '360px', className: 'region-popup' }).setLngLat(event.lngLat).setHTML(createPopupContent(feature, type === 'ward' ? 'Ward' : 'Community')).addTo(map);
+        selectRegion(feature.properties._key, true, event.lngLat);
       });
     }
     map.once('load', () => fitBoundaryData());
@@ -691,12 +728,15 @@ function closeDrawer() {
 }
 
 function updateMapControlOffset() {
+  elements.drawer.inert = !state.isDrawerOpen;
+  elements.openDrawerButton.setAttribute('aria-expanded', String(state.isDrawerOpen));
   document.body.style.setProperty('--analytics-height', state.isDrawerOpen ? `${elements.drawer.offsetHeight}px` : '0px');
 }
 
 function switchTab(tabId) {
   elements.tabButtons.forEach((button) => {
     button.classList.remove('active');
+    button.removeAttribute('aria-current');
     button.classList.remove('border-blue-400', 'bg-blue-500/10', 'text-blue-300');
     button.classList.add('border-transparent');
   });
@@ -704,6 +744,7 @@ function switchTab(tabId) {
   const activeTab = elements.tabButtons.find((button) => button.dataset.tab === tabId);
   if (activeTab) {
     activeTab.classList.add('active');
+    activeTab.setAttribute('aria-current', 'page');
     activeTab.classList.remove('border-transparent');
     activeTab.classList.add('border-blue-400', 'bg-blue-500/10', 'text-blue-300');
   }
@@ -738,7 +779,7 @@ function generateOverviewContent() {
           <span class="chart-info-icon" data-tooltip="retrofit-pulse">ⓘ</span>
         </div>
         <div class="chart-tooltip" id="tooltip-retrofit-pulse">
-          <strong>Analysis Insight:</strong> This stacked area chart visualizes weekly retrofit permit activity across six energy efficiency categories. The white rolling average line smooths out weekly volatility to reveal underlying trends. <em>Look for:</em> seasonal patterns (often peaks in spring/fall), category dominance shifts, and whether the rolling average is trending up or down—indicating momentum in retrofit adoption across Chicago.
+          <strong>Analysis Insight:</strong> This stacked area chart visualizes weekly retrofit permit activity across six energy efficiency categories. The dark rolling average line smooths out weekly volatility to reveal underlying trends. <em>Look for:</em> seasonal patterns (often peaks in spring/fall), category dominance shifts, and whether the rolling average is trending up or down—indicating momentum in retrofit adoption across Chicago.
         </div>
         <div class="chart-content" id="retrofit-pulse-chart" style="height: 300px;"></div>
       </div>
@@ -1034,23 +1075,13 @@ function initEventHandlers() {
 
   if (elements.wardToggle) {
     elements.wardToggle.addEventListener('click', () => {
-      const isActive = elements.wardToggle.classList.contains('active');
-      if (isActive) {
-        hideBoundaryType('ward');
-      } else {
-        showBoundaryType('ward');
-      }
+      showBoundaryType('ward');
     });
   }
 
   if (elements.communityToggle) {
     elements.communityToggle.addEventListener('click', () => {
-      const isActive = elements.communityToggle.classList.contains('active');
-      if (isActive) {
-        hideBoundaryType('community');
-      } else {
-        showBoundaryType('community');
-      }
+      showBoundaryType('community');
     });
   }
 
@@ -1091,6 +1122,12 @@ async function loadData() {
   state.summaryHtml.community = renderSummaryHtml('Community', communityLeaders);
   state.highlightKeys.ward = wardLeaders.highlightKeys;
   state.highlightKeys.community = communityLeaders.highlightKeys;
+  for (const type of ['ward', 'community']) {
+    if (!state.boundaryData[type]) continue;
+    state.boundaryData[type] = prepareBoundaries(state.boundaryData[type], type, type === 'ward' ? data.wardSummary : data.communitySummary);
+    state.map?.getSource(`${type}-boundaries`)?.setData(state.boundaryData[type]);
+  }
+  updateRegionInspector();
 
   updateHighlightLayer('ward');
   updateHighlightLayer('community');
@@ -1119,7 +1156,7 @@ async function init() {
   setupPanelToggle(document.querySelector('.map-layer-panel'), document.getElementById('controls-toggle'));
   document.getElementById('toggle-3d').addEventListener('click', event => {
     state.threeDEnabled = !state.threeDEnabled;
-    event.currentTarget.textContent = state.threeDEnabled ? 'Switch to 2D' : 'Switch to 3D';
+    event.currentTarget.textContent = '3D buildings';
     event.currentTarget.setAttribute('aria-pressed', String(state.threeDEnabled));
     state.map?.easeTo({ pitch: state.threeDEnabled ? 45 : 0, bearing: 0 });
     if (state.map?.getLayer('context-buildings')) state.map.setLayoutProperty('context-buildings', 'visibility', state.threeDEnabled ? 'visible' : 'none');
@@ -1128,7 +1165,11 @@ async function init() {
     state.localPopup?.remove();
     fitBoundaryData({ pitch: state.threeDEnabled ? 30 : 0, bearing: 0, duration: 600 });
   });
-  initSummaryWindowDrag();
+  document.getElementById('region-select').addEventListener('change', event => selectRegion(event.target.value));
+  document.getElementById('region-leaders').addEventListener('click', event => {
+    const button = event.target.closest('[data-select-region]');
+    if (button) selectRegion(button.dataset.selectRegion);
+  });
   initDrawerResize();
   initEventHandlers();
   new ResizeObserver(() => {
@@ -1141,7 +1182,6 @@ async function init() {
   void initMap();
   void loadBoundaryData();
   await reloadAnalytics();
-  showProjectTooltip();
 }
 
 init();
