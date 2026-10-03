@@ -7,6 +7,7 @@
   <title>City Lens · Chicago Energy Retrofit</title>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.11.2/dist/maplibre-gl.css">
   <link rel="stylesheet" href="assets/css/map-ui.css?v=20261003-ui3">
+  <link rel="stylesheet" href="assets/css/project-context.css?v=20261003" />
 </head>
 <body class="energy-app">
   <header class="app-header"><a class="brand-mark" href="portfolio.html" aria-label="Back to portfolio">↗</a><div><h1>Chicago Retrofit</h1><p>Energy &amp; building performance</p></div><div class="header-meta"><span>City Lens</span><a href="portfolio.html">Portfolio ↗</a></div></header>
@@ -26,6 +27,7 @@
         <label class="check-label"><input type="checkbox" id="show-clusters" checked> Group nearby buildings</label>
       </details>
       <details class="selection-summary"><summary>Selection statistics</summary><dl class="stat-list"><div><dt>Buildings</dt><dd id="total-buildings">—</dd></div><div><dt>Priority</dt><dd id="critical-count">—</dd></div><div><dt>Avg. ENERGY STAR</dt><dd id="avg-energy-score">—</dd></div></dl><p id="data-message" class="map-data-message" aria-live="polite"></p><div id="filter-insights"></div></details>
+      <details class="project-context map-project-context"><summary>About this project</summary><p class="project-context-label">Independent personal project · Sole developer and analyst</p><p><strong>My contribution:</strong> Prepared the building-energy analysis and retrofit priorities, and built the interactive map, filters, and building-detail views.</p></details>
       <details class="methodology-note"><summary>How priorities work</summary><p>Weighted scoring: ENERGY STAR (30%), Chicago Energy Rating (25%), site EUI (20%), building age (15%), and GHG intensity (10%). Missing scores appear as N/A.</p><p>3D building shapes provide geographic context. Colored markers show the retrofit priorities.</p></details>
     </div>
   </aside>

@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Urban Heat‑Island Mitigation via Green‑Roof Retrofits in Amsterdam · Portfolio</title>
+  <meta name="description" content="An independent Amsterdam study comparing Schiphol reference weather with UWG-modeled urban weather and outdoor comfort, with an exploratory green-roof scenario." />
+  <title>Modeling Urban Heat and Outdoor Thermal Comfort in Amsterdam · Portfolio</title>
 
   <!-- === External Dependencies === -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -14,8 +15,9 @@
   <!-- === Modular Stylesheets === -->
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="assets/css/building-analytics.css" />
+  <link rel="stylesheet" href="assets/css/project-context.css?v=20261003" />
 </head>
-<body data-page="portfolio">
+<body data-page="portfolio" class="uhi-page">
   <header class="site-header" data-include="components/header.html">
     <!-- === Vertical navigation === -->
     <nav class="vertical-nav">
@@ -31,362 +33,146 @@
       <!-- Back link -->
       <div class="back-navigation"><a href="portfolio.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Portfolio</a></div>
 
-      <!-- Header -->
       <header class="powerbi-header">
-        <h1 class="powerbi-title">Urban Heat‑Island Mitigation via Green‑Roof Retrofits in Amsterdam</h1>
-        <p class="powerbi-description"><em>A Dragonfly + 3D BAG + UWG study</em></p>
-        <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #ff6b00;">
-          <h3 style="font-size: 1.2rem; margin-bottom: 10px;">Abstract</h3>
-          <p style="color: #444; line-height: 1.7;">
-            Amsterdam's historic canal district suffers from summertime urban‑heat‑island (UHI) amplification.  
-            This study quantifies the cooling potential of extensive green‑roof retrofits by:
-          </p>
-          <ol style="color: #444; line-height: 1.7; margin: 15px 0 15px 20px;">
-            <li>Importing <strong>LoD 1.3</strong> building geometry from the open‑source <strong>3D BAG</strong> data set;</li>
-            <li>Filtering flat roofs with potential for green roofs via <strong>CityJSON</strong> attributes in Grasshopper;</li>
-            <li>Generating a <strong>UWG‑modified urban EPW</strong> and comparing it to the baseline rural EPW;</li>
-            <li>Assessing outdoor comfort using <strong>UTCI</strong>, thermal‑condition tiers, and a binary comfort metric.</li>
-          </ol>
-          <p style="color: #444; line-height: 1.7;">
-           Despite adding vegetated surfaces, the model showed no measurable cooling because (1) the share of roof area actually covered in greenery was too small to drive meaningful latent‑heat flux, and (2) whatever cooling did occur was swamped by the district’s continuous anthropogenic heat load (traffic + HVAC), leaving peak air temperatures and “extreme‑heat‑stress” hours unchanged.</p>
+        <h1 class="powerbi-title">Modeling Urban Heat and Outdoor Thermal Comfort in Amsterdam</h1>
+        <p class="powerbi-description"><em>Baseline weather comparison with an exploratory green-roof scenario.</em></p>
+        <div class="project-context">
+          <p class="project-context-label">Independent personal project · Sole researcher</p>
+          <p><strong>My contribution:</strong> Processed 3D city geometry, configured the urban model, generated weather with Dragonfly/UWG, and analyzed outdoor thermal comfort with Ladybug Tools.</p>
         </div>
       </header>
 
-      <!-- Introduction Section -->
-      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Introduction</h2>
-        <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 0;">
-          <li><strong>Background.</strong> Buildings, asphalt, and limited vegetation raise urban air temperatures, elevating heat stress on occupants.</li>
-          <li><strong>Objective.</strong> Evaluate how much green‑roof retrofits can mitigate UHI for a 0.65 km² Amsterdam tile.</li>
-          <li><strong>Contribution.</strong> Combines high‑resolution 3‑D data with Dragonfly's micro‑climate engine and open weather data to deliver block‑scale cooling estimates.</li>
-        </ul>
+      <section class="project-section study-section" aria-labelledby="study-overview">
+        <h2 id="study-overview">Study overview</h2>
+        <p>I developed a workflow connecting 3D BAG geometry, Dragonfly/UWG urban weather generation, and Ladybug thermal-comfort analysis for a 0.65 km² Amsterdam canal-district tile. My initial interest in green-roof retrofitting led to a broader comparison of reference weather and modeled urban conditions.</p>
+        <p><strong>Main question:</strong> How does the modeled urban context change reference weather and the selected outdoor-comfort metrics?</p>
+        <p><strong>Supplementary question:</strong> Does an exploratory green-roof scenario improve those outputs?</p>
+        <p class="study-note"><strong>Outcome:</strong> The workflow produced weather and comfort comparisons between the reference and urban scenarios. The exploratory green-roof setup showed no improvement in the selected outputs. Its interpretation depends on verifying how roof vegetation entered the weather model.</p>
       </section>
 
-      <!-- Data & Tools Section -->
-      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Data & Tools</h2>
-        
-        <div style="overflow-x: auto;">
-          <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem;">
-            <thead>
-              <tr style="background: #f8f9fa;">
-                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Component</th>
-                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Details</th>
-              </tr>
-            </thead>
+      <section class="project-section study-section" aria-labelledby="study-inputs">
+        <h2 id="study-inputs">Data and model assumptions</h2>
+        <p>The reference weather figure identifies the station as Amsterdam–Schiphol Airport. I compare that reference with a generated urban EPW; the study does not include independent field measurements of the canal district.</p>
+        <div class="study-table-scroll">
+          <table class="study-table">
+            <thead><tr><th scope="col">Input</th><th scope="col">Documented setup</th></tr></thead>
             <tbody>
-              <tr>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">3‑D Geometry</td>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">3D BAG (LoD 1.3) → CityJSON → Grasshopper (<code>cityjson</code> plug‑in)</td>
-              </tr>
-              <tr>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Simulation Suite</td>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Ladybug Tools v1.8 – Dragonfly Core + UWG</td>
-              </tr>
-              <tr>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Weather</td>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Baseline EPW <code>Amsterdam_062400_TMYx</code> vs. UWG urban EPW</td>
-              </tr>
-              <tr>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Surface Materials</td>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Terrain geometry (canal + street): albedo = 0.09, pavement thickness = 0.72 m, conductivity = 0.87 W/m‑K, volumetric heat capacity = 2.8 × 10⁶ J/m³‑K</td>
-              </tr>
-              <tr>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;">Anthropogenic Heat</td>
-                <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">Weekday/weekend traffic schedules + 18 W m⁻² anthropogenic heat</td>
-              </tr>
+              <tr><th scope="row">Study area and geometry</th><td>0.65 km² tile; 3D BAG LoD 1.3 building geometry, imported as CityJSON into Rhino/Grasshopper.</td></tr>
+              <tr><th scope="row">Weather</th><td>Amsterdam_062400_TMYx reference EPW and UWG-generated urban EPW.</td></tr>
+              <tr><th scope="row">Tools</th><td>Ladybug Tools v1.8, Dragonfly Core, UWG, Rhino, and Grasshopper.</td></tr>
+              <tr><th scope="row">Urban morphology</th><td>Mean building height 13.7 m; façade-to-site density 0.36; window-to-wall ratio 0.25.</td></tr>
+              <tr><th scope="row">Vegetation and heat</th><td>Tree cover 0.14; grass cover 0.09; anthropogenic heat 18 W/m² with weekday/weekend traffic schedules.</td></tr>
+              <tr><th scope="row">Terrain properties</th><td>Albedo 0.09; pavement thickness 0.72 m; conductivity 0.87 W/(m·K); volumetric heat capacity 2.8 × 10⁶ J/(m³·K).</td></tr>
+              <tr><th scope="row">Roof screening</th><td>RoofSurface geometry with pitch ≤ 5° and area ≥ 40 m². This screens geometric candidates; structural capacity and retrofit feasibility were not assessed.</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- ===== PROJECT PREVIEW =====
-      <div class="analytics-container">
-        <div class="project-media">
-          <img src="assets/images/UWG greenroof.png" 
-               alt="Amsterdam Green Roof Simulation Results" />
-        </div>
-      </div> -->
-
-      <!-- Methodology Section -->
-      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 class="platform-title">Methodology</h2>
-        
-        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-cubes" style="color: #ff6b00; margin-right: 0.5rem;"></i>3.1 Geometry Preparation</h3>
-        <ol style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
-          <li><strong>Download & crop</strong> 3D BAG tile.</li>
-          <li><strong>Import CityJSON</strong> to Grasshopper → explode by <code>surface_type</code>.</li>
-          <li><strong>Filter roofs</strong>: <code>(surface_type = "RoofSurface") ∧ (pitch ≤ 5°) ∧ (area ≥ 40 m²)</code>.</li>
-          <li><strong>Assign WWR</strong> = 0.25 to façades; tag filtered slabs as <em>green‑roof ready</em>.</li>
+      <section class="project-section study-section" aria-labelledby="study-method">
+        <h2 id="study-method">Methodology</h2>
+        <ol>
+          <li><strong>Prepare the urban context:</strong> Crop the 3D BAG tile, import CityJSON, and identify buildings and flat-roof candidates. Trace approximate street, canal, and vegetation geometry.</li>
+          <li><strong>Generate urban weather:</strong> Configure district morphology, surface properties, vegetation, and heat assumptions in Dragonfly/UWG to generate an urban EPW from the reference file.</li>
+          <li><strong>Compare weather and comfort:</strong> Examine temperature profiles and hourly differences, then compare Ladybug UTCI categories, thermal-status tiers, and binary comfort outputs for the reference and urban scenarios.</li>
+          <li><strong>Explore green roofs:</strong> Use the screened roof candidates in a supplementary retrofit setup. Scenario-specific UWG inputs and weather outputs require verification before attributing a district cooling response to vegetation.</li>
         </ol>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/3d bag view.png" alt="3D BAG Tile Overview" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 1.</strong> Axonometric view of the study tile showing canals and mid‑rise perimeter blocks.</p>
-          </div>
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/rhino model.png" alt="Consolidated Rhino Model" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 2.</strong> Cleaned Rhino scene; streets and canals were measured using Google Maps and vegetation was traced as approximate surfaces.</p>
-          </div>
+        <div class="study-figure-grid">
+          <figure><img src="assets/images/uwg/3d bag view.png" alt="3D BAG geometry of the Amsterdam study tile" width="692" height="473" loading="lazy" /><figcaption>Figure 1. Axonometric view of the study tile with canals and perimeter blocks.</figcaption></figure>
+          <figure><img src="assets/images/uwg/rhino model.png" alt="Cleaned Rhino urban context model" width="1088" height="687" loading="lazy" /><figcaption>Figure 2. Consolidated model; streets and canals were measured using Google Maps, with vegetation traced as approximate surfaces.</figcaption></figure>
         </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/flat roof.png" alt="Filtered Flat Roofs" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 3.</strong> Filtered buildings with flat roofs appropriate for green roof implementation.</p>
-          </div>
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/canal.png" alt="Canal Geometry" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 4.</strong> Traced canal geometry added to urban context model.</p>
-          </div>
+        <div class="study-figure-grid">
+          <figure><img src="assets/images/uwg/flat roof.png" alt="Flat-roof candidates selected from the city geometry" width="1093" height="625" loading="lazy" /><figcaption>Figure 3. Geometric roof candidates for the exploratory retrofit setup.</figcaption></figure>
+          <figure><img src="assets/images/uwg/canal.png" alt="Traced canal geometry within the study context" width="855" height="601" loading="lazy" /><figcaption>Figure 4. Canal geometry included in the context model.</figcaption></figure>
         </div>
-        
-        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-cloud-sun" style="color: #ff6b00; margin-right: 0.5rem;"></i>3.2 Urban Weather Generation</h3>
-        <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
-          <li>UWG model information: average height of building = 13.7 m, façade to site density = 0.36, tree cover = 0.14, grass cover = 0.09, anthropogenic heat as above.</li>
-          <li>UWG produces an <strong>urban EPW</strong> reflecting thermal mass & waste‑heat effects.</li>
-        </ul>
-        
-        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-flask" style="color: #ff6b00; margin-right: 0.5rem;"></i>3.3 Scenario Simulations</h3>
-        <div style="overflow-x: auto; margin-bottom: 1.5rem;">
-          <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-              <tr style="background: #f8f9fa;">
-                <th style="padding: 0.8rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Scenario</th>
-                <th style="padding: 0.8rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Roof Type</th>
-                <th style="padding: 0.8rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Weather File</th>
-              </tr>
-            </thead>
+        <h3>Comparison design</h3>
+        <div class="study-table-scroll">
+          <table class="study-table">
+            <thead><tr><th scope="col">Scenario</th><th scope="col">Weather / setup</th><th scope="col">Purpose</th></tr></thead>
             <tbody>
-              <tr>
-                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Baseline‑Rural</strong></td>
-                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666;">Conventional</td>
-                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666;">Baseline EPW</td>
-              </tr>
-              <tr>
-                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Baseline‑Urban</strong></td>
-                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666;">Conventional</td>
-                <td style="padding: 0.8rem; border-bottom: 1px solid #e9ecef; color: #666;">UWG EPW</td>
-              </tr>
-              <tr>
-                <td style="padding: 0.8rem; color: #666; font-weight: 600;"><strong>Green‑Roof‑Urban</strong></td>
-                <td style="padding: 0.8rem; color: #666;">Vegetated</td>
-                <td style="padding: 0.8rem; color: #666;">UWG EPW</td>
-              </tr>
+              <tr><th scope="row">Reference weather</th><td>Amsterdam–Schiphol TMYx EPW.</td><td>Reference for the modeled urban-weather comparison.</td></tr>
+              <tr><th scope="row">Urban baseline</th><td>UWG-generated EPW with conventional roofs.</td><td>Assess the modeled weather and comfort changes associated with the urban context.</td></tr>
+              <tr><th scope="row">Green-roof exploration</th><td>Vegetated-roof setup. A distinct retrofit EPW and the exported roof-vegetation parameters are not yet documented here.</td><td>Explore the retrofit question; the scenario setup limits the conclusion.</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- Results Section -->
-      <section class="project-section" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Results</h2>
-        
-        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-thermometer-three-quarters" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.1 Weather Validation</h3>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/dry bulb temp.png" alt="Monthly Mean Dry‑Bulb" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 5.</strong> Monthly mean dry‑bulb: rural (blue) vs. UWG urban (red).</p>
-          </div>
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/temp diff.png" alt="ΔT Urban‑Rural" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 6.</strong> Hourly ΔT = T<sub>urban</sub> – T<sub>rural</sub>.</p>
-          </div>
+      <section class="project-section study-section" aria-labelledby="weather-results">
+        <h2 id="weather-results">Modeled weather comparison</h2>
+        <p>The plotted urban temperature profiles generally sit above the reference profiles, with a more visible separation during warmer months. This is a model-generated heat-island signal under the stated inputs.</p>
+        <div class="study-figure-grid">
+          <figure><img src="assets/images/uwg/dry bulb temp.png" alt="Reference and UWG urban dry-bulb temperature profiles" width="1332" height="541" loading="lazy" /><figcaption>Figure 5. Monthly dry-bulb temperature profiles: reference weather (blue) and modeled urban weather (red). The source graphic identifies Amsterdam–Schiphol Airport.</figcaption></figure>
+          <figure><img src="assets/images/uwg/temp diff.png" alt="Hourly temperature difference between modeled urban and reference weather" width="1298" height="520" loading="lazy" /><figcaption>Figure 6. Hourly temperature difference: modeled urban weather minus reference weather.</figcaption></figure>
         </div>
+        <p>The comparison describes how UWG modifies the reference weather. Independent district observations would be needed to evaluate its accuracy for the actual site.</p>
+      </section>
 
-        <p style="color: #666; font-style: italic; margin-bottom: 1.5rem;">The urban (UWG) curve sits above the rural baseline all year, confirming a persistent urban‑heat‑island signal. The gap is modest in winter but widens to roughly <strong> 1–2 °C</strong> during June‑to‑August afternoons, meaning the city stays noticeably hotter precisely when heat‑stress risk is highest.</p>
-        
-        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-chart-bar" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.2 UTCI Category Comparison</h3>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/base category.png" alt="Rural UTCI Categories" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 7a.</strong> Rural UTCI category map.</p>
-          </div>
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/uwg category.png" alt="Urban UTCI Categories" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 7b.</strong> Urban UTCI category map.</p>
-          </div>
+      <section class="project-section study-section" aria-labelledby="comfort-results">
+        <h2 id="comfort-results">Outdoor thermal-comfort comparison</h2>
+        <p>Ladybug outputs compare the reference and modeled urban scenarios using UTCI categories, hot/neutral/cold tiers, and comfortable/uncomfortable classifications. These figures describe the baseline-versus-urban comparison.</p>
+        <div class="study-figure-grid">
+          <figure><img src="assets/images/uwg/base category.png" alt="UTCI category plot using reference weather" width="767" height="275" loading="lazy" /><figcaption>Figure 7a. UTCI categories using reference weather.</figcaption></figure>
+          <figure><img src="assets/images/uwg/uwg category.png" alt="UTCI category plot using UWG urban weather" width="776" height="265" loading="lazy" /><figcaption>Figure 7b. UTCI categories using modeled urban weather.</figcaption></figure>
         </div>
-        
-        <!-- <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
-          <li>Urban context adds <strong>75 additional "strong to extreme heat" hours</strong> (UTCI > 38 °C).</li>
-        </ul> -->
-        
-        <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-chart-pie" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.3 Thermal‑Status Tiers & Comfort Maps</h3>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/base condition.png" alt="Rural Thermal Status" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 8a.</strong> Hot / Neutral / Cold (rural).</p>
-          </div>
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/uwg condition.png" alt="Urban Thermal Status" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 8b.</strong> Hot / Neutral / Cold (urban).</p>
-          </div>
+        <div class="study-figure-grid">
+          <figure><img src="assets/images/uwg/base condition.png" alt="Thermal-status tiers using reference weather" width="1427" height="552" loading="lazy" /><figcaption>Figure 8a. Hot, neutral, and cold tiers using reference weather.</figcaption></figure>
+          <figure><img src="assets/images/uwg/uwg condition.png" alt="Thermal-status tiers using UWG urban weather" width="1413" height="535" loading="lazy" /><figcaption>Figure 8b. Hot, neutral, and cold tiers using modeled urban weather.</figcaption></figure>
         </div>
+        <div class="study-figure-grid">
+          <figure><img src="assets/images/uwg/base comfort.png" alt="Comfort classification using reference weather" width="790" height="287" loading="lazy" /><figcaption>Figure 9a. Comfortable and uncomfortable classifications using reference weather.</figcaption></figure>
+          <figure><img src="assets/images/uwg/uwg comfort.png" alt="Comfort classification using UWG urban weather" width="783" height="283" loading="lazy" /><figcaption>Figure 9b. Comfortable and uncomfortable classifications using modeled urban weather.</figcaption></figure>
+        </div>
+        <div class="study-figure-grid">
+          <figure><img src="assets/images/uwg/percentage of time for each condition(base).png" alt="Ladybug Comfort Statistics output for reference weather" width="440" height="121" loading="lazy" /><figcaption>Figure 10a. Original Comfort Statistics component output for reference weather.</figcaption></figure>
+          <figure><img src="assets/images/uwg/percentage of time for each condition(uwg).png" alt="Ladybug Comfort Statistics output for urban weather" width="515" height="141" loading="lazy" /><figcaption>Figure 10b. Original Comfort Statistics component output for modeled urban weather.</figcaption></figure>
+        </div>
+        <p>The retained component outputs show a change in the modeled comfort distribution. A reconciled hourly export, analysis period, and category thresholds are needed before reporting precise changes in stress-hour counts.</p>
+      </section>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/base comfort.png" alt="Rural Comfort" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 9a.</strong> Comfortable vs. Uncomfortable (rural).</p>
-          </div>
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/uwg comfort.png" alt="Urban Comfort" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 9b.</strong> Comfortable vs. Uncomfortable (urban).</p>
-          </div>
-        </div>
-        
-        <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin-bottom: 1.5rem;">
-          <li>The UWG run increases Amsterdam's hourly temperatures by ~1 °C, adding approximately <strong>80 more heat‑stress hours</strong> (primarily "slight heat," with some June afternoons reaching extreme‑heat category) while eliminating similar numbers of cold‑stress hours during winter nights.</li>
-          <li>Heat episodes <strong>start ~1 week earlier, finish ~1 week later</strong>, and persist for an extra hour daily, trading fewer chilly periods for noticeably more intense summer heat‑stress.</li>
+      <section class="project-section study-section" aria-labelledby="green-roof-exploration">
+        <h2 id="green-roof-exploration">Supplementary experiment: green roofs</h2>
+        <p>The exploratory green-roof setup showed no improvement in the selected outputs. This is a bounded observation from the implemented setup; it does not establish that green roofs are ineffective in Amsterdam.</p>
+        <p>The original scenario documentation labels both urban cases with an “UWG EPW.” To interpret a district-weather response, the next check is to verify that roof vegetation changed in the exported UWG inputs and that the retrofit produced a separate weather file. Dragonfly provides an explicit <code>roof_veg</code> fraction input, whose default is zero.</p>
+        <p>If both cases reused the same unchanged EPW, their air-temperature inputs would be identical. In that case, the result identifies a limitation in the workflow rather than quantifying vegetation’s effect on district air temperature. Any local radiant or comfort response would require its own documented model changes.</p>
+        <p>Roof coverage and anthropogenic heat are possible explanations for a small response, but this study does not include the sensitivity tests needed to establish those causes.</p>
+      </section>
+
+      <section class="project-section study-section" aria-labelledby="study-limits">
+        <h2 id="study-limits">Interpretation and limitations</h2>
+        <ul>
+          <li><strong>Model-based case study:</strong> One district and one typical-year weather setup; results do not represent measured site conditions or a specific heatwave.</li>
+          <li><strong>District-scale weather:</strong> UWG represents average urban-canyon conditions. Street-by-street climate accuracy has not been established here.</li>
+          <li><strong>Scenario traceability:</strong> The green-roof setup needs verified roof-vegetation inputs and scenario-specific weather outputs before making mitigation claims.</li>
+          <li><strong>Approximate context:</strong> Traced vegetation and terrain, uniform assumptions, and geometric roof screening limit retrofit and comfort interpretation.</li>
+          <li><strong>Result precision:</strong> Precise temperature differences and stress-hour counts require consistent periods, thresholds, and original output exports.</li>
         </ul>
-        
-        <!-- <h3 style="color: #000; margin: 1rem 0; font-size: 1.3rem;"><i class="fas fa-leaf" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.4 Green‑Roof Impact</h3>
-        <p style="color: #666; font-style: italic; margin-bottom: 1rem;">(Simulated with UWG EPW)</p>
-        
-        <div style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
-          <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse;">
-              <thead>
-                <tr style="background: #f8f9fa;">
-                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Metric</th>
-                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Baseline‑Urban</th>
-                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Green‑Roof‑Urban</th>
-                  <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #e9ecef; color: #000;">Δ</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Summer max T<sub>db</sub></strong></td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">35.1 °C</td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>34.2 °C</strong></td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #ff6b00; font-weight: 600;">−0.9 °C</td>
-                </tr>
-                <tr>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Summer min T<sub>db</sub></strong></td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">24.3 °C</td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>23.7 °C</strong></td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #ff6b00; font-weight: 600;">−0.6 °C</td>
-                </tr>
-                <tr>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666; font-weight: 600;"><strong>Peak UTCI</strong></td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;">41.8 °C</td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #666;"><strong>40.5 °C</strong></td>
-                  <td style="padding: 1rem; border-bottom: 1px solid #e9ecef; color: #ff6b00; font-weight: 600;">−1.3 °C</td>
-                </tr>
-                <tr>
-                  <td style="padding: 1rem; color: #666; font-weight: 600;"><strong>Extreme‑Heat Hours</strong></td>
-                  <td style="padding: 1rem; color: #666;">104 h</td>
-                  <td style="padding: 1rem; color: #666;"><strong>67 h</strong></td>
-                  <td style="padding: 1rem; color: #ff6b00; font-weight: 600;">−36 %</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div> -->
-
-        <h3 style="color: #000; margin: 1.5rem 0 1rem 0; font-size: 1.3rem;"><i class="fas fa-chart-pie" style="color: #ff6b00; margin-right: 0.5rem;"></i>4.4 Comfort Statistics Analysis</h3>
-        <p style="color: #666; font-style: italic; margin-bottom: 1rem;">Ladybug Comfort Statistics component analysis showing percent hot, neutral, and cold conditions.</p>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/percentage of time for each condition(base).png" alt="Baseline Comfort Statistics" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 10a.</strong> Baseline comfort statistics: Hot (66.9%), Neutral (31.9%), Cold (1.2%).</p>
-          </div>
-          <div style="text-align: center;">
-            <img src="assets/images/uwg/percentage of time for each condition(uwg).png" alt="UWG Comfort Statistics" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
-            <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic;"><strong>Figure 10b.</strong> UWG comfort statistics showing increased heat stress in urban conditions.</p>
-          </div>
-        </div>
-
-        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 1.5rem; border-left: 6px solid #ff6b00;">
-          <p style="color: #666; line-height: 1.7; margin: 0;">
-            These results show that the urban‑heat‑island signal itself—not the tested green‑roof retrofit—drives the shift toward more heat‑stress hours and fewer neutral hours. To restore thermal comfort, the project should pivot toward strategies with stronger, proven cooling leverage—e.g., expanding street‑level tree canopy, increasing high‑albedo and permeable paving, and improving night‑time ventilation corridors—rather than relying on extensive green roofs alone.
-          </p>
-        </div>
       </section>
 
-      <!-- Discussion & Limitations Sections -->
-      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Discussion & Limitations</h2>
-        
-        <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 2rem;">
-          <h3 style="color: #000; margin-bottom: 0.8rem; font-size: 1.2rem;"><i class="fas fa-comment-alt" style="color: #ff6b00; margin-right: 0.5rem;"></i>Discussion</h3>
-          <p style="color: #666; line-height: 1.7; margin: 0;">
-            Green roofs primarily <strong>flattened the diurnal temperature curve</strong>, trimming early‑afternoon peaks and accelerating post‑sunset cooling. While a ∼1 °C drop in air temperature may appear modest, UTCI reductions of >1 °C move several hours from "strong" to "moderate" stress—critical for vulnerable populations. Scaling the approach city‑wide could compound benefits.
-          </p>
-        </div>
-        
-        <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
-          <h3 style="color: #000; margin-bottom: 0.8rem; font-size: 1.2rem;"><i class="fas fa-exclamation-triangle" style="color: #ff6b00; margin-right: 0.5rem;"></i>Limitations</h3>
-          <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem; margin: 0;">
-            <li><strong>One‑way coupling</strong>: building‑level convective feedback to UWG not iterated.</li>
-            <li><strong>Uniform green‑roof properties</strong>: variations in irrigation and substrate depth ignored.</li>
-            <li><strong>Single design year</strong>: extreme‑weather EPWs (e.g., 2022 heatwave) require separate runs.</li>
-          </ul>
-        </div>
+      <section class="project-section study-section" aria-labelledby="study-conclusion">
+        <h2 id="study-conclusion">Conclusion</h2>
+        <p>This independent study connects open 3D city data, urban weather generation, and outdoor-comfort analysis in a single workflow. Its primary contribution is the comparison between reference weather and modeled urban conditions, supported by the retained weather and comfort outputs.</p>
+        <p>The green-roof exploration showed no improvement in the selected outputs under the implemented setup. Verifying scenario representation is necessary before interpreting that observation as a physical retrofit effect. The study provides a foundation for controlled sensitivity testing and more complete retrofit evaluation.</p>
       </section>
 
-      <!-- Conclusion Section -->
-      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Conclusion</h2>
-        
-        <p style="color: #666; line-height: 1.7; margin-bottom: 1.5rem;">
-          Deploying green roofs on all flat surfaces in this Amsterdam tile:
-        </p>
-        
-        <ul style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
-          <li>reduces peak summer air temperatures by up to <strong>0.9 °C</strong>,</li>
-          <li>cuts "extreme heat‑stress" hours by <strong>~35 %</strong>, and</li>
-          <li>increases annual "comfortable" hours by <strong>8 percentage points</strong>.</li>
-        </ul>
-        
-        <p style="color: #666; line-height: 1.7; margin-top: 1.5rem;">
-          These findings confirm green roofs as a viable micro‑climate mitigation strategy for canal cities.
-        </p>
-      </section>
-
-      <!-- Future Work Section -->
-      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">Future Work</h2>
-        
-        <ol style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
-          <li><strong>Parametric Coverage Sweep</strong> – quantify marginal gains at 10 % increments.</li>
-          <li><strong>Add Storm‑Water Module</strong> – simulate runoff retention benefits.</li>
-          <li><strong>Include Adaptive Façade Shading</strong> – compare combined cooling effects.</li>
-        </ol>
-      </section>
-      
-      <!-- Tech Stack Section -->
-      <div style="background: linear-gradient(135deg, #ff6b00, #e55a00); color: white; padding: 2rem; margin: 2rem 0; border-radius: 12px; text-align: center;">
-        <h3 style="margin-bottom: 1rem; font-size: 1.2rem;"><i class="fas fa-tools" style="margin-right: 0.5rem;"></i>Tech Stack</h3>
-        <p style="margin: 0; line-height: 1.6;">Rhino + Grasshopper, Ladybug Tools v1.8 (Dragonfly Core + UWG)</p>
-      </div>
-
-      <!-- References Section -->
-      <section class="project-section" style="background: white; padding: 2.5rem; margin: 2rem 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);">
-        <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.8rem; color: #000; margin-bottom: 1.5rem; border-bottom: 3px solid #ff6b00; padding-bottom: 0.5rem; display: inline-block;">References</h2>
-        
-        <ol style="color: #666; line-height: 1.7; padding-left: 1.5rem;">
-          <li>T. <strong>van Loon</strong> <em>et al.</em>, "3D BAG: A comprehensive open 3‑D building data set for the Netherlands", <em>ISPRS J. Photogramm.</em> (2021).</li>
-          <li>L. <strong>Bueno</strong>, "Urban Weather Generator User Manual", MIT (2013).</li>
-          <li>Ladybug Tools v1.8 Documentation, <a href="https://docs.ladybug.tools" style="color: #ff6b00; text-decoration: none;">https://docs.ladybug.tools</a>.</li>
+      <section class="project-section study-section" aria-labelledby="study-next">
+        <h2 id="study-next">Next steps</h2>
+        <ol>
+          <li><strong>Verify scenario inputs:</strong> Check exported roof-vegetation fractions, software settings, and separate output paths for the urban baseline and retrofit.</li>
+          <li><strong>Export consistent comparisons:</strong> Report temperature differences, summer day/night summaries, and comfort-category hours using the same period and thresholds.</li>
+          <li><strong>Test sensitivity:</strong> Vary roof coverage and heat assumptions to distinguish a small modeled response from a setup that does not represent the intervention.</li>
+          <li><strong>Broaden evaluation:</strong> Compare additional mitigation scenarios and, where available, use local observations to assess the modeled urban weather.</li>
         </ol>
       </section>
 
-      <!-- GitHub Repository Section -->
-        <!-- <div class="github-section" style="margin-top: 3rem; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); text-align: center;">
-            <h2 style="font-family: var(--font-primary, 'JetBrains Mono'); font-size: 1.5rem; margin-bottom: 1rem; color: #000;">Research Documentation</h2>
-            <p style="color: #666; margin-bottom: 1.5rem;">Access the complete research documentation, simulation files, and analysis results.</p>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="github-link" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #000; color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s ease;">
-            <i class="fas fa-file-alt" style="font-size: 1.2rem;"></i>
-            View Research Documentation
-            </a>
-        </div> -->
-
+      <section class="project-section study-section" aria-labelledby="study-references">
+        <h2 id="study-references">Tools and methodology references</h2>
+        <ul>
+          <li><a href="https://github.com/ladybug-tools/uwg">Urban Weather Generator: model description and source</a></li>
+          <li><a href="https://docs.ladybug.tools/dragonfly-primer/components/6_alternativeweather/run_urban_weather_generator">Dragonfly: generating urban weather from a rural or airport EPW</a></li>
+          <li><a href="https://docs.ladybug.tools/dragonfly-primer/components/6_alternativeweather/assign_building_uwg_properties">Dragonfly: roof vegetation and building UWG properties</a></li>
+        </ul>
+      </section>
     </div>
   </div>
 

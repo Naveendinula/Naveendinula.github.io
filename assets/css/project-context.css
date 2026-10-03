@@ -1,0 +1,50 @@
+.portfolio-origin {
+  max-width: 780px;
+  margin: 0 auto 2rem;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.project-context {
+  margin: 1.5rem auto 0;
+  max-width: 900px;
+  padding: 1rem 1.25rem;
+  border: 1px solid #e7e7e7;
+  border-radius: 8px;
+  text-align: left;
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.project-context p { margin: 0; }
+.project-context p + p { margin-top: 0.5rem; }
+.project-context .project-context-label { color: #333; font-weight: 600; }
+.map-project-context { margin: 0; padding: 12px 0 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; font-size: 11px; color: var(--muted); }
+.map-project-context p { margin-top: 10px; }
+.map-project-context .project-context-label { color: var(--ink); }
+.uhi-page .study-section { padding: 2.5rem; margin: 2rem 0; background: white; border-radius: 12px; box-shadow: 0 4px 20px #00000014; }
+.uhi-page .study-section h2 { margin: 0 0 1.5rem; color: #222; font-size: 1.65rem; }
+.uhi-page .study-section h3 { margin: 1.5rem 0 1rem; color: #333; font-size: 1.2rem; }
+.uhi-page .study-section p, .uhi-page .study-section li { color: #555; line-height: 1.8; }
+.uhi-page .study-section p { margin: 1rem 0; }
+.uhi-page .study-section ol, .uhi-page .study-section ul { padding-left: 1.5rem; }
+.uhi-page .study-section li + li { margin-top: 0.6rem; }
+.uhi-page .study-section a { color: #b44b00; text-underline-offset: 3px; }
+.study-figure-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin: 2rem 0; }
+.study-figure-grid figure { margin: 0; min-width: 0; }
+.study-figure-grid img { width: 100%; height: auto; border-radius: 8px; }
+.study-figure-grid figcaption { margin-top: 0.75rem; color: #666; font-size: 0.85rem; line-height: 1.65; }
+.study-table-scroll { overflow-x: auto; }
+.study-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; line-height: 1.7; }
+.study-table th, .study-table td { padding: 0.85rem; text-align: left; vertical-align: top; border-bottom: 1px solid #e7e7e7; }
+.study-table th { color: #333; background: #f8f9fa; }
+.study-table td { color: #555; }
+.study-note { padding: 1rem 1.25rem; background: #f8f9fa; border-left: 3px solid #ff6b00; border-radius: 6px; }
+@media (max-width: 768px) {
+  .project-context { padding: 0.9rem; font-size: 0.85rem; }
+  .map-project-context { padding: 12px 0 0; font-size: 11px; }
+  .uhi-page .study-section { padding: 1.25rem; }
+  .uhi-page .study-section h2 { font-size: 1.4rem; }
+  .study-figure-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .study-table th, .study-table td { padding: 0.65rem; }
+}

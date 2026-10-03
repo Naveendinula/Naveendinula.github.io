@@ -31,9 +31,12 @@ document.addEventListener('DOMContentLoaded', function() {
             modalImg.src = this.src;
             modalImg.alt = this.alt;
             
-            // Get caption from the following paragraph if it exists
+            // Support semantic figures while retaining the existing paragraph layouts.
+            const figureCaption = this.closest('figure')?.querySelector('figcaption');
             const nextElement = this.parentElement.nextElementSibling;
-            if (nextElement && nextElement.tagName === 'P') {
+            if (figureCaption) {
+                modalCaption.textContent = figureCaption.textContent;
+            } else if (nextElement && nextElement.tagName === 'P') {
                 modalCaption.innerHTML = nextElement.innerHTML;
             } else {
                 // Fallback to alt text
